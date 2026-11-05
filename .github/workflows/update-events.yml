@@ -18,7 +18,9 @@ jobs:
           python-version: '3.11'
       - run: pip install requests beautifulsoup4
       - run: python scrapers/scrape_events.py
-      - uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "Auto-update events"
-          file_pattern: data/events.json
+      - run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add data/events.json
+          git commit -m "Auto-update events" || echo "No changes"
+          git push
