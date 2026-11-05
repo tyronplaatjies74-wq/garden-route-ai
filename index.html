@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Garden Route AI</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui;background:#0f172a;color:white;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:16px}
+.top{width:100%;max-width:720px;text-align:center;padding:18px 0 8px}
+.orb{width:84px;height:84px;margin:0 auto 10px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fbbf24,#f97316,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:34px;box-shadow:0 0 40px #f9731688;animation:pulse 2.5s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+h1{margin:6px 0 2px;font-size:26px}p.sub{color:#cbd5e1;margin:0 0 14px;font-size:14px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px}
+.tabs button{background:#1e293b;color:white;border:1px solid #334155;padding:8px 14px;border-radius:999px;cursor:pointer;font-size:13px}
+.tabs button.active{background:#f97316;border-color:#f97316}
+.tabs button:disabled{opacity:.4}
+.chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px}
+.chips button{background:#1e293b;color:white;border:1px solid #334155;padding:8px 14px;border-radius:999px;cursor:pointer;font-size:13px}
+.card{background:#1e293b;border:1px solid #334155;border-radius:18px;padding:14px;width:100%;max-width:720px}
+#chat{height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
+.msg{padding:10px 12px;border-radius:14px;max-width:88%;font-size:14px;line-height:1.5;white-space:pre-wrap}
+.user{align-self:flex-end;background:#f97316}
+.ai{align-self:flex-start;background:#0f172a;border:1px solid #334155}
+.row{display:flex;gap:8px}input{flex:1;padding:12px;border-radius:999px;border:1px solid #334155;background:#0f172a;color:white;outline:none}
+button.send{background:#f97316;border:none;color:white;padding:12px 18px;border-radius:999px;cursor:pointer;font-weight:700}
+#status{font-size:12px;color:#94a3b8;text-align:center;margin-top:8px}
+.event{border:1px solid #334155;border-radius:12px;padding:10px;margin-top:8px;background:#0f172a}
+.event b{color:#fbbf24}
+a{color:#60a5fa}
+</style></head><body>
+<div class="top"><div class="orb">🌿</div><h1>Garden Route AI</h1><p class="sub">Your live guide to the Garden Route</p></div>
+<div class="tabs">
+<button class="active">🎉 Events</button>
+<button disabled>🍽️ Restaurants • Soon</button>
+<button disabled>🛏️ Stays • Soon</button>
+<button disabled>🥾 Activities • Soon</button>
+</div>
+<div class="chips">
+<button onclick="ask('What is on this weekend?')">This Weekend</button>
+<button onclick="ask('Markets')">Markets</button>
+<button onclick="ask('Live music')">Live Music</button>
+<button onclick="ask('What is on in Knysna?')">Knysna</button>
+<button onclick="ask('What is on in George?')">George</button>
+<button onclick="ask('Family events')">Family Fun</button>
+</div>
+<div class="card"><div id="chat"></div><div class="row"><input id="q" placeholder="Ask: What's on in Knysna this weekend?" onkeydown="if(event.key==='Enter')send()"><button class="send" onclick="send()">Ask</button></div><div id="status">Loading live events...</div></div>
+<script>
+let EVENTS=[];
+async function load(){
+ try{const r=await fetch('data/events.json?t='+Date.now());const j=await r.json();EVENTS=j.events||[];document.getElementById('status').textContent=`Live • ${EVENTS.length} events • Last updated: ${new Date(j.last_updated).toLocaleString()}`;say("Hi! I'm Garden Route AI 🌿\nRight now I'm live for EVENTS. Restaurants, Stays & Activities are coming next.\n\nAsk me: 'What's on in Knysna this weekend?'",'ai');}
+ catch(e){document.getElementById('status').textContent='No data/events.json yet - run the scraper first.';say("Hi! Events are loading. Once your scraper runs, I'll show live events here.",'ai');}
+}
+function say(t,who){const c=document.getElementById('chat');const d=document.createElement('div');d.className='msg '+who;d.innerHTML=t.replace(/\n/g,'<br>');c.appendChild(d);c.scrollTop=c.scrollHeight;}
+function filterEvents(q){
+ q=q.toLowerCase();let list=[...EVENTS];
+ const towns=['knysna','plett','george','wilderness','mossel bay','oudtshoorn','sedgefield','buffalo bay'];
+ for(const t of towns){if(q.includes(t)) list=list.filter(e=>(e.town+' '+e.title+' '+e.description).toLowerCase().includes(t));}
+ if(q.includes('market')) list=list.filter(e=>(e.title+e.description).toLowerCase().includes('market'));
+ if(q.includes('music')||q.includes('live')) list=list.filter(e=>(e.title+e.description).toLowerCase().match(/music|live|concert|band|acoustic/));
+ if(q.includes('family')||q.includes('kids')) list=list.filter(e=>(e.title+e.description).toLowerCase().match(/family|kids|children|market|fair/));
+ if(q.includes('festival')) list=list.filter(e=>(e.title+e.description).toLowerCase().includes('festival'));
+ return list.slice(0,8);
+}
+function ask(q){document.getElementById('q').value=q;send();}
+function send(){
+ const inp=document.getElementById('q');const q=inp.value.trim();if(!q)return;
+ say(q,'user');inp.value='';
+ const list=filterEvents(q);
+ if(!list.length){say("I couldn't find a live event for that exact search right now.\n\nTry: 'Knysna', 'Markets', or 'Live music'.\n\nI auto-update every 6 hours from gardenroute.com.",'ai');return;}
+ let out=`Found ${list.length} live event(s):\n`;
+ list.forEach(e=>{out+=`\n<div class="event"><b>${e.title}</b><br>📍 ${e.town} • 📅 ${e.date_text}<br>${e.description.slice(0,220)}...<br><a href="${e.url}" target="_blank">View event →</a></div>`});
+ say(out,'ai');
+}
+load();
+</script></body></html>
