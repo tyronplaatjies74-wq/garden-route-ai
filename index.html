@@ -45,7 +45,10 @@ a{color:#60a5fa}
 <script>
 let EVENTS=[];
 async function load(){
- try{const r=await fetch('data/events.json?t='+Date.now());const j=await r.json();EVENTS=j.events||[];document.getElementById('status').textContent=`Live • ${EVENTS.length} events • Last updated: ${new Date(j.last_updated).toLocaleString()}`;say("Hi! I'm Garden Route AI 🌿\nRight now I'm live for EVENTS. Restaurants, Stays & Activities are coming next.\n\nAsk me: 'What's on in Knysna this weekend?'",'ai');}
+ try{const r=await fetch('data/events.json?t='+Date.now());const j=await r.json();EVENTS=j.events||[];
+ // DEDUP by title
+ const seen=new Set(); EVENTS=EVENTS.filter(e=>{const k=(e.title||'').toLowerCase().trim(); if(seen.has(k)) return false; seen.add(k); return true;});
+ document.getElementById('status').textContent=`Live • ${EVENTS.length} events • Last updated: ${new Date(j.last_updated).toLocaleString()}`;say("Hi! I'm Garden Route AI 🌿\nRight now I'm live for EVENTS. Restaurants, Stays & Activities are coming next.\n\nAsk me: 'What's on in Knysna this weekend?'",'ai');}
  catch(e){document.getElementById('status').textContent='No data/events.json yet - run the scraper first.';say("Hi! Events are loading. Once your scraper runs, I'll show live events here.",'ai');}
 }
 function say(t,who){const c=document.getElementById('chat');const d=document.createElement('div');d.className='msg '+who;d.innerHTML=t.replace(/\n/g,'<br>');c.appendChild(d);c.scrollTop=c.scrollHeight;}
@@ -66,7 +69,13 @@ function send(){
  const list=filterEvents(q);
  if(!list.length){say("I couldn't find a live event for that exact search right now.\n\nTry: 'Knysna', 'Markets', or 'Live music'.\n\nI auto-update every 6 hours from public listings across the Garden Route.",'ai');return;}
  let out=`Found ${list.length} live event(s):\n`;
- list.forEach(e=>{out+=`\n<div class="event"><b>${e.title}</b><br>📍 ${e.town} • 📅 ${e.date_text}<br><a href="${e.url}" target="_blank">View Full Details →</a></div>`});
+ list.forEach(e=>{
+   const dateStr = e.date || e.date_text || 'See link for date';
+   let link = e.link || e.url || '';
+   if(!link || link==='undefined' || link.startsWith('/')) {
+     link = 'https://www.google.com/search?q=' + encodeURIComponent((e.title||'') + ' ' + (e.town||'') + ' Garden Route');
+   }
+   out+=`\n<div class="event"><b>${e.title}</b><br>📍 ${e.town} • 📅 ${dateStr}<br><a href="${link}" target="_blank">View Full Details →</a></div>`});
  say(out,'ai');
 }
 load();
