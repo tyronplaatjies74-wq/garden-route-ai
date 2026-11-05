@@ -1,4 +1,5 @@
-# scrapers/scrape_events.py - Garden Route AI - Events Scraper
+# scrapers/scrape_events.py - Garden Route AI - Events Scraper - OPTION B
+# Legal version: Only saves FACTS (Title + Town + Date + Link). No descriptions, no images.
 import requests, json, re, os
 from datetime import datetime
 from bs4 import BeautifulSoup
@@ -9,15 +10,12 @@ EVENTS = []
 def clean(text):
     return re.sub(r'\s+', ' ', text or '').strip()
 
-def add_event(title, town, date_text, venue, description, source, url):
+def add_event(title, town, date_text, url):
     if not title: return
     EVENTS.append({
         "title": clean(title),
         "town": clean(town) or "Garden Route",
         "date_text": clean(date_text),
-        "venue": clean(venue),
-        "description": clean(description)[:600],
-        "source": source,
         "url": url,
         "scraped_at": datetime.now().isoformat()
     })
@@ -51,11 +49,10 @@ def scrape_gardenroute():
                 for t in ["Knysna","Plettenberg Bay","Plett","George","Wilderness","Mossel Bay","Oudtshoorn","Sedgefield","Buffalo Bay","Great Brak River"]:
                     if t.lower() in text.lower() or t.lower() in title.lower():
                         town = t; break
-                desc = s.find('meta', attrs={'name':'description'})
-                desc = desc['content'] if desc else ''
                 m = re.search(r'(\d{1,2}\s(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s\d{4})', text)
                 date_text = m.group(0) if m else "See event page for date"
-                add_event(title, town, date_text, "", desc or text[:500], "gardenroute.com", url)
+                # OPTION B: No description saved - only facts + link
+                add_event(title, town, date_text, url)
             except: continue
     except Exception as e:
         print(f"gardenroute error: {e}")
@@ -74,9 +71,8 @@ def scrape_ontheroute():
                 for h in gs.find_all(['h2','h3']):
                     title = clean(h.get_text())
                     if len(title) < 4 or title.lower() in ['mossel bay','george','knysna','plett','wilderness']: continue
-                    nxt = h.find_next('p')
-                    desc = nxt.get_text() if nxt else ""
-                    add_event(title, "Garden Route", "Check guide for date", "", desc, "ontheroute.co.za", guide_url)
+                    # OPTION B: No description saved - only facts + link
+                    add_event(title, "Garden Route", "Check guide for date", guide_url)
                 break
     except Exception as e:
         print(f"ontheroute error: {e}")
