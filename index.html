@@ -41,6 +41,7 @@ a{color:#60a5fa}
 <button onclick="ask('Family events')">Family Fun</button>
 </div>
 <div class="card"><div id="chat"></div><div class="row"><input id="q" placeholder="Ask: What's on in Knysna this weekend?" onkeydown="if(event.key==='Enter')send()"><button class="send" onclick="send()">Ask</button></div><div id="status">Loading live events...</div></div>
+<p style="font-size:11px;color:#64748b;text-align:center;margin-top:12px;">© Garden Route AI | T Plaatjies Trading (Pty) Ltd - Reg 2026/589356/07</p>
 <script>
 let EVENTS=[];
 async function load(){
@@ -51,11 +52,11 @@ function say(t,who){const c=document.getElementById('chat');const d=document.cre
 function filterEvents(q){
  q=q.toLowerCase();let list=[...EVENTS];
  const towns=['knysna','plett','george','wilderness','mossel bay','oudtshoorn','sedgefield','buffalo bay'];
- for(const t of towns){if(q.includes(t)) list=list.filter(e=>(e.town+' '+e.title+' '+e.description).toLowerCase().includes(t));}
- if(q.includes('market')) list=list.filter(e=>(e.title+e.description).toLowerCase().includes('market'));
- if(q.includes('music')||q.includes('live')) list=list.filter(e=>(e.title+e.description).toLowerCase().match(/music|live|concert|band|acoustic/));
- if(q.includes('family')||q.includes('kids')) list=list.filter(e=>(e.title+e.description).toLowerCase().match(/family|kids|children|market|fair/));
- if(q.includes('festival')) list=list.filter(e=>(e.title+e.description).toLowerCase().includes('festival'));
+ for(const t of towns){if(q.includes(t)) list=list.filter(e=>((e.town||'')+' '+(e.title||'')).toLowerCase().includes(t));}
+ if(q.includes('market')) list=list.filter(e=>(e.title||'').toLowerCase().includes('market'));
+ if(q.includes('music')||q.includes('live')) list=list.filter(e=>(e.title||'').toLowerCase().match(/music|live|concert|band|acoustic/));
+ if(q.includes('family')||q.includes('kids')) list=list.filter(e=>(e.title||'').toLowerCase().match(/family|kids|children|market|fair/));
+ if(q.includes('festival')) list=list.filter(e=>(e.title||'').toLowerCase().includes('festival'));
  return list.slice(0,8);
 }
 function ask(q){document.getElementById('q').value=q;send();}
@@ -63,9 +64,9 @@ function send(){
  const inp=document.getElementById('q');const q=inp.value.trim();if(!q)return;
  say(q,'user');inp.value='';
  const list=filterEvents(q);
- if(!list.length){say("I couldn't find a live event for that exact search right now.\n\nTry: 'Knysna', 'Markets', or 'Live music'.\n\nI auto-update every 6 hours from gardenroute.com.",'ai');return;}
+ if(!list.length){say("I couldn't find a live event for that exact search right now.\n\nTry: 'Knysna', 'Markets', or 'Live music'.\n\nI auto-update every 6 hours from public listings across the Garden Route.",'ai');return;}
  let out=`Found ${list.length} live event(s):\n`;
- list.forEach(e=>{out+=`\n<div class="event"><b>${e.title}</b><br>📍 ${e.town} • 📅 ${e.date_text}<br>${e.description.slice(0,220)}...<br><a href="${e.url}" target="_blank">View event →</a></div>`});
+ list.forEach(e=>{out+=`\n<div class="event"><b>${e.title}</b><br>📍 ${e.town} • 📅 ${e.date_text}<br><a href="${e.url}" target="_blank">View Full Details →</a></div>`});
  say(out,'ai');
 }
 load();
