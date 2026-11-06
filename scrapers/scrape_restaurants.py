@@ -1,6 +1,6 @@
 # scrape_restaurants.py
 # Garden Route AI - Restaurants Scraper
-# Free - Uses OpenStreetMap Overpass API, no key needed
+# Fixed: include way + relation (buildings), not just nodes
 # Output: data/restaurants.json
 
 import requests
@@ -22,54 +22,66 @@ TOWNS = {
 }
 
 OVERPASS_URL = "https://overpass-api.de/api/interpreter"
+HEADERS = {"User-Agent": "GardenRouteAI/1.0 (contact: gardenroute.ai)"}
 
 def fetch_town(town, lat, lon, radius):
+    # nwr = node + way + relation - THIS IS THE FIX
     query = f"""
-    [out:json][timeout:30];
+    [out:json][timeout:60];
     (
-      node["amenity"="restaurant"](around:{radius},{lat},{lon});
-      node["amenity"="cafe"](around:{radius},{lat},{lon});
-      node["amenity"="fast_food"](around:{radius},{lat},{lon});
-      node["amenity"="biergarten"](around:{radius},{lat},{lon});
+      nwr["amenity"="restaurant"](around:{radius},{lat},{lon});
+      nwr["amenity"="cafe"](around:{radius},{lat},{lon});
+      nwr["amenity"="fast_food"](around:{radius},{lat},{lon});
+      nwr["amenity"="biergarten"](around:{radius},{lat},{lon});
     );
-    out body;
+    out center;
     """
-    try:
-        r = requests.post(OVERPASS_URL, data={"data": query}, timeout=40)
-        r.raise_for_status()
-        data = r.json()
-        results = []
-        for el in data.get("elements", []):
-            tags = el.get("tags", {})
-            name = tags.get("name")
-            if not name:
+    for attempt in range(3):
+        try:
+            r = requests.post(OVERPASS_URL, data={"data": query}, headers=HEADERS, timeout=60)
+            if r.status_code == 429:
+                print(f"  Rate limited {town}, waiting 10s...")
+                time.sleep(10)
                 continue
-            cuisine = tags.get("cuisine", "")
-            if cuisine:
-                cuisine = ", ".join([c.strip().capitalize() for c in cuisine.replace("_", " ").split(";")])
-            address = tags.get("addr:full") or tags.get("addr:street", "")
-            phone = tags.get("phone", "") or tags.get("contact:phone", "")
-            website = tags.get("website", "") or tags.get("contact:website", "")
-            opening = tags.get("opening_hours", "")
-            gmaps = f"https://www.google.com/maps/search/?api=1&query={requests.utils.quote(name + ' ' + town + ' Garden Route')}"
-            results.append({
-                "name": name,
-                "town": town,
-                "cuisine": cuisine or "Restaurant",
-                "type": tags.get("amenity", "restaurant"),
-                "address": address,
-                "phone": phone,
-                "website": website,
-                "opening_hours": opening,
-                "lat": el.get("lat"),
-                "lon": el.get("lon"),
-                "link": gmaps,
-                "source": "OpenStreetMap"
-            })
-        return results
-    except Exception as e:
-        print(f"Error {town}: {e}")
-        return []
+            r.raise_for_status()
+            data = r.json()
+            results = []
+            for el in data.get("elements", []):
+                tags = el.get("tags", {})
+                name = tags.get("name")
+                if not name:
+                    continue
+                cuisine = tags.get("cuisine", "")
+                if cuisine:
+                    cuisine = ", ".join([c.strip().capitalize() for c in cuisine.replace("_", " ").split(";")])
+                address = tags.get("addr:full") or tags.get("addr:street", "")
+                phone = tags.get("phone", "") or tags.get("contact:phone", "")
+                website = tags.get("website", "") or tags.get("contact:website", "")
+                opening = tags.get("opening_hours", "")
+                # way/relation use center, node uses lat/lon
+                center = el.get("center", {})
+                el_lat = el.get("lat") or center.get("lat")
+                el_lon = el.get("lon") or center.get("lon")
+                gmaps = f"https://www.google.com/maps/search/?api=1&query={requests.utils.quote(name + ' ' + town + ' Garden Route')}"
+                results.append({
+                    "name": name,
+                    "town": town,
+                    "cuisine": cuisine or "Restaurant",
+                    "type": tags.get("amenity", "restaurant"),
+                    "address": address,
+                    "phone": phone,
+                    "website": website,
+                    "opening_hours": opening,
+                    "lat": el_lat,
+                    "lon": el_lon,
+                    "link": gmaps,
+                    "source": "OpenStreetMap"
+                })
+            return results
+        except Exception as e:
+            print(f"Error {town} attempt {attempt+1}: {e}")
+            time.sleep(5)
+    return []
 
 def main():
     all_restaurants = []
@@ -85,6 +97,12 @@ def main():
             all_restaurants.append(item)
         print(f"  -> {len(items)} found")
         time.sleep(2)
+
+    # SAFETY: Don't overwrite good data with 0
+    if len(all_restaurants) == 0:
+        print("WARNING: Found 0 restaurants - NOT overwriting file. Keeping old data.")
+        return
+
     all_restaurants.sort(key=lambda x: (x["town"], x["name"]))
     Path("data").mkdir(exist_ok=True)
     out = {
