@@ -380,7 +380,7 @@ async function askSpecialist(town, days) {
     const res = await fetch(SPECIALIST_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ town: town, days: days || 2 })
+      body: JSON.stringify({ towns: [town], days: days || 2, travel_style: "backpacker" })
     });
     const data = await res.json();
     return data;
