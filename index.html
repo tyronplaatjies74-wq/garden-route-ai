@@ -370,8 +370,8 @@
   </div>
 
   <div class="tabs" role="tablist">
-    <button class="active" role="tab">🎉 Events</button>
-    <button disabled>🍽️ Restaurants • Soon</button>
+    <button id="tab-events" class="active" role="tab" onclick="setMode('events')">🎉 Events</button>
+    <button id="tab-restaurants" role="tab" onclick="setMode('restaurants')">🍽️ Restaurants</button>
     <button disabled>🛏️ Stays • Soon</button>
     <button disabled>🥾 Activities • Soon</button>
   </div>
@@ -407,6 +407,8 @@
 
 <script>
 let EVENTS = [];
+let RESTAURANTS = [];
+let MODE = 'events';
 let lastTown = null;
 let lastQuery = "";
 
@@ -524,6 +526,69 @@ function showTyping() {
 function hideTyping() {
   const t = document.getElementById('typing');
   if (t) t.remove();
+}
+
+function setMode(mode) {
+  MODE = mode;
+  lastTown = null;
+  document.getElementById('tab-events').classList.toggle('active', mode === 'events');
+  document.getElementById('tab-restaurants').classList.toggle('active', mode === 'restaurants');
+  document.getElementById('q').placeholder = mode === 'restaurants' ? 'Ask me anything about restaurants...' : 'Ask me anything about events...';
+  document.getElementById('q').setAttribute('aria-label', mode === 'restaurants' ? 'Ask about restaurants' : 'Ask about events');
+  clearChat();
+  if (mode === 'restaurants') {
+    say("Hi! I'm Garden Route AI 🌿\nI can help you find restaurants across the Garden Route.\n\nTry: \"Pizza in Knysna\", \"Seafood in George\", or \"Family friendly in Plett\".", 'ai');
+  } else {
+    say("Hi! I'm Garden Route AI 🌿\nI can help you find live events across the Garden Route.\n\nAsk me anything, or try the quick buttons above!", 'ai');
+  }
+}
+
+function filterRestaurants(q) {
+  q = (q || '').toLowerCase().trim();
+  let list = RESTAURANTS.slice();
+  const mentionedTowns = TOWNS.filter(t => q.includes(t));
+  if (mentionedTowns.length) {
+    lastTown = mentionedTowns[0];
+    list = list.filter(r => {
+      const hay = ((r.town || '') + ' ' + (r.name || r.title || '') + ' ' + (r.area || '')).toLowerCase();
+      return mentionedTowns.some(t => hay.includes(t));
+    });
+  }
+  let keywords = q;
+  mentionedTowns.forEach(t => { keywords = keywords.replace(t, ''); });
+  keywords = keywords.replace(/in|near|find|show|me|best|good|any|restaurant|restaurants|eat|food|where|can|i/g, ' ').trim();
+  if (keywords) {
+    const words = keywords.split(/\s+/).filter(w => w.length > 2);
+    if (words.length) {
+      list = list.filter(r => {
+        const hay = ((r.name || r.title || '') + ' ' + (r.cuisine || '') + ' ' + (r.category || '') + ' ' + (r.description || '')).toLowerCase();
+        return words.some(w => hay.includes(w));
+      });
+    }
+  }
+  return list.slice(0, 8);
+}
+
+function renderRestaurants(list) {
+  if (!list.length) {
+    return `I couldn't find any restaurants for that.\n\nTry a town (Knysna, George, Plett...) or a type (pizza, seafood, sushi, steakhouse).`;
+  }
+  let out = `Here's what I found (${list.length} restaurant${list.length === 1 ? '' : 's'}):\n`;
+  list.forEach(r => {
+    const name = escapeHtml(r.name || r.title || 'Untitled');
+    const town = escapeHtml(r.town || r.area || 'Garden Route');
+    const cuisine = escapeHtml(r.cuisine || r.category || '');
+    const desc = r.description ? '<br>' + escapeHtml(String(r.description).slice(0, 140)) : '';
+    let link = getLink(r);
+    if (!link) {
+      const q = encodeURIComponent((r.name || '') + ' ' + (r.town || '') + ' Garden Route restaurant');
+      link = `https://www.google.com/search?q=${q}`;
+    } else {
+      link = escapeHtml(link);
+    }
+    out += `\n<div class="event"><b>${name}</b><br>📍 ${town}${cuisine ? ' • 🍽️ ' + cuisine : ''}${desc}<br><a href="${link}" target="_blank" rel="noopener noreferrer">View Details →</a></div>`;
+  });
+  return out;
 }
 
 function filterEvents(q) {
@@ -663,11 +728,11 @@ async function send() {
 
   hideTyping();
 
-  const list = filterEvents(q);
-  const reply = generateReply(q, list);
+  const list = MODE === 'restaurants' ? filterRestaurants(q) : filterEvents(q);
+  const reply = MODE === 'restaurants' ? renderRestaurants(list) : generateReply(q, list);
   const msgEl = say(reply, 'ai', true);
 
-  const suggestions = getSuggestions(q, list);
+  const suggestions = MODE === 'restaurants' ? [] : getSuggestions(q, list);
   if (suggestions.length) {
     const sugDiv = document.createElement('div');
     sugDiv.className = 'suggestions';
@@ -701,6 +766,14 @@ async function load() {
 
     EVENTS = j.events || [];
 
+    try {
+      const rr = await fetch('data/restaurants.json?t=' + Date.now());
+      if (rr.ok) {
+        const rj = await rr.json();
+        RESTAURANTS = rj.restaurants || rj.data || (Array.isArray(rj) ? rj : []);
+      }
+    } catch(e) { console.log('No restaurants yet', e); }
+
     const seen = new Set();
     EVENTS = EVENTS.filter(e => {
       const k = (e.title || '').toLowerCase().replace(/\s+/g, ' ').trim();
@@ -709,7 +782,7 @@ async function load() {
       return true;
     });
 
-    let statusText = `Live • ${EVENTS.length} events`;
+    let statusText = `Live • ${EVENTS.length} events • ${RESTAURANTS.length} restaurants`;
     if (j.last_updated) {
       const updated = new Date(j.last_updated);
       if (!isNaN(updated.getTime())) {
