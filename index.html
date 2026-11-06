@@ -5,71 +5,410 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Garden Route AI</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:system-ui;background:#0f172a;color:white;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:16px}
-.top{width:100%;max-width:720px;text-align:center;padding:18px 0 8px}
-.orb{width:84px;height:84px;margin:0 auto 10px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fbbf24,#f97316,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:34px;box-shadow:0 0 40px #f9731688;animation:pulse 2.5s infinite}
-@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
-h1{margin:6px 0 2px;font-size:26px}
-p.sub{color:#cbd5e1;margin:0 0 14px;font-size:14px}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px}
-.tabs button{background:#1e293b;color:white;border:1px solid #334155;padding:8px 14px;border-radius:999px;cursor:pointer;font-size:13px}
-.tabs button.active{background:#f97316;border-color:#f97316}
-.tabs button:disabled{opacity:.4}
-.chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:12px}
-.chips button{background:#1e293b;color:white;border:1px solid #334155;padding:8px 14px;border-radius:999px;cursor:pointer;font-size:13px}
-.card{background:#1e293b;border:1px solid #334155;border-radius:18px;padding:14px;width:100%;max-width:720px}
-#chat{height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
-.msg{padding:10px 12px;border-radius:14px;max-width:88%;font-size:14px;line-height:1.5;white-space:pre-wrap}
-.user{align-self:flex-end;background:#f97316}
-.ai{align-self:flex-start;background:#0f172a;border:1px solid #334155}
-.row{display:flex;gap:8px}
-input{flex:1;padding:12px;border-radius:999px;border:1px solid #334155;background:#0f172a;color:white;outline:none}
-button.send{background:#f97316;border:none;color:white;padding:12px 18px;border-radius:999px;cursor:pointer;font-weight:700}
-#status{font-size:12px;color:#94a3b8;text-align:center;margin-top:8px}
-.event{border:1px solid #334155;border-radius:12px;padding:10px;margin-top:8px;background:#0f172a}
-.event b{color:#fbbf24}
-a{color:#60a5fa}
+  :root {
+    --bg: #0b1120;
+    --card: rgba(30, 41, 59, 0.55);
+    --border: rgba(148, 163, 184, 0.18);
+    --orange: #f97316;
+    --glow: rgba(249, 115, 22, 0.45);
+    --text: #f8fafc;
+    --muted: #94a3b8;
+    --link: #60a5fa;
+  }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 16px 32px;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 20% -20%, rgba(249, 115, 22, 0.18), transparent),
+      radial-gradient(ellipse 60% 40% at 80% 10%, rgba(124, 58, 237, 0.15), transparent),
+      radial-gradient(ellipse 50% 30% at 50% 100%, rgba(56, 189, 248, 0.08), transparent);
+    animation: meshMove 18s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  @keyframes meshMove {
+    0% { transform: scale(1) translate(0, 0); }
+    100% { transform: scale(1.05) translate(-2%, 1%); }
+  }
+
+  .top {
+    width: 100%;
+    max-width: 720px;
+    text-align: center;
+    padding: 12px 0 8px;
+  }
+
+  .orb-wrap {
+    position: relative;
+    width: 96px;
+    height: 96px;
+    margin: 0 auto 14px;
+  }
+
+  .orb {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 28%, #fde68a, #f97316 45%, #7c3aed 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.12),
+      0 0 40px var(--glow),
+      0 0 80px rgba(124, 58, 237, 0.25);
+    animation: pulse 3s ease-in-out infinite;
+    position: relative;
+    z-index: 2;
+  }
+
+  .orb-ring {
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 1px solid rgba(249, 115, 22, 0.35);
+    animation: spin 12s linear infinite;
+  }
+
+  .orb-ring:nth-child(2) {
+    inset: -16px;
+    border-color: rgba(124, 58, 237, 0.25);
+    animation-duration: 18s;
+    animation-direction: reverse;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  h1 {
+    margin: 4px 0 2px;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #fff 30%, #fdba74);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  p.sub {
+    color: var(--muted);
+    margin: 0 0 18px;
+    font-size: 14px;
+  }
+
+  .tabs, .chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+
+  .tabs button,
+  .chips button,
+  .suggestions button {
+    background: rgba(30, 41, 59, 0.6);
+    color: white;
+    border: 1px solid var(--border);
+    padding: 8px 15px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 13px;
+    backdrop-filter: blur(8px);
+    transition: all 0.2s ease;
+  }
+
+  .tabs button:hover:not(:disabled),
+  .chips button:hover,
+  .suggestions button:hover {
+    background: rgba(51, 65, 85, 0.8);
+    border-color: rgba(249, 115, 22, 0.4);
+    transform: translateY(-1px);
+  }
+
+  .tabs button.active {
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    border-color: transparent;
+    box-shadow: 0 4px 20px rgba(249, 115, 22, 0.35);
+  }
+
+  .tabs button:disabled {
+    opacity: 0.38;
+    cursor: not-allowed;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    padding: 16px;
+    width: 100%;
+    max-width: 720px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow:
+      0 4px 30px rgba(0, 0, 0, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  #chat {
+    height: 380px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 14px;
+    scroll-behavior: smooth;
+    padding-right: 4px;
+  }
+
+  .msg {
+    padding: 11px 14px;
+    border-radius: 16px;
+    max-width: 88%;
+    font-size: 14px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+  }
+
+  .user {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.25);
+  }
+
+  .ai {
+    align-self: flex-start;
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid var(--border);
+  }
+
+  .typing {
+    align-self: flex-start;
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid var(--border);
+    padding: 12px 16px;
+    border-radius: 16px;
+    display: flex;
+    gap: 5px;
+    width: fit-content;
+  }
+
+  .typing span {
+    width: 7px;
+    height: 7px;
+    background: #94a3b8;
+    border-radius: 50%;
+    animation: bounce 1.2s infinite ease-in-out;
+  }
+  .typing span:nth-child(2) { animation-delay: 0.15s; }
+  .typing span:nth-child(3) { animation-delay: 0.3s; }
+
+  @keyframes bounce {
+    0%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-6px); }
+  }
+
+  .suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+
+  .row {
+    display: flex;
+    gap: 10px;
+  }
+
+  input {
+    flex: 1;
+    padding: 13px 18px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(15, 23, 42, 0.6);
+    color: white;
+    outline: none;
+    font-size: 14px;
+    backdrop-filter: blur(8px);
+    transition: border-color 0.2s;
+  }
+
+  input:focus {
+    border-color: rgba(249, 115, 22, 0.5);
+  }
+
+  button.send {
+    background: linear-gradient(135deg, #f97316, #ea580c);
+    border: none;
+    color: white;
+    padding: 13px 20px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+    box-shadow: 0 4px 18px rgba(249, 115, 22, 0.35);
+    transition: all 0.2s ease;
+  }
+
+  button.send:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 22px rgba(249, 115, 22, 0.45);
+  }
+
+  button.send:active {
+    transform: scale(0.97);
+  }
+
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  #status {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .clear-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  .clear-btn:hover {
+    border-color: #f97316;
+    color: #f97316;
+  }
+
+  .event {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 13px 14px;
+    margin-top: 10px;
+    background: rgba(15, 23, 42, 0.55);
+    transition: transform 0.2s, border-color 0.2s, background 0.2s;
+  }
+
+  .event:hover {
+    transform: translateY(-2px);
+    border-color: rgba(249, 115, 22, 0.35);
+    background: rgba(15, 23, 42, 0.75);
+  }
+
+  .event b {
+    color: #fbbf24;
+    font-size: 15px;
+  }
+
+  .event a {
+    color: var(--link);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .event a:hover {
+    text-decoration: underline;
+  }
+
+  .footer {
+    font-size: 11px;
+    color: #64748b;
+    text-align: center;
+    margin-top: 18px;
+  }
+
+  #chat::-webkit-scrollbar { width: 6px; }
+  #chat::-webkit-scrollbar-track { background: transparent; }
+  #chat::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.25);
+    border-radius: 99px;
+  }
 </style>
 </head>
 <body>
-<div class="top">
-  <div class="orb">🌿</div>
-  <h1>Garden Route AI</h1>
-  <p class="sub">Your live guide to the Garden Route</p>
-</div>
-
-<div class="tabs">
-  <button class="active">🎉 Events</button>
-  <button disabled>🍽️ Restaurants • Soon</button>
-  <button disabled>🛏️ Stays • Soon</button>
-  <button disabled>🥾 Activities • Soon</button>
-</div>
-
-<div class="chips">
-  <button onclick="ask('What is on this weekend?')">This Weekend</button>
-  <button onclick="ask('Markets')">Markets</button>
-  <button onclick="ask('Live music')">Live Music</button>
-  <button onclick="ask('What is on in Knysna?')">Knysna</button>
-  <button onclick="ask('What is on in George?')">George</button>
-  <button onclick="ask('Family events')">Family Fun</button>
-</div>
-
-<div class="card">
-  <div id="chat"></div>
-  <div class="row">
-    <input id="q" placeholder="Ask: What's on in Knysna this weekend?" onkeydown="if(event.key==='Enter')send()">
-    <button class="send" onclick="send()">Ask</button>
+  <div class="top">
+    <div class="orb-wrap">
+      <div class="orb-ring"></div>
+      <div class="orb-ring"></div>
+      <div class="orb">🌿</div>
+    </div>
+    <h1>Garden Route AI</h1>
+    <p class="sub">Your live AI guide to the Garden Route</p>
   </div>
-  <div id="status">Loading live events...</div>
-</div>
 
-<p style="font-size:11px;color:#64748b;text-align:center;margin-top:12px;">
-  © Garden Route AI | T Plaatjies Trading (Pty) Ltd - Reg 2026/589356/07
-</p>
+  <div class="tabs" role="tablist">
+    <button class="active" role="tab">🎉 Events</button>
+    <button disabled>🍽️ Restaurants • Soon</button>
+    <button disabled>🛏️ Stays • Soon</button>
+    <button disabled>🥾 Activities • Soon</button>
+  </div>
+
+  <div class="chips">
+    <button type="button" onclick="ask('What is on this weekend?')">This Weekend</button>
+    <button type="button" onclick="ask('Markets')">Markets</button>
+    <button type="button" onclick="ask('Live music')">Live Music</button>
+    <button type="button" onclick="ask('What is on in Knysna?')">Knysna</button>
+    <button type="button" onclick="ask('What is on in George?')">George</button>
+    <button type="button" onclick="ask('Family events')">Family Fun</button>
+  </div>
+
+  <div class="card">
+    <div id="chat" role="log" aria-live="polite"></div>
+
+    <div class="row">
+      <input id="q" type="text" placeholder="Ask me anything about events..."
+             aria-label="Ask about events"
+             onkeydown="if(event.key==='Enter')send()">
+      <button class="send" type="button" onclick="send()">Ask</button>
+    </div>
+
+    <div class="toolbar">
+      <div id="status">Loading live events...</div>
+      <button class="clear-btn" onclick="clearChat()">Clear chat</button>
+    </div>
+  </div>
+
+  <p class="footer">
+    © Garden Route AI | T Plaatjies Trading (Pty) Ltd - Reg 2026/589356/07
+  </p>
 
 <script>
 let EVENTS = [];
+let lastTown = null;
+let lastQuery = "";
 
 const TOWNS = [
   'knysna', 'plett', 'plettenberg bay', 'george', 'wilderness',
@@ -98,17 +437,11 @@ function startOfDay(d) {
 function parseEventDate(e) {
   const raw = e.date || e.date_text || e.when || '';
   if (!raw) return null;
-
-  // Native parse first
   let d = new Date(raw);
   if (!isNaN(d.getTime())) return d;
-
-  // Strip ordinals (1st, 2nd, 3rd, 4th) and try again
   const cleaned = String(raw).replace(/(\d+)(st|nd|rd|th)/gi, '$1');
   d = new Date(cleaned);
-  if (!isNaN(d.getTime())) return d;
-
-  return null;
+  return isNaN(d.getTime()) ? null : d;
 }
 
 function isPast(date) {
@@ -130,28 +463,40 @@ function isTomorrow(date) {
 
 function isThisWeekend(date) {
   if (!date) return false;
-  const now = new Date();
-  const day = now.getDay(); // 0 = Sun ... 6 = Sat
+  const today = startOfDay(new Date());
+  const day = today.getDay();
+  let sat, sun;
 
-  // Days until next Saturday (0 if today is Saturday)
-  const daysToSat = (6 - day + 7) % 7;
-  const sat = startOfDay(new Date(now));
-  sat.setDate(now.getDate() + daysToSat);
-
-  const sun = new Date(sat);
-  sun.setDate(sat.getDate() + 1);
+  if (day === 0) {
+    sat = new Date(today); sat.setDate(today.getDate() - 1);
+    sun = today;
+  } else if (day === 6) {
+    sat = today;
+    sun = new Date(today); sun.setDate(today.getDate() + 1);
+  } else {
+    const daysToSat = 6 - day;
+    sat = new Date(today); sat.setDate(today.getDate() + daysToSat);
+    sun = new Date(sat); sun.setDate(sat.getDate() + 1);
+  }
 
   const eventDay = startOfDay(date).getTime();
   return eventDay === sat.getTime() || eventDay === sun.getTime();
+}
+
+function isThisWeek(date) {
+  if (!date) return false;
+  const now = startOfDay(new Date());
+  const in7 = new Date(now);
+  in7.setDate(now.getDate() + 7);
+  const d = startOfDay(date);
+  return d >= now && d <= in7;
 }
 
 function getLink(e) {
   let link = e.link || e.url || '';
   if (!link || link === 'undefined' || link === 'null') return null;
   link = String(link).trim();
-  if (link.startsWith('/') || link.startsWith('./') || !/^https?:\/\//i.test(link)) {
-    return null; // treat relative / protocol-less as invalid for direct linking
-  }
+  if (link.startsWith('/') || link.startsWith('./') || !/^https?:\/\//i.test(link)) return null;
   return link;
 }
 
@@ -159,65 +504,61 @@ function say(text, who, isHtml = false) {
   const c = document.getElementById('chat');
   const d = document.createElement('div');
   d.className = 'msg ' + who;
-
-  if (isHtml) {
-    d.innerHTML = text;
-  } else {
-    d.textContent = text;
-  }
+  if (isHtml) d.innerHTML = text;
+  else d.textContent = text;
   c.appendChild(d);
   c.scrollTop = c.scrollHeight;
+  return d;
+}
+
+function showTyping() {
+  const c = document.getElementById('chat');
+  const d = document.createElement('div');
+  d.className = 'typing';
+  d.id = 'typing';
+  d.innerHTML = '<span></span><span></span><span></span>';
+  c.appendChild(d);
+  c.scrollTop = c.scrollHeight;
+}
+
+function hideTyping() {
+  const t = document.getElementById('typing');
+  if (t) t.remove();
 }
 
 function filterEvents(q) {
   q = (q || '').toLowerCase().trim();
 
-  // Attach parsed dates once
-  let list = EVENTS.map(e => ({
-    ...e,
-    _date: parseEventDate(e)
-  }));
-
-  // Default: hide past events (keep undated)
+  let list = EVENTS.map(e => ({ ...e, _date: parseEventDate(e) }));
   list = list.filter(e => !isPast(e._date));
 
-  // Town filter – UNION (any matching town)
+  if (/\b(there|same place|that town)\b/.test(q) && lastTown) {
+    q += ' ' + lastTown;
+  }
+
   const mentionedTowns = TOWNS.filter(t => q.includes(t));
   if (mentionedTowns.length) {
+    lastTown = mentionedTowns[0];
     list = list.filter(e => {
       const hay = ((e.town || '') + ' ' + (e.title || '')).toLowerCase();
       return mentionedTowns.some(t => hay.includes(t));
     });
   }
 
-  // Intent filters
-  if (/\b(today)\b/.test(q)) {
-    list = list.filter(e => isToday(e._date));
-  } else if (/\b(tomorrow)\b/.test(q)) {
-    list = list.filter(e => isTomorrow(e._date));
-  } else if (/\b(weekend|this week)\b/.test(q)) {
-    list = list.filter(e => isThisWeekend(e._date));
-  }
+  if (/\b(today)\b/.test(q)) list = list.filter(e => isToday(e._date));
+  else if (/\b(tomorrow)\b/.test(q)) list = list.filter(e => isTomorrow(e._date));
+  else if (/\b(weekend)\b/.test(q)) list = list.filter(e => isThisWeekend(e._date));
+  else if (/\b(this week)\b/.test(q)) list = list.filter(e => isThisWeek(e._date));
 
-  // Keyword filters
-  if (q.includes('market')) {
-    list = list.filter(e => (e.title || '').toLowerCase().includes('market'));
-  }
+  if (q.includes('market')) list = list.filter(e => (e.title || '').toLowerCase().includes('market'));
   if (/\b(music|live music|concert|band|acoustic|gig)\b/.test(q)) {
-    list = list.filter(e =>
-      (e.title || '').toLowerCase().match(/music|concert|band|acoustic|gig|live\s/)
-    );
+    list = list.filter(e => (e.title || '').toLowerCase().match(/music|concert|band|acoustic|gig|live\s/));
   }
   if (/\b(family|kids|children)\b/.test(q)) {
-    list = list.filter(e =>
-      (e.title || '').toLowerCase().match(/family|kids|children|market|fair/)
-    );
+    list = list.filter(e => (e.title || '').toLowerCase().match(/family|kids|children|market|fair/));
   }
-  if (q.includes('festival')) {
-    list = list.filter(e => (e.title || '').toLowerCase().includes('festival'));
-  }
+  if (q.includes('festival')) list = list.filter(e => (e.title || '').toLowerCase().includes('festival'));
 
-  // Sort: soonest first, undated at the end
   list.sort((a, b) => {
     if (!a._date && !b._date) return 0;
     if (!a._date) return 1;
@@ -231,10 +572,7 @@ function filterEvents(q) {
 function formatDate(e) {
   if (e._date && !isNaN(e._date.getTime())) {
     return e._date.toLocaleDateString('en-ZA', {
-      weekday: 'short',
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric'
+      weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'
     });
   }
   return e.date || e.date_text || 'See link for date';
@@ -242,10 +580,10 @@ function formatDate(e) {
 
 function renderEvents(list) {
   if (!list.length) {
-    return "I couldn't find any upcoming events for that search right now.\n\nTry: \"Knysna\", \"Markets\", \"Live music\", or \"This weekend\".\n\nI refresh every few hours from public listings across the Garden Route.";
+    return `I couldn't find any upcoming events for that.\n\nTry asking about a town (Knysna, George, Plett...), "this weekend", "markets" or "live music".`;
   }
 
-  let out = `Found ${list.length} upcoming event${list.length === 1 ? '' : 's'}:\n`;
+  let out = `Here's what I found (${list.length} event${list.length === 1 ? '' : 's'}):\n`;
 
   list.forEach(e => {
     const title = escapeHtml(e.title || 'Untitled event');
@@ -260,10 +598,48 @@ function renderEvents(list) {
       link = escapeHtml(link);
     }
 
-    out += `\n<div class="event"><b>${title}</b><br>📍 ${town} • 📅 ${dateStr}<br><a href="${link}" target="_blank" rel="noopener">View Full Details →</a></div>`;
+    out += `\n<div class="event"><b>${title}</b><br>📍 ${town} • 📅 ${dateStr}<br><a href="${link}" target="_blank" rel="noopener noreferrer">View Full Details →</a></div>`;
   });
 
   return out;
+}
+
+function getSuggestions(q, list) {
+  const suggestions = [];
+  if (list.length > 0) {
+    suggestions.push("This weekend");
+    if (lastTown) suggestions.push(`More in ${lastTown.charAt(0).toUpperCase() + lastTown.slice(1)}`);
+    suggestions.push("Markets", "Live music", "Family events");
+  } else {
+    suggestions.push("What is on this weekend?", "Knysna events", "George events", "Markets");
+  }
+  return [...new Set(suggestions)].slice(0, 4);
+}
+
+function generateReply(q, list) {
+  q = q.toLowerCase().trim();
+
+  if (/^(hi|hello|hey|howdy|good morning|good afternoon|good evening)\b/.test(q)) {
+    return "Hey! 👋 I'm Garden Route AI. I can show you live events across the Garden Route.\n\nTry asking: \"What's on in Knysna this weekend?\" or just tap one of the chips above.";
+  }
+
+  if (/^(thanks|thank you|thx|cheers)\b/.test(q)) {
+    return "You're welcome! 🌿 Anything else you'd like to know about events?";
+  }
+
+  if (/^(help|what can you do|how does this work)\b/.test(q)) {
+    return "I can find upcoming events for you. Just tell me:\n• A town (Knysna, George, Plett, etc.)\n• A time (today, tomorrow, this weekend)\n• A type (markets, live music, family)\n\nYou can also combine them: \"Family markets in Sedgefield this weekend\"";
+  }
+
+  if (/^(who are you|what are you)\b/.test(q)) {
+    return "I'm Garden Route AI — your local events guide. I pull live data from public listings across the Garden Route and help you discover what's happening.";
+  }
+
+  const intro = list.length
+    ? (lastTown ? `Looking at ${lastTown.charAt(0).toUpperCase() + lastTown.slice(1)}... ` : "")
+    : "";
+
+  return intro + renderEvents(list);
 }
 
 function ask(q) {
@@ -271,17 +647,47 @@ function ask(q) {
   send();
 }
 
-function send() {
+async function send() {
   const inp = document.getElementById('q');
   const q = inp.value.trim();
   if (!q) return;
 
-  say(q, 'user');          // safe – textContent
+  say(q, 'user');
   inp.value = '';
+  inp.focus();
+  lastQuery = q;
+
+  showTyping();
+
+  await new Promise(r => setTimeout(r, 600 + Math.random() * 700));
+
+  hideTyping();
 
   const list = filterEvents(q);
-  const html = renderEvents(list);
-  say(html, 'ai', true);   // structured HTML, already escaped
+  const reply = generateReply(q, list);
+  const msgEl = say(reply, 'ai', true);
+
+  const suggestions = getSuggestions(q, list);
+  if (suggestions.length) {
+    const sugDiv = document.createElement('div');
+    sugDiv.className = 'suggestions';
+    suggestions.forEach(s => {
+      const btn = document.createElement('button');
+      btn.textContent = s;
+      btn.onclick = () => ask(s);
+      sugDiv.appendChild(btn);
+    });
+    msgEl.appendChild(sugDiv);
+  }
+
+  document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+}
+
+function clearChat() {
+  document.getElementById('chat').innerHTML = '';
+  lastTown = null;
+  lastQuery = '';
+  say("Chat cleared. What would you like to know about Garden Route events?", 'ai');
 }
 
 async function load() {
@@ -295,7 +701,6 @@ async function load() {
 
     EVENTS = j.events || [];
 
-    // Deduplicate by normalised title
     const seen = new Set();
     EVENTS = EVENTS.filter(e => {
       const k = (e.title || '').toLowerCase().replace(/\s+/g, ' ').trim();
@@ -308,12 +713,12 @@ async function load() {
     if (j.last_updated) {
       const updated = new Date(j.last_updated);
       if (!isNaN(updated.getTime())) {
-        statusText += ` • Last updated: ${updated.toLocaleString()}`;
+        statusText += ` • Updated: ${updated.toLocaleString()}`;
       }
     }
     statusEl.textContent = statusText;
 
-    say("Hi! I'm Garden Route AI 🌿\nRight now I'm live for EVENTS. Restaurants, Stays & Activities are coming next.\n\nAsk me: \"What's on in Knysna this weekend?\"", 'ai');
+    say("Hi! I'm Garden Route AI 🌿\nI can help you find live events across the Garden Route.\n\nAsk me anything, or try the quick buttons above!", 'ai');
   } catch (err) {
     console.error(err);
     statusEl.textContent = 'No data/events.json yet – run the scraper first.';
