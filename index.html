@@ -372,6 +372,23 @@ const TOWNS = [
   'great brak', 'little brak', 'herolds bay', 'victoria bay',
   'brenton', 'belvidere', 'rheenendal'
 ];
+// --- Garden Route Specialist - the brain ---
+const SPECIALIST_URL = "https://garden-route-specialist-api.vercel.app/api/plan";
+
+async function askSpecialist(town, days) {
+  try {
+    const res = await fetch(SPECIALIST_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ town: town, days: days || 2 })
+    });
+    const data = await res.json();
+    return data;
+  } catch (e) {
+    console.log("Specialist offline, using local data", e);
+    return null;
+  }
+  }
 function escapeHtml(str) {
   if (str == null) return '';
   return String(str)
