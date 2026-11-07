@@ -2,140 +2,171 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Garden Route AI | Live Guide</title>
-<meta name="description" content="Garden Route AI - Live events, restaurants, weather, budget and itineraries.">
-<meta name="theme-color" content="#0b1120">
 <style>
-:root{--bg:#0b1120;--card:rgba(30,41,59,0.6);--border:rgba(148,163,184,0.18);--orange:#f97316;--text:#f8fafc;--muted:#94a3b8;--link:#60a5fa}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:url('/IMG-20261107-WA0174.jpg');background-size:cover;background-position:center;background-attachment:fixed;color:var(--text);height:100dvh;display:flex;flex-direction:column;align-items:center;padding:0;overflow:hidden}
-body::before{content:"";position:fixed;inset:0;background:rgba(5,10,20,0.62);pointer-events:none;z-index:-1}
-.topbar{position:sticky;top:0;z-index:99;width:100%;max-width:720px;background:#000;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid #222;position:relative;flex-shrink:0}
-.topbar-name{display:flex;align-items:center;gap:10px;color:#fff;font-size:19px;font-weight:700}
-.topbar-check{color:#1d9bf0;font-size:18px}
-.topbar-dots{color:#fff;font-size:26px;cursor:pointer;padding:0 6px;line-height:1}
-.top-menu{display:none;position:absolute;top:54px;right:10px;background:#111;border:1px solid #333;border-radius:12px;padding:8px 0;width:230px;box-shadow:0 10px 30px rgba(0,0,0,0.5);z-index:100;max-height:80vh;overflow-y:auto}
-.top-menu div{padding:13px 16px;color:#fff;font-size:14px;cursor:pointer;border-bottom:1px solid #222}
-.top-menu div:hover{background:#1e293b}
-.chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:14px}
-.chips button{background:rgba(30,41,59,0.6);color:white;border:1px solid var(--border);padding:8px 15px;border-radius:999px;cursor:pointer;font-size:13px}
-.card{background:var(--card);border:none;border-radius:0;padding:16px;width:100%;max-width:720px;backdrop-filter:blur(20px);margin-top:0;flex:1;display:flex;flex-direction:column;min-height:0}
-#chat{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:12px;margin-bottom:14px;min-height:0}
-.msg{padding:11px 14px;border-radius:16px;max-width:88%;font-size:14px;line-height:1.55;white-space:pre-wrap}
-.user{align-self:flex-end;background:linear-gradient(135deg,#f97316,#ea580c)}
-.ai{align-self:flex-start;background:rgba(15,23,42,0.7);border:1px solid var(--border)}
-.row{display:flex;gap:10px;flex-shrink:0;padding-bottom:6px}
-input{flex:1;padding:13px 18px;border-radius:999px;border:1px solid var(--border);background:rgba(15,23,42,0.6);color:white;outline:none;font-size:16px}
-button.send{background:linear-gradient(135deg,#f97316,#ea580c);border:none;color:white;padding:13px 20px;border-radius:999px;cursor:pointer;font-weight:700}
-.event{border:1px solid var(--border);border-radius:14px;padding:13px 14px;margin-top:10px;background:rgba(15,23,42,0.55)}
-.event b{color:#fbbf24;font-size:15px}
-.event a{color:var(--link);text-decoration:none}
-.event.featured{border-color:rgba(249,115,22,0.6);background:rgba(249,115,22,0.08)}
-.featured-badge{background:linear-gradient(135deg,#f97316,#ea580c);color:white;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:700;margin-left:6px}
-.fav-btn{background:rgba(255,255,255,0.08);border:1px solid var(--border);color:white;padding:5px 11px;border-radius:999px;font-size:12px;cursor:pointer;margin-top:8px}
-.fav-btn.active{background:#f97316;border-color:#f97316}
-.section{width:100%;max-width:720px;margin-top:0;padding:16px;display:none;flex:1;overflow-y:auto}
-.section.show{display:block}
-.section h2{font-size:17px;margin-bottom:10px}
-.back-btn{background:#1e293b;border:1px solid var(--border);color:white;padding:10px 16px;border-radius:999px;font-size:13px;cursor:pointer;margin-bottom:12px;width:100%}
-.weather-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.w-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px;text-align:center}
-.w-card .temp{font-size:22px;font-weight:800;margin:4px 0}
-.w-card small{color:var(--muted);font-size:11px}
-.budget-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:16px}
-.budget-box label{font-size:12px;color:var(--muted);display:block;margin:10px 0 4px;text-transform:uppercase;font-weight:700}
-.budget-box select,.budget-box input{width:100%;padding:11px;border-radius:10px;border:1px solid var(--border);background:#0f172a;color:white}
-.budget-result{background:#0f172a;border-radius:14px;padding:14px;margin-top:14px}
-.budget-result .total{font-size:28px;font-weight:800}
-.budget-row{display:flex;justify-content:space-between;font-size:13px;color:#cbd5e1;padding:4px 0;border-top:1px solid rgba(255,255,255,0.06)}
-.curr-row{display:flex;gap:6px;margin-top:10px}
-.curr-row button{flex:1;padding:8px;border-radius:999px;border:1px solid var(--border);background:#1e293b;color:white;font-weight:700;cursor:pointer;font-size:12px}
-.curr-row button.active{background:#f97316;border-color:#f97316}
-.drawer{position:fixed;inset:0;z-index:99;display:none}
-.drawer.open{display:block}
-.drawer-bg{position:absolute;inset:0;background:rgba(0,0,0,0.6)}
-.drawer-panel{position:absolute;right:0;top:0;bottom:0;width:100%;max-width:380px;background:#0f172a;border-left:1px solid var(--border);padding:18px;overflow-y:auto}
-.modal{position:fixed;inset:0;z-index:99;display:none;align-items:center;justify-content:center;padding:16px}
-.modal.open{display:flex}
-.modal-bg{position:absolute;inset:0;background:rgba(0,0,0,0.65)}
-.modal-panel{position:relative;background:#0f172a;border:1px solid var(--border);border-radius:20px;padding:18px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
-.em-card{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:14px;padding:12px;margin-top:10px;text-decoration:none;color:white}
-.em-card b{font-size:14px}
-.em-card small{color:var(--muted);font-size:12px}
-.em-btn{background:#e11d48;color:white;padding:8px 12px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}
-.footer{font-size:11px;color:#64748b;text-align:center;margin-top:18px}
+body{margin:0;font-family:system-ui,Arial;background:#0f2a3a;color:#fff}
+header{padding:16px;display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px}
+header span{color:#4ade80}
+.wrap{padding:0 14px 100px}
+.pill{display:inline-block;background:#1a3a4d;padding:6px 10px;border-radius:20px;font-size:12px;margin:3px}
+#chat{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+.msg{padding:14px;border-radius:16px;line-height:1.5;font-size:15px}
+.user{align-self:flex-end;background:#f97316;max-width:85%}
+.bot{align-self:flex-start;background:#1e3a4a;width:100%;box-sizing:border-box}
+.card{background:#0b2230;border:1px solid #2a4a5e;border-radius:14px;padding:14px;margin-top:10px}
+.card h3{margin:0 0 6px;color:#facc15;font-size:16px}
+.card p{margin:4px 0;color:#cbd5e1;font-size:14px}
+.card img{width:100%;border-radius:10px;margin-top:8px}
+a{color:#60a5fa}
+button{border:0;cursor:pointer}
+.save{background:#334155;color:#fff;padding:7px 12px;border-radius:20px;margin-top:8px}
+.bar{position:fixed;bottom:0;left:0;right:0;background:#0f2a3a;padding:10px;display:flex;gap:8px;border-top:1px solid #2a4a5e}
+.bar input{flex:1;padding:13px;border-radius:30px;border:0;background:#1e3a4a;color:#fff;outline:none}
+.bar button{background:#f97316;color:#fff;padding:0 22px;border-radius:30px;font-weight:700}
 </style>
 </head>
 <body>
-<div class="topbar"><div class="topbar-name"><span style="font-size:24px">🌿</span>Garden Route AI <span class="topbar-check">✔</span></div><div class="topbar-dots" onclick="toggleMenu(event)">⋮</div><div id="menu" class="top-menu"><div onclick="showSection('chat')">🗓️ Itinerary - Main Chat</div><div onclick="showSection('chat');ask('2-day itinerary in Knysna')">🗓️ 2-Day Knysna</div><div onclick="showSection('chat');ask('2-day itinerary in Plett')">🗓️ 2-Day Plett</div><div onclick="showSection('chat');ask('3-day itinerary George to Plett')">🗓️ 3-Day George to Plett</div><div onclick="showSection('chat');ask('About Knysna')">📖 About Knysna</div><div onclick="showSection('chat');ask('About Robberg')">📖 About Robberg</div><div onclick="showSection('chat');ask('About George')">📖 About George</div><div onclick="showSection('eventsSec')">🎉 Events</div><div onclick="showSection('restSec')">🍽️ Restaurants</div><div onclick="toggleMenu(event);openDrawer()">❤️ Saved</div><div onclick="toggleMenu(event);openModal()">🚨 Emergency</div><div onclick="showSection('weather')">🌦️ Weather</div><div onclick="showSection('budget')">💰 Budget Calculator</div><div onclick="showSection('highlightsSec')">⭐ Highlights</div><div onclick="toggleMenu(event);shareWhatsApp()">📲 Share to WhatsApp</div><div onclick="toggleMenu(event);exportTxt()">⬇️ Export .txt</div><div onclick="toggleMenu(event);clearChat()">🧹 Clear Chat</div><div onclick="toggleMenu(event);window.location.href='join.html'">💼 Get Featured - R50/mo</div></div></div>
-<div class="card" id="mainChat"><div id="chat"></div><div class="row"><input id="q" placeholder="Ask for an itinerary... e.g. 2 days in Knysna" onkeydown="if(event.key==='Enter')send()"><button class="send" onclick="send()">Ask</button></div></div>
-<div class="section" id="eventsSec"><button class="back-btn" onclick="showSection('chat')">← Back to Itinerary Chat</button><h2>🎉 Events</h2><div class="chips"><button onclick="showSection('chat');ask('What is on this weekend?')">This Weekend</button><button onclick="showSection('chat');ask('Markets')">Markets</button><button onclick="showSection('chat');ask('Live music')">Live Music</button><button onclick="showSection('chat');ask('What is on in Knysna?')">Knysna</button><button onclick="showSection('chat');ask('What is on in George?')">George</button></div><p style="font-size:13px;color:#94a3b8">Tap a chip to ask in the main chat.</p></div>
-<div class="section" id="restSec"><button class="back-btn" onclick="showSection('chat')">← Back to Itinerary Chat</button><h2>🍽️ Restaurants</h2><div class="chips"><button onclick="showSection('chat');setMode('restaurants');ask('Restaurants in Knysna')">Knysna</button><button onclick="showSection('chat');setMode('restaurants');ask('Restaurants in George')">George</button><button onclick="showSection('chat');setMode('restaurants');ask('Restaurants in Plett')">Plett</button></div></div>
-<div class="section" id="weather"><button class="back-btn" onclick="showSection('chat')">← Back to Itinerary Chat</button><h2>🌦️ Live Weather & Packing</h2><div class="weather-grid" id="weatherGrid"><div class="w-card">Loading real weather...</div></div><p style="font-size:12px;color:#94a3b8;margin-top:6px">Live from Open-Meteo • Garden Route microclimates change fast.</p></div>
-<div class="section" id="budget"><button class="back-btn" onclick="showSection('chat')">← Back to Itinerary Chat</button><h2>💰 Trip Budget Calculator</h2><div class="budget-box"><label>Days</label><input type="number" id="bd-days" value="5" min="1" max="21" oninput="calcBudget()"><label>Accommodation</label><select id="bd-acc" onchange="calcBudget()"><option value="budget">Backpacker / B&B — R600/day</option><option value="mid" selected>Comfort Hotel — R1,400/day</option><option value="luxury">Luxury Resort — R3,500/day</option></select><label>Dining</label><select id="bd-food" onchange="calcBudget()"><option value="casual">Self-Catering / Cafes — R350/day</option><option value="standard" selected>Bistro & Oyster Bars — R700/day</option><option value="fine">Fine Dining — R1,500/day</option></select><label>Activities</label><select id="bd-act" onchange="calcBudget()"><option value="low">Low (Beaches & Walks) — R150/day</option><option value="medium" selected>Moderate (Zipline, Boat) — R500/day</option><option value="high">Extreme (Bungee, Safari) — R1,200/day</option></select><div class="curr-row"><button id="cZAR" class="active" onclick="setCurr('ZAR')">ZAR (R)</button><button id="cUSD" onclick="setCurr('USD')">USD ($)</button><button id="cEUR" onclick="setCurr('EUR')">EUR (€)</button><button id="cGBP" onclick="setCurr('GBP')">GBP (£)</button></div><div class="budget-result"><div style="font-size:11px;color:#94a3b8;text-transform:uppercase;font-weight:700">Estimated Total</div><div class="total" id="bd-total">R 12,500</div><div style="font-size:12px;color:#94a3b8"><span id="bd-daily" style="color:#34d399;font-weight:700">R 2,500</span> per day • <span id="bd-daysLabel">5</span> days</div><div style="margin-top:10px"><div class="budget-row"><span>🏨 Accommodation</span><b id="bd-accCost">R 7,000</b></div><div class="budget-row"><span>🍽️ Food & Dining</span><b id="bd-foodCost">R 3,500</b></div><div class="budget-row"><span>🎢 Excursions</span><b id="bd-actCost">R 2,500</b></div></div><button onclick="shareWhatsApp()" style="margin-top:12px;width:100%;background:#059669;border:none;color:white;padding:11px;border-radius:999px;font-weight:700">📲 Send Estimate via WhatsApp</button></div></div></div>
-<div class="section" id="highlightsSec"><button class="back-btn" onclick="showSection('chat')">← Back to Itinerary Chat</button><h2>⭐ Curated Highlights — Tap ❤️ to Save</h2><div id="highlights"></div><p class="footer">© Garden Route AI | T Plaatjies Trading (Pty) Ltd - Reg 2026/589356/07</p></div>
-<div id="drawer" class="drawer"><div class="drawer-bg" onclick="closeDrawer()"></div><div class="drawer-panel"><div style="display:flex;justify-content:space-between;align-items:center"><h3>❤️ My Saved Itinerary</h3><button onclick="closeDrawer()" style="background:none;border:none;color:white;font-size:20px;cursor:pointer">✕</button></div><div id="favList" style="margin-top:14px"></div><button onclick="shareWhatsApp()" style="width:100%;margin-top:14px;background:#059669;border:none;color:white;padding:12px;border-radius:999px;font-weight:700">📲 Share to WhatsApp</button><button onclick="exportTxt()" style="width:100%;margin-top:8px;background:#1e293b;border:1px solid var(--border);color:white;padding:11px;border-radius:999px;font-weight:700">⬇️ Export .txt</button></div></div>
-<div id="modal" class="modal"><div class="modal-bg" onclick="closeModal()"></div><div class="modal-panel"><div style="display:flex;justify-content:space-between"><h3>🚨 Emergency Directory</h3><button onclick="closeModal()" style="background:none;border:none;color:white;font-size:20px;cursor:pointer">✕</button></div><p style="font-size:12px;color:#94a3b8;margin-top:6px">Tap to call immediately. Real South African numbers.</p><a class="em-card" href="tel:112"><div><b>NSRI Sea Rescue</b><br><small>Coastal & Lagoon Emergencies</small></div><span class="em-btn">Call 112</span></a><a class="em-card" href="tel:10111"><div><b>SAPS Police</b><br><small>Knysna / Plett / George</small></div><span class="em-btn" style="background:#0284c7">Call 10111</span></a><a class="em-card" href="tel:082911"><div><b>ER24 Ambulance</b><br><small>Medical Emergency</small></div><span class="em-btn" style="background:#059669">Call 082 911</span></a><a class="em-card" href="tel:0448735123"><div><b>George Mediclinic</b><br><small>24/7 ER Trauma</small></div><span class="em-btn" style="background:#059669">Call Hospital</span></a><a class="em-card" href="tel:0448745123"><div><b>Knysna Private Hospital</b><br><small>24/7 ER</small></div><span class="em-btn" style="background:#059669">Call Hospital</span></a></div></div>
+<header>🌿 Garden Route AI <span>✓</span></header>
+<div class="wrap">
+<div>
+<span class="pill">Saved</span><span class="pill">Emergency</span><span class="pill">Weather</span><span class="pill">Budget</span><span class="pill">Highlights</span>
+</div>
+<div id="chat">
+<div class="msg bot">Hi! Ask me anything. Try: <b>About Knysna</b> or <b>2-day itinerary in George</b> or <b>Events in Knysna</b></div>
+</div>
+</div>
+<div class="bar">
+<input id="q" placeholder="Ask for an itinerary... e.g. 2 days in George" />
+<button onclick="ask()">Ask</button>
+</div>
+
 <script>
-let EVENTS=[],RESTAURANTS=[],FEATURED=[],MODE='events',lastTown=null,isSending=false,CURR='ZAR';
-let FAVS=JSON.parse(localStorage.getItem('gra_favs')||'[]');
-const TOWNS=['knysna','plett','plettenberg bay','george','wilderness','mossel bay','oudtshoorn','sedgefield','storms river','great brak','little brak','herolds bay','victoria bay'];
-const TS=[...TOWNS].sort((a,b)=>b.length-a.length);
-const RATES={ZAR:{s:'R',r:1},USD:{s:'$',r:0.055},EUR:{s:'€',r:0.051},GBP:{s:'£',r:0.043}};
-const HIGHLIGHTS=[{id:'h1',title:'Robberg Nature Reserve Hike',town:'Plettenberg Bay',price:120,desc:'Peninsula trail, seal colony, fynbos cliffs.'},{id:'h2',title:'Knysna Waterfront Oyster Tasting',town:'Knysna',price:350,desc:'Wild oysters + Cape wine overlooking lagoon.'},{id:'h3',title:'Bloukrans Bridge Bungee',town:'Plettenberg Bay',price:1600,desc:"World's highest commercial bungee - 216m."},{id:'h4',title:'Wilderness Lagoon Kayak',town:'Wilderness',price:450,desc:'Paddle Touw River to hidden waterfalls.'}];
-function toggleMenu(e){if(e)e.stopPropagation();const m=document.getElementById('menu');m.style.display=m.style.display==='block'?'none':'block'}
-document.addEventListener('click',function(){const m=document.getElementById('menu');if(m)m.style.display='none'});
-function showSection(id){document.getElementById('menu').style.display='none';document.querySelectorAll('.section').forEach(s=>s.classList.remove('show'));const chat=document.getElementById('mainChat');if(id==='chat'){chat.style.display='flex';window.scrollTo({top:0,behavior:'smooth'})}else{chat.style.display='none';const el=document.getElementById(id);if(el)el.classList.add('show');window.scrollTo({top:0,behavior:'smooth'})}}
-function esc(s){if(s==null)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function startOfDay(d){const x=new Date(d);x.setHours(0,0,0,0);return x}
-function parseDate(e){const r=e.date||e.date_text||e.when||'';if(!r)return null;let d=new Date(r);return isNaN(d.getTime())?null:d}
-function formatDate(d){if(!d||d==='See link for date')return 'See link';const dt=parseDate({date:d});if(!dt)return d;return dt.toLocaleDateString('en-ZA',{weekday:'short',day:'numeric',month:'short'})}
-function isPast(d){return d&&startOfDay(d)<startOfDay(new Date())}
-function isToday(d){return d&&startOfDay(d).getTime()===startOfDay(new Date()).getTime()}
-function isTomorrow(d){if(!d)return false;const t=new Date();t.setDate(t.getDate()+1);return startOfDay(d).getTime()===startOfDay(t).getTime()}
-function isWeekend(d){if(!d)return false;const t=startOfDay(new Date());const day=t.getDay();let sat,sun;if(day===0){sat=new Date(t);sat.setDate(t.getDate()-1);sun=t}else if(day===6){sat=t;sun=new Date(t);sun.setDate(t.getDate()+1)}else{sat=new Date(t);sat.setDate(t.getDate()+(6-day));sun=new Date(sat);sun.setDate(sat.getDate()+1)}return startOfDay(d).getTime()===sat.getTime()||startOfDay(d).getTime()===sun.getTime()}
-function getLink(e){let l=e.link||e.url||'';if(!l)return null;if(!/^https?:\/\//i.test(String(l).trim()))return null;return l}
-function say(t,who,isHtml=false){const c=document.getElementById('chat');const d=document.createElement('div');d.className='msg '+who;if(isHtml)d.innerHTML=t;else d.textContent=t;c.appendChild(d);c.scrollTop=c.scrollHeight;return d}
-function setMode(m){MODE=m;const q=document.getElementById('q');if(q)q.placeholder='Ask for an itinerary... e.g. 2 days in Knysna'}
-function toggleFav(id,name){const i=FAVS.findIndex(f=>f.id===id);if(i>=0)FAVS.splice(i,1);else FAVS.push({id,name});localStorage.setItem('gra_favs',JSON.stringify(FAVS));updateFav();renderHighlights()}
-function updateFav(){const el=document.getElementById('favList');if(!FAVS.length){el.innerHTML='<p style="color:#94a3b8;font-size:13px">No saved yet. Tap ❤️ on any event, restaurant or highlight.</p>';return}el.innerHTML=FAVS.map(f=>`<div class="event"><b>${esc(f.name)}</b><br><button class="fav-btn active" onclick="toggleFav('${f.id}','')">❤️ Remove</button></div>`).join('')}
-function renderHighlights(){document.getElementById('highlights').innerHTML=HIGHLIGHTS.map(h=>{const fav=FAVS.some(f=>f.id===h.id);return `<div class="event"><b>${esc(h.title)}</b> • 📍 ${esc(h.town)}<br><small style="color:#94a3b8">${esc(h.desc)}</small><br><small>From R ${h.price} / person</small><br><button class="fav-btn ${fav?'active':''}" onclick="toggleFav('${h.id}','${esc(h.title)}')">${fav?'❤️ Saved':'🤍 Save to Itinerary'}</button> <button class="fav-btn" onclick="shareWhatsApp()">📲 Share</button></div>`}).join('')}
-function filterEvents(q){q=(q||'').toLowerCase().trim();let list=EVENTS.map(e=>({...e,_date:parseDate(e)})).filter(e=>!isPast(e._date));const mt=TS.filter(t=>q.includes(t));if(mt.length){lastTown=mt[0];list=list.filter(e=>((e.town||'')+' '+(e.title||'')).toLowerCase().includes(mt[0]))}if(q.includes('today'))list=list.filter(e=>isToday(e._date));else if(q.includes('tomorrow'))list=list.filter(e=>isTomorrow(e._date));else if(q.includes('weekend'))list=list.filter(e=>isWeekend(e._date));if(q.includes('market'))list=list.filter(e=>(e.title||'').toLowerCase().includes('market'));if(q.includes('music'))list=list.filter(e=>(e.title||'').toLowerCase().match(/music|concert|band/));list.sort((a,b)=>{if(!a._date)return 1;if(!b._date)return -1;return a._date-b._date});return list.slice(0,8)}
-function filterRestaurants(q){q=(q||'').toLowerCase().trim();let all=[...FEATURED.map(f=>({...f,is_featured:true})),...RESTAURANTS.map(r=>({...r,is_featured:false}))];let list=all.slice();const mt=TS.filter(t=>q.includes(t));if(mt.length){lastTown=mt[0];list=list.filter(r=>((r.town||'')+' '+(r.name||'')).toLowerCase().includes(mt[0]))}return list.slice(0,8)}
-function renderEvents(list){if(!list.length)return `No upcoming events found. Try "this weekend" or a town.`;let out=`Here's what I found (${list.length}):\n`;list.forEach((e,i)=>{const id='ev'+i+'-'+(e.title||'').slice(0,8).replace(/\W/g,'');const fav=FAVS.some(f=>f.id===id);let link=getLink(e)||`https://www.google.com/search?q=${encodeURIComponent((e.title||'')+' '+(e.town||'')+' Garden Route')}`;out+=`\n<div class="event"><b>${esc(e.title||'Untitled')}</b><br>📍 ${esc(e.town||'Garden Route')} • 📅 ${esc(formatDate(e.date||e.date_text))}<br><a href="${link}" target="_blank">View Details →</a><br><button class="fav-btn ${fav?'active':''}" onclick="toggleFav('${id}','${esc(e.title||'Event')}')">${fav?'❤️ Saved':'🤍 Save'}</button></div>`});return out}
-function renderRestaurants(list){if(!list.length)return `No restaurants found. Try Knysna, George, Plett.`;let out=`Here's what I found (${list.length}):\n`;list.forEach((r,i)=>{const id='rs'+i+'-'+(r.name||'').slice(0,8).replace(/\W/g,'');const fav=FAVS.some(f=>f.id===id);let link=getLink(r)||`https://www.google.com/search?q=${encodeURIComponent((r.name||'')+' '+(r.town||'')+' restaurant')}`;out+=`\n<div class="event ${r.is_featured?'featured':''}"><b>${esc(r.name||r.title||'Untitled')}</b>${r.is_featured?'<span class="featured-badge">⭐ FEATURED</span>':''}<br>📍 ${esc(r.town||'Garden Route')} • 🍽️ ${esc(r.cuisine||r.category||'')}<br><a href="${link}" target="_blank">View Details →</a><br><button class="fav-btn ${fav?'active':''}" onclick="toggleFav('${id}','${esc(r.name||'Restaurant')}')">${fav?'❤️ Saved':'🤍 Save'}</button></div>`});return out}
-function ask(q){if(isSending)return;document.getElementById('q').value=q;send()}
-function openDrawer(){document.getElementById('drawer').classList.add('open');updateFav()}
-function closeDrawer(){document.getElementById('drawer').classList.remove('open')}
-function openModal(){document.getElementById('modal').classList.add('open')}
-function closeModal(){document.getElementById('modal').classList.remove('open')}
-function shareWhatsApp(){const txt=document.getElementById('chat').innerText.slice(-800)||'Check out Garden Route AI!';window.open('https://wa.me/?text='+encodeURIComponent(txt+'\n\n— via Garden Route AI'),'_blank')}
-function exportTxt(){const txt=document.getElementById('chat').innerText||'Garden Route AI';const b=new Blob([txt],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='garden-route-plan.txt';a.click()}
-function setCurr(c){CURR=c;['ZAR','USD','EUR','GBP'].forEach(x=>document.getElementById('c'+x).classList.toggle('active',x===c));calcBudget()}
-function calcBudget(){const days=parseInt(document.getElementById('bd-days').value||5);const acc=document.getElementById('bd-acc').value;const food=document.getElementById('bd-food').value;const act=document.getElementById('bd-act').value;const accD=acc==='budget'?600:acc==='mid'?1400:3500;const foodD=food==='casual'?350:food==='standard'?700:1500;const actD=act==='low'?150:act==='medium'?500:1200;const aT=accD*days,fT=foodD*days,acT=actD*days,total=aT+fT+acT;const {s,r}=RATES[CURR];const fmt=v=>`${s} ${Math.round(v*r).toLocaleString()}`;document.getElementById('bd-total').textContent=fmt(total);document.getElementById('bd-daily').textContent=fmt(total/days);document.getElementById('bd-daysLabel').textContent=days;document.getElementById('bd-accCost').textContent=fmt(aT);document.getElementById('bd-foodCost').textContent=fmt(fT);document.getElementById('bd-actCost').textContent=fmt(acT)}
-async function loadItinerary(){const town=lastTown||'Knysna';say('Building your 2-day itinerary for '+town+'...','ai');try{const r=await fetch('/api/itinerary?town='+encodeURIComponent(town)+'&weekend=1&limit=8');const j=await r.json();if(!j.plan||!j.plan.length)return say('No dated events for this weekend in '+town+'. Try All events.','ai');let out='🗓️ 2-Day Itinerary — '+town+' (this weekend):\n';j.plan.forEach(p=>{out+=`\n<div class="event"><b>${esc(p.slot)} — ${esc(p.title)}</b><br>📍 ${esc(p.town)} • 📅 ${esc(formatDate(p.date))}<br><a href="${p.link||'#'}" target="_blank">View Details →</a></div>`});say(out,'ai',true)}catch(e){say('Itinerary offline — try "What is on this weekend?"','ai')}}
-async function showWeatherFor(townRaw){const coords={knysna:{lat:-34.036,lon:23.047},plett:{lat:-34.05,lon:23.37},'plettenberg bay':{lat:-34.05,lon:23.37},george:{lat:-33.97,lon:22.46},wilderness:{lat:-33.99,lon:22.58},'mossel bay':{lat:-34.18,lon:22.14},oudtshoorn:{lat:-33.59,lon:22.2},sedgefield:{lat:-34.03,lon:22.8}};const c=coords[townRaw]||coords['knysna'];const townName=townRaw.charAt(0).toUpperCase()+townRaw.slice(1);say('Checking live weather in '+townName+'...','ai');try{const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${c.lat}&longitude=${c.lon}&current=temperature_2m,precipitation,wind_speed_10m&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=Africa%2FJohannesburg&forecast_days=3`);const j=await r.json();const temp=Math.round(j.current.temperature_2m);const rain=j.current.precipitation>0;const wind=Math.round(j.current.wind_speed_10m);let out=`🌦️ Weather in ${townName} — RIGHT NOW:\n\n🌡️ ${temp}°C • ${rain?'🌧️ Raining now':'☀️ No rain now'} • 💨 Wind ${wind} km/h\n\n📅 Next 3 days:\n`;j.daily.time.forEach((d,i)=>{const day=new Date(d).toLocaleDateString('en-ZA',{weekday:'short',day:'numeric',month:'short'});out+=`• ${day}: ${Math.round(j.daily.temperature_2m_min[i])}° - ${Math.round(j.daily.temperature_2m_max[i])}°C • Rain chance ${j.daily.precipitation_probability_max[i]}%\n`});out+=`\n🧳 Pack: ${temp>=20&&!rain?'Shorts, sunscreen, beach gear':temp>=15?'Layers + light jacket':'Warm jacket + rain jacket'}`;say(out,'ai')}catch(e){say('Weather offline — try ⋮ > Weather','ai')}}
-async function showWikiFor(placeRaw){
-  const pretty = placeRaw.trim().split(' ').map(w=>w.charAt(0).toUpperCase()+w.slice(1)).join(' ');
-  const title = pretty.replace(/ /g,'_');
-  say('Looking up '+pretty+' on Wikipedia...','ai');
-  try{
-    const r = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`);
-    if(!r.ok) return say('No Wikipedia page found for '+pretty+'. Try "About Knysna" or "About Robberg".','ai');
-    const j = await r.json();
-    let out = `📖 About ${j.title}\n\n${j.extract}\n`;
-    if(j.thumbnail && j.thumbnail.source) out += `\n🖼️ Photo: ${j.thumbnail.source}\n`;
-    if(j.content_urls && j.content_urls.desktop) out += `\n🔗 Read more: ${j.content_urls.desktop.page}`;
-    say(out,'ai');
-  }catch(e){ say('Wikipedia offline — try again.','ai'); }
+const chat = document.getElementById('chat');
+const input = document.getElementById('q');
+input.addEventListener('keydown', e=>{ if(e.key==='Enter') ask(); });
+
+function addMsg(text, who='bot', isHtml=false){
+  const d=document.createElement('div');
+  d.className='msg '+who;
+  if(isHtml) d.innerHTML=text; else d.textContent=text;
+  chat.appendChild(d);
+  window.scrollTo(0, document.body.scrollHeight);
+  return d;
 }
-function buildItinerary(townRaw,days){const townName=townRaw.charAt(0).toUpperCase()+townRaw.slice(1);const evs=EVENTS.filter(e=>(e.town||'').toLowerCase().includes(townRaw)).slice(0,4);const MORNINGS={george:['Garden Route Botanical Garden walk + coffee','Outeniqua Trail walk + York Street coffee'],knysna:['Knysna Heads / Lagoon walk + coffee','Knysna Waterfront walk + coffee'],plett:['Robberg / Lagoon walk + coffee','Central Beach walk + coffee'],'plettenberg bay':['Robberg / Lagoon walk + coffee','Central Beach walk + coffee'],sedgefield:['Sedgefield Lagoon / beach walk + coffee','Wild Oats Market walk + coffee'],wilderness:['Wilderness Lagoon boardwalk + coffee','Touw River walk + coffee'],'mossel bay':['Point / St Blaize Trail walk + coffee','Mossel Bay beachfront walk + coffee'],oudtshoorn:['CP Nel Museum walk + coffee','Cango Caves area walk + coffee'],default:['Lagoon / beach walk + coffee','Town centre walk + coffee']};const mornings=MORNINGS[townRaw]||MORNINGS['default'];let out=`🗓️ ${days}-Day Itinerary — ${townName}:\n`;for(let d=1;d<=days;d++){out+=`\n--- DAY ${d} ---\n`;out+=`☀️ Morning: ${mornings[(d-1)%mornings.length]}\n`;out+=`🌤️ Afternoon: ${evs[d-1]?evs[d-1].title:'Waterfront + oyster tasting'}\n`;out+=`🌙 Evening: Sunset dinner in ${townName}\n`}out+=`\nWant me to add restaurants or weather for this trip?`;say(out,'ai')}
-async function send(){if(isSending)return;const inp=document.getElementById('q');const q=inp.value.trim();if(!q)return;isSending=true;try{say(q,'user');inp.value='';await new Promise(r=>setTimeout(r,400));const lower=q.toLowerCase().trim();if(['yes','yeah','yep','sure','ok','okay','please','add'].includes(lower)){const town=lastTown||'knysna';const townName=town.charAt(0).toUpperCase()+town.slice(1);say('Perfect — adding restaurants + weather for '+townName+'...','ai');await showWeatherFor(town);const list=filterRestaurants(town);say(renderRestaurants(list),'ai',true);return}if(lower.includes('about')||lower.includes('tell me about')||lower.includes('history of')){let place=lower.replace('tell me about','').replace('history of','').replace('about','').replace('?','').trim();if(!place)place=lastTown||'knysna';await showWikiFor(place);return}if(lower.includes('weather')||lower.includes('rain')||lower.includes('hot')||lower.includes('cold')){const wTown=TS.find(t=>lower.includes(t))||lastTown||'knysna';lastTown=wTown;await showWeatherFor(wTown);return}const dayMatch=lower.match(/(\d+)\s*-?\s*day/);const townMatch=TS.find(t=>lower.includes(t));if(dayMatch&&townMatch){lastTown=townMatch;buildItinerary(townMatch,parseInt(dayMatch[1]));return}if(lower.includes('itinerary')&&townMatch){lastTown=townMatch;buildItinerary(townMatch,2);return}if(lower.includes('restaurant')||MODE==='restaurants'){const rTown=townMatch||lastTown;if(rTown)lastTown=rTown;const list=filterRestaurants(q);say(renderRestaurants(list),'ai',true);return}const list=MODE==='restaurants'?filterRestaurants(q):filterEvents(q);const reply=MODE==='restaurants'?renderRestaurants(list):renderEvents(list);say(reply,'ai',true)}finally{isSending=false}}
-function clearChat(){document.getElementById('chat').innerHTML='';say("Hi! I'm Garden Route AI 🌿 Tell me where you want to go and how many days — I'll build your itinerary.",'ai')}
-async function loadWeather(){const towns=[{n:'Knysna',lat:-34.036,lon:23.047},{n:'Plett',lat:-34.05,lon:23.37},{n:'George',lat:-33.97,lon:22.46},{n:'Wilderness',lat:-33.99,lon:22.58}];try{const grid=document.getElementById('weatherGrid');grid.innerHTML='';for(let t of towns){const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${t.lat}&longitude=${t.lon}&current=temperature_2m,precipitation&timezone=Africa%2FJohannesburg`);const j=await r.json();const temp=Math.round(j.current.temperature_2m);const rain=j.current.precipitation>0;const good=temp>=18&&!rain;grid.innerHTML+=`<div class="w-card"><b>${t.n}</b><div class="temp">${temp}°C ${rain?'🌧️':'☀️'}</div><small>${good?'✅ Great for outdoors':'🧥 Pack layers / rain jacket'}</small><br><small>${rain?'Rain now':'No rain now'} • Real data</small></div>`}}catch(e){document.getElementById('weatherGrid').innerHTML='<div class="w-card">Weather offline — try again.</div>'}}
-async function load(){try{const r=await fetch('data/events.json');const j=await r.json();EVENTS=j.events||[];try{const rr=await fetch('data/restaurants.json');if(rr.ok){const rj=await rr.json();RESTAURANTS=rj.restaurants||[]}}catch(e){}try{const rf=await fetch('data/featured.json');if(rf.ok){const fj=await rf.json();FEATURED=fj.featured||[]}}catch(e){}say("Hi! I'm Garden Route AI 🌿\n\nI build itineraries. Tell me where you want to go and how many days — e.g. '2 days in Knysna'.\n\nTap ⋮ at the top for Events, Restaurants, Saved, Emergency, Weather, Budget & Highlights.",'ai')}catch(e){say("Hi! Events loading...",'ai')}updateFav();renderHighlights();calcBudget();loadWeather()}
-load();
+
+async function getWikipedia(place){
+  try{
+    const clean = place.trim();
+    if(!clean) return null;
+    const res = await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(clean));
+    if(!res.ok) return null;
+    const data = await res.json();
+    if(!data.extract) return null;
+    return {
+      title: data.title,
+      extract: data.extract,
+      image: data.thumbnail ? data.thumbnail.source : null,
+      link: data.content_urls && data.content_urls.desktop ? data.content_urls.desktop.page : 'https://en.wikipedia.org/wiki/' + encodeURIComponent(clean)
+    };
+  }catch(e){ return null; }
+}
+
+function showWiki(data, place){
+  // remove loading message
+  const last = chat.lastChild;
+  if(last && last.textContent.includes('Looking up')) last.remove();
+  if(!data){
+    addMsg('Sorry, I could not find Wikipedia info for ' + place + '. Try: About Knysna, About George, About Plettenberg Bay');
+    return;
+  }
+  let html = '<h3>📖 ' + data.title + ' - from Wikipedia</h3><p>' + data.extract + '</p>';
+  if(data.image) html += '<img src="'+data.image+'" />';
+  html += '<p><a href="'+data.link+'" target="_blank">Read full article on Wikipedia →</a></p>';
+  addMsg(html, 'bot', true);
+}
+
+function getEvents(place){
+  const events = [
+    {title:'Leisure Isle Festival - 21st Anniversary', town:'Knysna'},
+    {title:'ForestJAZZ in November', town:'Knysna'},
+    {title:'Radiate', town:'Knysna'},
+    {title:'Knysna Oyster Festival', town:'Knysna'},
+    {title:'George Arts Festival', town:'George'},
+    {title:'Garden Route Botanical Garden Walk', town:'George'},
+    {title:'Plett Wine & Bubbly Festival', town:'Plettenberg Bay'},
+    {title:'Mossel Bay Dias Festival', town:'Mossel Bay'}
+  ];
+  return events.filter(e => e.town.toLowerCase() === place.toLowerCase());
+}
+
+function getItinerary(place, days){
+  if(place==='george'){
+    return '<h3>🗓️ '+days+'-Day Itinerary in George</h3>'
+    + '<p><b>Day 1:</b> Garden Route Botanical Garden, George Museum, York Street for lunch, Outeniqua Transport Museum</p>'
+    + '<p><b>Day 2:</b> Kaaimans River, Wilderness Beach, Map of Africa viewpoint, dinner on York Street</p>';
+  }
+  if(place==='knysna'){
+    return '<h3>🗓️ '+days+'-Day Itinerary in Knysna</h3>'
+    + '<p><b>Day 1:</b> Knysna Heads, Leisure Isle, Waterfront for lunch, Knysna Forest</p>'
+    + '<p><b>Day 2:</b> Featherbed Nature Reserve, Thesen Island, Oyster tasting</p>';
+  }
+  return '<h3>🗓️ '+days+'-Day Itinerary in '+place+'</h3><p>Explore the main beach, local markets, forest walks and waterfront restaurants. Ask me About '+place+' for history first.</p>';
+}
+
+async function ask(){
+  const q = input.value.trim();
+  if(!q) return;
+  addMsg(q, 'user');
+  input.value = '';
+  const lower = q.toLowerCase();
+
+  // 1. WIKIPEDIA - MUST BE FIRST, BEFORE ANYTHING ELSE
+  if(lower.includes('about') || lower.includes('tell') || lower.includes('tel me')){
+    let place = lower.replace('tel me about','').replace('tell me about','').replace('about','').replace('tell','').replace('me','').replace('what is','').replace('?','').trim();
+    if(!place) place = 'Knysna';
+    // Capitalize first letter
+    place = place.charAt(0).toUpperCase() + place.slice(1);
+    addMsg('Looking up ' + place + ' on Wikipedia...');
+    const data = await getWikipedia(place);
+    showWiki(data, place);
+    return;
+  }
+
+  // 2. ITINERARY
+  if(lower.includes('itinerary') || lower.includes('day') && lower.includes('in')){
+    let town = 'George';
+    if(lower.includes('knysna')) town='Knysna';
+    if(lower.includes('george')) town='George';
+    if(lower.includes('plett')) town='Plettenberg Bay';
+    if(lower.includes('mossel')) town='Mossel Bay';
+    if(lower.includes('wilderness')) town='Wilderness';
+    let days = 2;
+    const m = lower.match(/(\d+)\s*-?\s*day/);
+    if(m) days = parseInt(m[1]);
+    addMsg(getItinerary(town.toLowerCase(), days), 'bot', true);
+    return;
+  }
+
+  // 3. EVENTS - ONLY IF NOT WIKIPEDIA
+  if(lower.includes('event') || lower.includes('what is on') || lower.includes("what's on")){
+    let town = 'Knysna';
+    if(lower.includes('george')) town='George';
+    if(lower.includes('knysna')) town='Knysna';
+    if(lower.includes('plett')) town='Plettenberg Bay';
+    if(lower.includes('mossel')) town='Mossel Bay';
+    const list = getEvents(town);
+    let html = "Here's what I found ("+list.length+"): ";
+    list.forEach(e=>{
+      html += '<div class="card"><h3>'+e.title+'</h3><p>📍 '+e.town+' • 📅 See link</p><a href="#">View Details →</a><br><button class="save" onclick="this.textContent=\'♥ Saved\'">🤍 Save</button></div>';
+    });
+    addMsg(html, 'bot', true);
+    return;
+  }
+
+  // 4. FALLBACK
+  addMsg('I can help with: <b>About Knysna</b> for Wikipedia, <b>2-day itinerary in George</b>, or <b>Events in Knysna</b>. What do you want?');
+}
 </script>
 </body>
 </html>
