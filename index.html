@@ -67,6 +67,7 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   h1 { margin: 4px 0 2px; font-size: 28px; font-weight: 700; letter-spacing: -0.03em; background: linear-gradient(135deg, #fff 30%, #fdba74); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
   p.sub { color: var(--muted); margin: 0 0 18px; font-size: 14px; }
+  .join-btn { display:block; max-width:720px; width:100%; margin:0 auto 14px; background:linear-gradient(135deg,#f97316,#ea580c); color:white; padding:13px 18px; border-radius:999px; text-align:center; text-decoration:none; font-weight:700; font-size:14px; box-shadow:0 4px 20px rgba(249,115,22,0.35); }
   .tabs, .chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 14px; }
   .tabs button, .chips button, .suggestions button { background: rgba(30, 41, 59, 0.6); color: white; border: 1px solid var(--border); padding: 8px 15px; border-radius: 999px; cursor: pointer; font-size: 13px; backdrop-filter: blur(8px); transition: all 0.2s ease; }
   .tabs button:hover:not(:disabled), .chips button:hover, .suggestions button:hover { background: rgba(51, 65, 85, 0.8); border-color: rgba(249, 115, 22, 0.4); transform: translateY(-1px); }
@@ -98,6 +99,8 @@
   .event b { color: #fbbf24; font-size: 15px; }
   .event a { color: var(--link); text-decoration: none; font-weight: 500; }
   .event a:hover { text-decoration: underline; }
+  .event.featured { border-color: rgba(249,115,22,0.6); background: rgba(249,115,22,0.08); }
+  .featured-badge { background: linear-gradient(135deg,#f97316,#ea580c); color: white; font-size: 11px; padding: 2px 8px; border-radius: 999px; font-weight: 700; margin-left: 6px; }
   .footer { font-size: 11px; color: #64748b; text-align: center; margin-top: 18px; }
   #chat::-webkit-scrollbar { width: 6px; }
   #chat::-webkit-scrollbar-track { background: transparent; }
@@ -114,6 +117,7 @@
     <h1>Garden Route AI</h1>
     <p class="sub">Your live AI guide to the Garden Route</p>
   </div>
+  <a href="/join.html" class="join-btn">Are you a business? Get Featured for R50/mo →</a>
   <div class="tabs" role="tablist">
     <button id="tab-events" class="active" role="tab" onclick="setMode('events')">🎉 Events</button>
     <button id="tab-restaurants" role="tab" onclick="setMode('restaurants')">🍽️ Restaurants</button>
@@ -144,6 +148,7 @@
 <script>
 let EVENTS = [];
 let RESTAURANTS = [];
+let FEATURED = [];
 let MODE = 'events';
 let lastTown = null;
 let lastQuery = "";
@@ -189,13 +194,20 @@ function setMode(mode){
 }
 function filterRestaurants(q){
   q=(q||'').toLowerCase().trim();
-  let list=RESTAURANTS.slice();
+  // Featured always first - combine featured + normal, featured flagged
+  let all = [
+    ...FEATURED.map(f => ({...f, is_featured: true})),
+    ...RESTAURANTS.map(r => ({...r, is_featured: false}))
+  ];
+  let list = all.slice();
   const mentionedTowns=TOWNS_SORTED.filter(t=>q.includes(t));
   if(mentionedTowns.length){ lastTown=mentionedTowns[0]; list=list.filter(r=>{ const hay=((r.town||'')+' '+(r.name||r.title||'')+' '+(r.area||'')).toLowerCase(); return mentionedTowns.some(t=>hay.includes(t)); }); }
   let keywords=q;
   mentionedTowns.forEach(t=>{ keywords=keywords.replace(t,''); });
   keywords=keywords.replace(/\b(in|near|find|show|me|best|good|any|restaurant|restaurants|eat|food|where|can|i)\b/g,' ').trim();
-  if(keywords){ const words=keywords.split(/\s+/).filter(w=>w.length>2); if(words.length){ list=list.filter(r=>{ const hay=((r.name||r.title||'')+' '+(r.cuisine||'')+' '+(r.category||'')+' '+(r.description||'')).toLowerCase(); return words.some(w=>hay.includes(w)); }); } }
+  if(keywords){ const words=keywords.split(/\s+/).filter(w=>w.length>2); if(words.length){ list=list.filter(r=>{ const hay=((r.name||r.title||'')+' '+(r.cuisine||'')+' '+(r.category||'')+' '+(r.description||'')+' '+(r.food||'')+' '+(r.tip||'')).toLowerCase(); return words.some(w=>hay.includes(w)) || r.is_featured; }); } }
+  // Sort: featured first, then rest
+  list.sort((a,b) => (b.is_featured?1:0) - (a.is_featured?1:0));
   return list.slice(0,8);
 }
 function renderRestaurants(list){
@@ -204,11 +216,14 @@ function renderRestaurants(list){
   list.forEach(r=>{
     const name=escapeHtml(r.name||r.title||'Untitled');
     const town=escapeHtml(r.town||r.area||'Garden Route');
-    const cuisine=escapeHtml(r.cuisine||r.category||'');
-    const desc=r.description?'<br>'+escapeHtml(String(r.description).slice(0,140)):'';
+    const cuisine=escapeHtml(r.cuisine||r.category||r.food||'');
+    const desc=r.description?'<br>'+escapeHtml(String(r.description).slice(0,140)):(r.tip?'<br><i>⭐ Local tip: '+escapeHtml(String(r.tip).slice(0,140))+'</i>':'');
+    const badge=r.is_featured?'<span class="featured-badge">⭐ FEATURED</span>':'';
+    const cls=r.is_featured?'event featured':'event';
     let link=getLink(r);
     if(!link){ const q=encodeURIComponent((r.name||'')+' '+(r.town||'')+' Garden Route restaurant'); link=`https://www.google.com/search?q=${q}`; } else { link=escapeHtml(link); }
-    out+=`\n<div class="event"><b>${name}</b><br>📍 ${town}${cuisine?' • 🍽️ '+cuisine:''}${desc}<br><a href="${link}" target="_blank" rel="noopener noreferrer">View Details →</a></div>`;
+    const wa = r.whatsapp ? `<br><a href="https://wa.me/${escapeHtml(String(r.whatsapp).replace(/[^0-9]/g,''))}" target="_blank" rel="noopener">📱 Book on WhatsApp →</a>` : '';
+    out+=`\n<div class="${cls}"><b>${name}</b>${badge}<br>📍 ${town}${cuisine?' • 🍽️ '+cuisine:''}${desc}<br><a href="${link}" target="_blank" rel="noopener noreferrer">View Details →</a>${wa}</div>`;
   });
   return out;
 }
@@ -407,6 +422,10 @@ async function load(){
       const rr=await fetch('data/restaurants.json');
       if(rr.ok){ const rj=await rr.json(); RESTAURANTS=rj.restaurants||rj.data||(Array.isArray(rj)?rj:[]); }
     }catch(e){ console.log('No restaurants yet',e); }
+    try{
+      const rf=await fetch('data/featured.json');
+      if(rf.ok){ const fj=await rf.json(); FEATURED=fj.featured||fj.data||(Array.isArray(fj)?fj:[]); }
+    }catch(e){ console.log('No featured yet',e); }
     const seen=new Set();
     EVENTS=EVENTS.filter(e=>{
       const k=((e.title||'').toLowerCase().replace(/\s+/g,' ').trim())+'|'+((e.date||e.date_text||e.when||'').toString().toLowerCase().trim())+'|'+((e.town||'').toLowerCase().trim())+'|'+((e.location||e.venue||'').toLowerCase().trim());
@@ -414,7 +433,7 @@ async function load(){
       seen.add(k);
       return true;
     });
-    let statusText=`Live • ${EVENTS.length} events • ${RESTAURANTS.length} restaurants`;
+    let statusText=`Live • ${EVENTS.length} events • ${RESTAURANTS.length} restaurants • ${FEATURED.length} featured`;
     let staleWarning='';
     if(j.last_updated){
       const updated=new Date(j.last_updated);
