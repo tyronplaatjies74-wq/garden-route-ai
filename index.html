@@ -339,6 +339,7 @@
     <button type="button" onclick="ask('What is on in Knysna?')">Knysna</button>
     <button type="button" onclick="ask('What is on in George?')">George</button>
     <button type="button" onclick="ask('Family events')">Family Fun</button>
+    <button type="button" onclick="ask('Generate itinerary for 2 days in Knysna')">🗓️ 2-Day Itinerary</button>
   </div>
 
   <div class="card">
@@ -372,23 +373,40 @@ const TOWNS = [
   'great brak', 'little brak', 'herolds bay', 'victoria bay',
   'brenton', 'belvidere', 'rheenendal'
 ];
-// --- Garden Route Specialist - the brain ---
+// Longest first so "Plettenberg Bay" beats "plett"
+const TOWNS_SORTED = [...TOWNS].sort((a, b) => b.length - a.length);
+function titleCase(str) {
+  return String(str).split(' ').map(w => w ? w.charAt(0).toUpperCase() + w.slice(1) : w).join(' ');
+}
+function findTown(lower) {
+  return TOWNS_SORTED.find(t => lower.includes(t)) || null;
+}
+// --- Garden Route Specialist - the brain - DIRECT, no Hub ---
 const SPECIALIST_URL = "https://garden-route-specialist-api.vercel.app/itinerary/generate";
 
 async function askSpecialist(town, days) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
   try {
     const res = await fetch(SPECIALIST_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ towns: [town], days: days || 2, travel_style: "backpacker" })
+      body: JSON.stringify({ towns: [town], days: days || 2, travel_style: "backpacker" }),
+      signal: controller.signal
     });
+    if (!res.ok) {
+      console.log("Specialist returned non-200:", res.status);
+      return null;
+    }
     const data = await res.json();
     return data;
   } catch (e) {
-    console.log("Specialist offline, using local data", e);
+    console.log("Specialist offline / timeout, using local data", e);
     return null;
+  } finally {
+    clearTimeout(timeoutId);
   }
-  }
+}
 function escapeHtml(str) {
   if (str == null) return '';
   return String(str)
@@ -460,6 +478,10 @@ function getLink(e) {
   if (link.startsWith('/') || link.startsWith('./') || !/^https?:\/\//i.test(link)) return null;
   return link;
 }
+function safeLink(url) {
+  if (!url) return null;
+  return getLink({ link: url });
+}
 function say(text, who, isHtml = false) {
   const c = document.getElementById('chat');
   const d = document.createElement('div');
@@ -500,7 +522,7 @@ function setMode(mode) {
 function filterRestaurants(q) {
   q = (q || '').toLowerCase().trim();
   let list = RESTAURANTS.slice();
-  const mentionedTowns = TOWNS.filter(t => q.includes(t));
+  const mentionedTowns = TOWNS_SORTED.filter(t => q.includes(t));
   if (mentionedTowns.length) {
     lastTown = mentionedTowns[0];
     list = list.filter(r => {
@@ -550,7 +572,7 @@ function filterEvents(q) {
   if (/\b(there|same place|that town)\b/.test(q) && lastTown) {
     q += ' ' + lastTown;
   }
-  const mentionedTowns = TOWNS.filter(t => q.includes(t));
+  const mentionedTowns = TOWNS_SORTED.filter(t => q.includes(t));
   if (mentionedTowns.length) {
     lastTown = mentionedTowns[0];
     list = list.filter(e => {
@@ -610,7 +632,7 @@ function getSuggestions(q, list) {
   const suggestions = [];
   if (list.length > 0) {
     suggestions.push("This weekend");
-    if (lastTown) suggestions.push(`More in ${lastTown.charAt(0).toUpperCase() + lastTown.slice(1)}`);
+    if (lastTown) suggestions.push(`More in ${titleCase(lastTown)}`);
     suggestions.push("Markets", "Live music", "Family events");
   } else {
     suggestions.push("What is on this weekend?", "Knysna events", "George events", "Markets");
@@ -632,13 +654,55 @@ function generateReply(q, list) {
     return "I'm Garden Route AI — your local events guide. I pull live data from public listings across the Garden Route and help you discover what's happening.";
   }
   const intro = list.length
-    ? (lastTown ? `Looking at ${lastTown.charAt(0).toUpperCase() + lastTown.slice(1)}... ` : "")
+    ? (lastTown ? `Looking at ${titleCase(lastTown)}... ` : "")
     : "";
   return intro + renderEvents(list);
 }
 function ask(q) {
   document.getElementById('q').value = q;
   send();
+}
+function renderItinerary(data, town, days) {
+  if (!data || !data.itinerary || !data.itinerary.length) {
+    return "Specialist didn't return an itinerary. Try again, or try a different town.";
+  }
+  let out = `Here's your ${days}-day plan for ${escapeHtml(town)} — from the Specialist:\n`;
+  if (data.route_order && Array.isArray(data.route_order) && data.route_order.length) out += `Route: ${escapeHtml(data.route_order.join(" → "))}\n`;
+  data.itinerary.forEach((day, i) => {
+    const dayNum = day.day || day.day_number || (i + 1);
+    const dayTitle = day.title || day.name || "";
+    out += `\n<div class="event"><b>Day ${escapeHtml(String(dayNum))}${dayTitle ? " — " + escapeHtml(String(dayTitle)) : ""}</b><br>`;
+    const items = day.activities || day.items || day.stops || day.plan || day.schedule || [];
+    if (Array.isArray(items) && items.length) {
+      items.forEach(it => {
+        if (typeof it === "string") { out += `• ${escapeHtml(it)}<br>`; return; }
+        const name = escapeHtml(it.name || it.title || "Stop");
+        const cost = it.cost_display ? ` • ${escapeHtml(String(it.cost_display))}` : (it.cost ? ` • R${escapeHtml(String(it.cost))}` : "");
+        const desc = it.description ? `<br><span style="color:#94a3b8">${escapeHtml(String(it.description).slice(0, 140))}</span>` : "";
+        const mapsUrl = safeLink(it.maps);
+        const webUrl = safeLink(it.website || it.url);
+        const link = mapsUrl ? `<br><a href="${escapeHtml(mapsUrl)}" target="_blank" rel="noopener">Map →</a>` : (webUrl ? `<br><a href="${escapeHtml(webUrl)}" target="_blank" rel="noopener">Website →</a>` : "");
+        out += `• <b>${name}</b>${cost}${desc}${link}<br>`;
+      });
+    } else {
+      const keys = Object.keys(day).filter(k => !["day","day_number","title","name"].includes(k));
+      if (keys.length) {
+        keys.forEach(k => {
+          const v = day[k];
+          if (typeof v === "string" || typeof v === "number") out += `• ${escapeHtml(k)}: ${escapeHtml(String(v))}<br>`;
+          else if (Array.isArray(v)) v.forEach(x => { out += `• ${escapeHtml(typeof x === "string" ? x : (x.name || JSON.stringify(x)))}<br>`; });
+        });
+      } else {
+        out += escapeHtml(JSON.stringify(day).slice(0, 400)) + "<br>";
+      }
+    }
+    out += `</div>`;
+  });
+  if (data.warnings) {
+    const warnText = Array.isArray(data.warnings) ? data.warnings.join("; ") : String(data.warnings);
+    if (warnText) out += `\n<span style="color:#94a3b8">Note: ${escapeHtml(warnText)}</span>`;
+  }
+  return out;
 }
 async function send() {
   const inp = document.getElementById('q');
@@ -650,68 +714,10 @@ async function send() {
   lastQuery = q;
   showTyping();
   await new Promise(r => setTimeout(r, 600 + Math.random() * 700));
-  hideTyping();
-  const list = MODE === 'restaurants' ? filterRestaurants(q) : filterEvents(q);
-  const reply = MODE === 'restaurants' ? renderRestaurants(list) : generateReply(q, list);
-  const msgEl = say(reply, 'ai', true);
-  const suggestions = MODE === 'restaurants' ? [] : getSuggestions(q, list);
-  if (suggestions.length) {
-    const sugDiv = document.createElement('div');
-    sugDiv.className = 'suggestions';
-    suggestions.forEach(s => {
-      const btn = document.createElement('button');
-      btn.textContent = s;
-      btn.onclick = () => ask(s);
-      sugDiv.appendChild(btn);
-    });
-    msgEl.appendChild(sugDiv);
-  }
-  document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
-}
-function clearChat() {
-  document.getElementById('chat').innerHTML = '';
-  lastTown = null;
-  lastQuery = '';
-  say("Chat cleared. What would you like to know about Garden Route events?", 'ai');
-}
-async function load() {
-  const statusEl = document.getElementById('status');
-  statusEl.textContent = 'Loading live events...';
-  try {
-    const r = await fetch('data/events.json?t=' + Date.now());
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    const j = await r.json();
-    EVENTS = j.events || [];
-    try {
-      const rr = await fetch('data/restaurants.json?t=' + Date.now());
-      if (rr.ok) {
-        const rj = await rr.json();
-        RESTAURANTS = rj.restaurants || rj.data || (Array.isArray(rj) ? rj : []);
-      }
-    } catch(e) { console.log('No restaurants yet', e); }
-    const seen = new Set();
-    EVENTS = EVENTS.filter(e => {
-      const k = (e.title || '').toLowerCase().replace(/\s+/g, ' ').trim();
-      if (!k || seen.has(k)) return false;
-      seen.add(k);
-      return true;
-    });
-    let statusText = `Live • ${EVENTS.length} events • ${RESTAURANTS.length} restaurants`;
-    if (j.last_updated) {
-      const updated = new Date(j.last_updated);
-      if (!isNaN(updated.getTime())) {
-        statusText += ` • Updated: ${updated.toLocaleString()}`;
-      }
-    }
-    statusEl.textContent = statusText;
-    say("Hi! I'm Garden Route AI 🌿\nI can help you find live events across the Garden Route.\n\nAsk me anything, or try the quick buttons above!", 'ai');
-  } catch (err) {
-    console.error(err);
-    statusEl.textContent = 'No data/events.json yet – run the scraper first.';
-    say("Hi! Events are still loading. Once your scraper has run I’ll show live upcoming events here.", 'ai');
-  }
-}
-load();
-</script>
-</body>
-</html>
+
+  // --- If user wants an itinerary / plan, go DIRECT to Specialist ---
+  const lower = q.toLowerCase();
+  const wantsItinerary = /\b(itinerary|plan|trip|holiday)\b/.test(lower) || /\b\d+\s*-?\s*days?\s+in\b/.test(lower) || /\bday\s+trip\b/.test(lower) || /\b\d+\s*-?\s*day\b/.test(lower);
+  if (wantsItinerary && MODE !== 'restaurants') {
+    const townMatch = findTown(lower);
+    let townRaw = townMatch ||
