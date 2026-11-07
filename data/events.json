@@ -1,7 +1,19 @@
 {
-  "last_updated": "07/11/2026, 05:43:13",
-  "count": 106,
+  "last_updated": "07/11/2026, 06:35:07",
+  "count": 108,
   "events": [
+    {
+      "title": "A Night of Comedy with Alan Committie",
+      "town": "Knysna",
+      "date": ", 7 November 2026",
+      "link": "https://www.toodoo.co.za/a-night-of-comedy-with-alan-committie/"
+    },
+    {
+      "title": "A Night of Comedy with Alan Committie",
+      "town": "Garden Route",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/a-night-of-comedy-with-alan-committie/"
+    },
     {
       "title": "Ancient history of Robberg Coastal Corridor Protected Environment",
       "town": "Knysna",
@@ -183,6 +195,12 @@
       "link": "https://www.toodoo.co.za/george-botanical-gardens-parkrun/"
     },
     {
+      "title": "George Open Gardens 2026",
+      "town": "George",
+      "date": ", 7 November 2026",
+      "link": "https://www.toodoo.co.za/george-open-gardens-2026/"
+    },
+    {
       "title": "George Picnic Fiesta – Summer Edition",
       "town": "George",
       "date": "Enjoy live music, top DJs, old-school R&B and local hits at George Picnic Fiesta – Summer Edition on 12 December 2026!",
@@ -283,18 +301,6 @@
       "town": "Garden Route",
       "date": "See link for date",
       "link": "https://www.toodoo.co.za/magda-louw-en-die-kar-se-sleutel-mossel-bay/"
-    },
-    {
-      "title": "Man in Black – A Tribute to Johnny Cash",
-      "town": "Knysna",
-      "date": ", 7 November 2026",
-      "link": "https://www.toodoo.co.za/man-in-black-johnny-cash-tribute-knysna/"
-    },
-    {
-      "title": "Man in Black – A Tribute to Johnny Cash",
-      "town": "Garden Route",
-      "date": "See link for date",
-      "link": "https://www.toodoo.co.za/man-in-black-johnny-cash-tribute-knysna/"
     },
     {
       "title": "Mermaid Ball 2026",
@@ -427,6 +433,12 @@
       "town": "Sedgefield",
       "date": "Bring the whole family for Secret Sunset at Myoli Beach, Sedgefield, on 14 November 2026! Enjoy 60 minutes of music, dancing, mindfulness and festive summer fun with wireless headphones. Adults R180, children R100.",
       "link": "https://www.toodoo.co.za/sedgefield-sunset-family-festive-fun/"
+    },
+    {
+      "title": "Showground Sundays – George",
+      "town": "George",
+      "date": ", 8 November 2026",
+      "link": "https://www.toodoo.co.za/showground-sundays-george/"
     },
     {
       "title": "Spoilt Knysna Gift Fair 2026",
