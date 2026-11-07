@@ -720,4 +720,87 @@ async function send() {
   const wantsItinerary = /\b(itinerary|plan|trip|holiday)\b/.test(lower) || /\b\d+\s*-?\s*days?\s+in\b/.test(lower) || /\bday\s+trip\b/.test(lower) || /\b\d+\s*-?\s*day\b/.test(lower);
   if (wantsItinerary && MODE !== 'restaurants') {
     const townMatch = findTown(lower);
-    let townRaw = townMatch ||
+        let townRaw = townMatch || lastTown || "knysna";
+    const town = titleCase(townRaw);
+    const daysMatch = lower.match(/(\d+)\s*-?\s*day/);
+    let days = daysMatch ? parseInt(daysMatch[1], 10) : 2;
+    if (isNaN(days)) days = 2;
+    days = Math.min(7, Math.max(1, days));
+    lastTown = townRaw.toLowerCase();
+    // Keep typing dots ON while Specialist answers - hide after response
+    const data = await askSpecialist(town, days);
+    hideTyping();
+    if (data && data.itinerary) {
+      say(renderItinerary(data, town, days), 'ai', true);
+      document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+      return;
+    }
+    say("Specialist didn't answer, showing live events instead:", 'ai');
+  } else {
+    hideTyping();
+  }
+
+  const list = MODE === 'restaurants' ? filterRestaurants(q) : filterEvents(q);
+  const reply = MODE === 'restaurants' ? renderRestaurants(list) : generateReply(q, list);
+  const msgEl = say(reply, 'ai', true);
+  const suggestions = MODE === 'restaurants' ? [] : getSuggestions(q, list);
+  if (suggestions.length) {
+    const sugDiv = document.createElement('div');
+    sugDiv.className = 'suggestions';
+    suggestions.forEach(s => {
+      const btn = document.createElement('button');
+      btn.textContent = s;
+      btn.onclick = () => ask(s);
+      sugDiv.appendChild(btn);
+    });
+    msgEl.appendChild(sugDiv);
+  }
+  document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+}
+function clearChat() {
+  document.getElementById('chat').innerHTML = '';
+  lastTown = null;
+  lastQuery = '';
+  say("Chat cleared. What would you like to know about Garden Route events?", 'ai');
+}
+async function load() {
+  const statusEl = document.getElementById('status');
+  statusEl.textContent = 'Loading live events...';
+  try {
+    const r = await fetch('data/events.json?t=' + Date.now());
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const j = await r.json();
+    EVENTS = j.events || [];
+    try {
+      const rr = await fetch('data/restaurants.json?t=' + Date.now());
+      if (rr.ok) {
+        const rj = await rr.json();
+        RESTAURANTS = rj.restaurants || rj.data || (Array.isArray(rj) ? rj : []);
+      }
+    } catch(e) { console.log('No restaurants yet', e); }
+    const seen = new Set();
+    EVENTS = EVENTS.filter(e => {
+      const k = (e.title || '').toLowerCase().replace(/\s+/g, ' ').trim();
+      if (!k || seen.has(k)) return false;
+      seen.add(k);
+      return true;
+    });
+    let statusText = `Live • ${EVENTS.length} events • ${RESTAURANTS.length} restaurants`;
+    if (j.last_updated) {
+      const updated = new Date(j.last_updated);
+      if (!isNaN(updated.getTime())) {
+        statusText += ` • Updated: ${updated.toLocaleString()}`;
+      }
+    }
+    statusEl.textContent = statusText;
+    say("Hi! I'm Garden Route AI 🌿\nI can help you find live events across the Garden Route.\n\nAsk me anything, or try the quick buttons above!", 'ai');
+  } catch (err) {
+    console.error(err);
+    statusEl.textContent = 'No data/events.json yet – run the scraper first.';
+    say("Hi! Events are still loading. Once your scraper has run I’ll show live upcoming events here.", 'ai');
+  }
+}
+load();
+</script>
+</body>
+</html>
