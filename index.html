@@ -3,452 +3,173 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Garden Route AI - Your live AI guide to events, restaurants and itineraries across the Garden Route.">
+<title>Garden Route AI | Live Guide</title>
+<meta name="description" content="Garden Route AI - Live events, restaurants, weather, budget and itineraries.">
 <meta name="theme-color" content="#0b1120">
-<meta property="og:title" content="Garden Route AI">
-<meta property="og:description" content="Your live AI guide to the Garden Route">
-<title>Garden Route AI</title>
 <style>
-  :root {
-    --bg: #0b1120;
-    --card: rgba(30, 41, 59, 0.55);
-    --border: rgba(148, 163, 184, 0.18);
-    --orange: #f97316;
-    --glow: rgba(249, 115, 22, 0.45);
-    --text: #f8fafc;
-    --muted: #94a3b8;
-    --link: #60a5fa;
-  }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px 16px 32px;
-    position: relative;
-    overflow-x: hidden;
-  }
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 80% 50% at 20% -20%, rgba(249, 115, 22, 0.18), transparent),
-      radial-gradient(ellipse 60% 40% at 80% 10%, rgba(124, 58, 237, 0.15), transparent),
-      radial-gradient(ellipse 50% 30% at 50% 100%, rgba(56, 189, 248, 0.08), transparent);
-    animation: meshMove 18s ease-in-out infinite alternate;
-    pointer-events: none;
-    z-index: -1;
-  }
-  @keyframes meshMove {
-    0% { transform: scale(1) translate(0, 0); }
-    100% { transform: scale(1.05) translate(-2%, 1%); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
-  }
-  .top { width: 100%; max-width: 720px; text-align: center; padding: 12px 0 8px; }
-  .orb-wrap { position: relative; width: 96px; height: 96px; margin: 0 auto 14px; }
-  .orb {
-    width: 84px; height: 84px; border-radius: 50%;
-    background: radial-gradient(circle at 30% 28%, #fde68a, #f97316 45%, #7c3aed 100%);
-    display: flex; align-items: center; justify-content: center; font-size: 36px;
-    box-shadow: 0 0 0 1px rgba(255,255,255,0.12), 0 0 40px var(--glow), 0 0 80px rgba(124, 58, 237, 0.25);
-    animation: pulse 3s ease-in-out infinite; position: relative; z-index: 2;
-  }
-  .orb-ring { position: absolute; inset: -8px; border-radius: 50%; border: 1px solid rgba(249, 115, 22, 0.35); animation: spin 12s linear infinite; }
-  .orb-ring:nth-child(2) { inset: -16px; border-color: rgba(124, 58, 237, 0.25); animation-duration: 18s; animation-direction: reverse; }
-  @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  h1 { margin: 4px 0 2px; font-size: 28px; font-weight: 700; letter-spacing: -0.03em; background: linear-gradient(135deg, #fff 30%, #fdba74); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-  p.sub { color: var(--muted); margin: 0 0 18px; font-size: 14px; }
-  .join-btn { display:block; max-width:720px; width:100%; margin:0 auto 14px; background:linear-gradient(135deg,#f97316,#ea580c); color:white; padding:13px 18px; border-radius:999px; text-align:center; text-decoration:none; font-weight:700; font-size:14px; box-shadow:0 4px 20px rgba(249,115,22,0.35); }
-  .tabs, .chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 14px; }
-  .tabs button, .chips button, .suggestions button { background: rgba(30, 41, 59, 0.6); color: white; border: 1px solid var(--border); padding: 8px 15px; border-radius: 999px; cursor: pointer; font-size: 13px; backdrop-filter: blur(8px); transition: all 0.2s ease; }
-  .tabs button:hover:not(:disabled), .chips button:hover, .suggestions button:hover { background: rgba(51, 65, 85, 0.8); border-color: rgba(249, 115, 22, 0.4); transform: translateY(-1px); }
-  .tabs button.active { background: linear-gradient(135deg, #f97316, #ea580c); border-color: transparent; box-shadow: 0 4px 20px rgba(249, 115, 22, 0.35); }
-  .tabs button:disabled { opacity: 0.38; cursor: not-allowed; }
-  .card { background: var(--card); border: 1px solid var(--border); border-radius: 22px; padding: 16px; width: 100%; max-width: 720px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06); }
-  #chat { height: 380px; height: 55dvh; max-height: 520px; min-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; margin-bottom: 14px; scroll-behavior: smooth; padding-right: 4px; }
-  .msg { padding: 11px 14px; border-radius: 16px; max-width: 88%; font-size: 14px; line-height: 1.55; white-space: pre-wrap; }
-  .user { align-self: flex-end; background: linear-gradient(135deg, #f97316, #ea580c); box-shadow: 0 4px 15px rgba(249, 115, 22, 0.25); }
-  .ai { align-self: flex-start; background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border); }
-  .typing { align-self: flex-start; background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border); padding: 12px 16px; border-radius: 16px; display: flex; gap: 5px; width: fit-content; }
-  .typing span { width: 7px; height: 7px; background: #94a3b8; border-radius: 50%; animation: bounce 1.2s infinite ease-in-out; }
-  .typing span:nth-child(2) { animation-delay: 0.15s; }
-  .typing span:nth-child(3) { animation-delay: 0.3s; }
-  @keyframes bounce { 0%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-6px); } }
-  .suggestions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
-  .row { display: flex; gap: 10px; }
-  input { flex: 1; padding: 13px 18px; border-radius: 999px; border: 1px solid var(--border); background: rgba(15, 23, 42, 0.6); color: white; outline: none; font-size: 16px; backdrop-filter: blur(8px); transition: border-color 0.2s; }
-  input:focus { border-color: rgba(249, 115, 22, 0.5); }
-  button.send { background: linear-gradient(135deg, #f97316, #ea580c); border: none; color: white; padding: 13px 20px; border-radius: 999px; cursor: pointer; font-weight: 700; font-size: 14px; box-shadow: 0 4px 18px rgba(249, 115, 22, 0.35); transition: all 0.2s ease; }
-  button.send:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(249, 115, 22, 0.45); }
-  button.send:active { transform: scale(0.97); }
-  .toolbar { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
-  #status { font-size: 12px; color: var(--muted); }
-  .clear-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 5px 12px; border-radius: 999px; font-size: 12px; cursor: pointer; }
-  .clear-btn:hover { border-color: #f97316; color: #f97316; }
-  .event { border: 1px solid var(--border); border-radius: 14px; padding: 13px 14px; margin-top: 10px; background: rgba(15, 23, 42, 0.55); transition: transform 0.2s, border-color 0.2s, background 0.2s; }
-  .event:hover { transform: translateY(-2px); border-color: rgba(249, 115, 22, 0.35); background: rgba(15, 23, 42, 0.75); }
-  .event b { color: #fbbf24; font-size: 15px; }
-  .event a { color: var(--link); text-decoration: none; font-weight: 500; }
-  .event a:hover { text-decoration: underline; }
-  .event.featured { border-color: rgba(249,115,22,0.6); background: rgba(249,115,22,0.08); }
-  .featured-badge { background: linear-gradient(135deg,#f97316,#ea580c); color: white; font-size: 11px; padding: 2px 8px; border-radius: 999px; font-weight: 700; margin-left: 6px; }
-  .footer { font-size: 11px; color: #64748b; text-align: center; margin-top: 18px; }
-  #chat::-webkit-scrollbar { width: 6px; }
-  #chat::-webkit-scrollbar-track { background: transparent; }
-  #chat::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25); border-radius: 99px; }
+:root{--bg:#0b1120;--card:rgba(30,41,59,0.6);--border:rgba(148,163,184,0.18);--orange:#f97316;--text:#f8fafc;--muted:#94a3b8;--link:#60a5fa}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:0 16px 32px;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 20% -20%,rgba(249,115,22,0.18),transparent),radial-gradient(ellipse 60% 40% at 80% 10%,rgba(124,58,237,0.15),transparent);pointer-events:none;z-index:-1}
+.top{width:100%;max-width:720px;text-align:center;padding:14px 0 8px}
+.orb{width:84px;height:84px;border-radius:50%;background:radial-gradient(circle at 30% 28%,#fde68a,#f97316 45%,#7c3aed 100%);display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 10px;box-shadow:0 0 40px rgba(249,115,22,0.45)}
+h1{font-size:28px;background:linear-gradient(135deg,#fff 30%,#fdba74);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+p.sub{color:var(--muted);font-size:14px;margin-bottom:10px}
+.ticker{width:100%;max-width:720px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);border-radius:999px;overflow:hidden;white-space:nowrap;padding:7px 0;font-size:12px;margin-bottom:12px}
+.ticker span{display:inline-block;padding-left:100%;animation:tick 22s linear infinite}
+@keyframes tick{to{transform:translateX(-100%)}}
+.join-btn{display:block;max-width:720px;width:100%;margin:0 auto 14px;background:linear-gradient(135deg,#f97316,#ea580c);color:white;padding:13px 18px;border-radius:999px;text-align:center;text-decoration:none;font-weight:700;font-size:14px;box-shadow:0 4px 20px rgba(249,115,22,0.35)}
+.tabs,.chips{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:14px}
+.tabs button,.chips button{background:rgba(30,41,59,0.6);color:white;border:1px solid var(--border);padding:8px 15px;border-radius:999px;cursor:pointer;font-size:13px}
+.tabs button.active{background:linear-gradient(135deg,#f97316,#ea580c)}
+.tabs button:disabled{opacity:.38}
+.card{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:16px;width:100%;max-width:720px;backdrop-filter:blur(20px)}
+#chat{height:340px;height:50dvh;max-height:520px;min-height:280px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;margin-bottom:14px}
+.msg{padding:11px 14px;border-radius:16px;max-width:88%;font-size:14px;line-height:1.55;white-space:pre-wrap}
+.user{align-self:flex-end;background:linear-gradient(135deg,#f97316,#ea580c)}
+.ai{align-self:flex-start;background:rgba(15,23,42,0.7);border:1px solid var(--border)}
+.row{display:flex;gap:10px}
+input{flex:1;padding:13px 18px;border-radius:999px;border:1px solid var(--border);background:rgba(15,23,42,0.6);color:white;outline:none;font-size:16px}
+button.send{background:linear-gradient(135deg,#f97316,#ea580c);border:none;color:white;padding:13px 20px;border-radius:999px;cursor:pointer;font-weight:700}
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+#status{font-size:12px;color:var(--muted)}
+.clear-btn{background:transparent;border:1px solid var(--border);color:var(--muted);padding:5px 12px;border-radius:999px;font-size:12px;cursor:pointer}
+.event{border:1px solid var(--border);border-radius:14px;padding:13px 14px;margin-top:10px;background:rgba(15,23,42,0.55)}
+.event b{color:#fbbf24;font-size:15px}
+.event a{color:var(--link);text-decoration:none}
+.event.featured{border-color:rgba(249,115,22,0.6);background:rgba(249,115,22,0.08)}
+.featured-badge{background:linear-gradient(135deg,#f97316,#ea580c);color:white;font-size:11px;padding:2px 8px;border-radius:999px;font-weight:700;margin-left:6px}
+.fav-btn{background:rgba(255,255,255,0.08);border:1px solid var(--border);color:white;padding:5px 11px;border-radius:999px;font-size:12px;cursor:pointer;margin-top:8px}
+.fav-btn.active{background:#f97316;border-color:#f97316}
+.section{width:100%;max-width:720px;margin-top:18px}
+.section h2{font-size:17px;margin-bottom:10px}
+.weather-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.w-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:12px;text-align:center}
+.w-card .temp{font-size:22px;font-weight:800;margin:4px 0}
+.w-card small{color:var(--muted);font-size:11px}
+.tool-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.tool-row button{background:rgba(30,41,59,0.7);border:1px solid var(--border);color:white;padding:10px 14px;border-radius:999px;font-size:13px;cursor:pointer}
+.budget-box{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:16px}
+.budget-box label{font-size:12px;color:var(--muted);display:block;margin:10px 0 4px;text-transform:uppercase;font-weight:700}
+.budget-box select,.budget-box input{width:100%;padding:11px;border-radius:10px;border:1px solid var(--border);background:#0f172a;color:white}
+.budget-result{background:#0f172a;border-radius:14px;padding:14px;margin-top:14px}
+.budget-result .total{font-size:28px;font-weight:800}
+.budget-row{display:flex;justify-content:space-between;font-size:13px;color:#cbd5e1;padding:4px 0;border-top:1px solid rgba(255,255,255,0.06)}
+.budget-row:first-of-type{border-top:none}
+.curr-row{display:flex;gap:6px;margin-top:10px}
+.curr-row button{flex:1;padding:8px;border-radius:999px;border:1px solid var(--border);background:#1e293b;color:white;font-weight:700;cursor:pointer;font-size:12px}
+.curr-row button.active{background:#f97316;border-color:#f97316}
+/* Drawer + Modal - Gemini style, dark version */
+.drawer{position:fixed;inset:0;z-index:99;display:none}
+.drawer.open{display:block}
+.drawer-bg{position:absolute;inset:0;background:rgba(0,0,0,0.6)}
+.drawer-panel{position:absolute;right:0;top:0;bottom:0;width:100%;max-width:380px;background:#0f172a;border-left:1px solid var(--border);padding:18px;overflow-y:auto}
+.modal{position:fixed;inset:0;z-index:99;display:none;align-items:center;justify-content:center;padding:16px}
+.modal.open{display:flex}
+.modal-bg{position:absolute;inset:0;background:rgba(0,0,0,0.65)}
+.modal-panel{position:relative;background:#0f172a;border:1px solid var(--border);border-radius:20px;padding:18px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+.em-card{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:14px;padding:12px;margin-top:10px;text-decoration:none;color:white}
+.em-card b{font-size:14px}
+.em-card small{color:var(--muted);font-size:12px}
+.em-btn{background:#e11d48;color:white;padding:8px 12px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}
+.footer{font-size:11px;color:#64748b;text-align:center;margin-top:18px}
 </style>
 </head>
 <body>
-  <div class="top">
-    <div class="orb-wrap">
-      <div class="orb-ring"></div>
-      <div class="orb-ring"></div>
-      <div class="orb">🌿</div>
-    </div>
-    <h1>Garden Route AI</h1>
-    <p class="sub">Your live AI guide to the Garden Route</p>
-  </div>
-  <a href="join.html" class="join-btn">Are you a business? Get Featured for R50/mo →</a>
-  <div class="tabs" role="tablist">
-    <button id="tab-events" class="active" role="tab" onclick="setMode('events')">🎉 Events</button>
-    <button id="tab-restaurants" role="tab" onclick="setMode('restaurants')">🍽️ Restaurants</button>
-    <button disabled>🛏️ Stays • Soon</button>
-    <button disabled>🥾 Activities • Soon</button>
-  </div>
-  <div class="chips">
-    <button type="button" onclick="ask('What is on this weekend?')">This Weekend</button>
-    <button type="button" onclick="ask('Markets')">Markets</button>
-    <button type="button" onclick="ask('Live music')">Live Music</button>
-    <button type="button" onclick="ask('What is on in Knysna?')">Knysna</button>
-    <button type="button" onclick="ask('What is on in George?')">George</button>
-    <button type="button" onclick="ask('Family events')">Family Fun</button>
-    <button type="button" onclick="ask('Generate itinerary for 2 days in Knysna')">🗓️ 2-Day Itinerary</button>
-  </div>
-  <div class="card">
-    <div id="chat" role="log" aria-live="polite"></div>
-    <div class="row">
-      <input id="q" type="text" placeholder="Ask me anything about events..." aria-label="Ask about events" onkeydown="if(event.key==='Enter')send()">
-      <button class="send" type="button" onclick="send()">Ask</button>
-    </div>
-    <div class="toolbar">
-      <div id="status">Loading live events...</div>
-      <button class="clear-btn" onclick="clearChat()">Clear chat</button>
-    </div>
-  </div>
-  <p class="footer">© Garden Route AI | T Plaatjies Trading (Pty) Ltd - Reg 2026/589356/07</p>
+<div class="top"><div class="orb">🌿</div><h1>Garden Route AI</h1><p class="sub">Your live AI guide to the Garden Route</p></div>
+<div class="ticker"><span id="tickerText">🌿 Live Garden Route AI • Loading...</span></div>
+<a href="join.html" class="join-btn">Are you a business? Get Featured for R50/mo →</a>
+<div class="tabs">
+<button id="tab-events" class="active" onclick="setMode('events')">🎉 Events</button>
+<button id="tab-restaurants" onclick="setMode('restaurants')">🍽️ Restaurants</button>
+<button onclick="openDrawer()">❤️ Saved <span id="favCount"></span></button>
+<button onclick="openModal()">🚨 Emergency</button>
+<button disabled>🛏️ Stays • Soon</button>
+</div>
+<div class="chips">
+<button onclick="ask('What is on this weekend?')">This Weekend</button>
+<button onclick="ask('Markets')">Markets</button>
+<button onclick="ask('Live music')">Live Music</button>
+<button onclick="ask('What is on in Knysna?')">Knysna</button>
+<button onclick="ask('What is on in George?')">George</button>
+<button onclick="ask('Generate itinerary for 2 days in Knysna')">🗓️ 2-Day Itinerary</button>
+</div>
+<div class="card">
+<div id="chat"></div>
+<div class="row"><input id="q" placeholder="Ask me anything about events..." onkeydown="if(event.key==='Enter')send()"><button class="send" onclick="send()">Ask</button></div>
+<div class="toolbar"><div id="status">Loading live events...</div><button class="clear-btn" onclick="clearChat()">Clear chat</button></div>
+<div class="tool-row"><button onclick="shareWhatsApp()">📲 Share to WhatsApp</button><button onclick="exportTxt()">⬇️ Export .txt</button><button onclick="openModal()">🚨 Emergency Directory</button><button onclick="openDrawer()">❤️ My Saved</button></div>
+</div>
+
+<div class="section"><h2>🌦️ Live Weather & Packing — Real Data</h2><div class="weather-grid" id="weatherGrid"><div class="w-card">Loading real weather...</div></div><p style="font-size:12px;color:#94a3b8;margin-top:6px" id="packTip">Live from Open-Meteo • Garden Route microclimates change fast.</p></div>
+
+<div class="section"><h2>💰 Trip Budget Calculator — Gemini Style Breakdown</h2><div class="budget-box">
+<label>Days</label><input type="number" id="bd-days" value="5" min="1" max="21" oninput="calcBudget()">
+<label>Accommodation</label><select id="bd-acc" onchange="calcBudget()"><option value="budget">Backpacker / B&B — R600/day</option><option value="mid" selected>Comfort Hotel — R1,400/day</option><option value="luxury">Luxury Resort — R3,500/day</option></select>
+<label>Dining</label><select id="bd-food" onchange="calcBudget()"><option value="casual">Self-Catering / Cafes — R350/day</option><option value="standard" selected>Bistro & Oyster Bars — R700/day</option><option value="fine">Fine Dining — R1,500/day</option></select>
+<label>Activities</label><select id="bd-act" onchange="calcBudget()"><option value="low">Low (Beaches & Walks) — R150/day</option><option value="medium" selected>Moderate (Zipline, Boat) — R500/day</option><option value="high">Extreme (Bungee, Safari) — R1,200/day</option></select>
+<div class="curr-row"><button id="cZAR" class="active" onclick="setCurr('ZAR')">ZAR (R)</button><button id="cUSD" onclick="setCurr('USD')">USD ($)</button><button id="cEUR" onclick="setCurr('EUR')">EUR (€)</button><button id="cGBP" onclick="setCurr('GBP')">GBP (£)</button></div>
+<div class="budget-result"><div style="font-size:11px;color:#94a3b8;text-transform:uppercase;font-weight:700">Estimated Total</div><div class="total" id="bd-total">R 12,500</div><div style="font-size:12px;color:#94a3b8"><span id="bd-daily" style="color:#34d399;font-weight:700">R 2,500</span> per day • <span id="bd-daysLabel">5</span> days</div><div style="margin-top:10px"><div class="budget-row"><span>🏨 Accommodation</span><b id="bd-accCost">R 7,000</b></div><div class="budget-row"><span>🍽️ Food & Dining</span><b id="bd-foodCost">R 3,500</b></div><div class="budget-row"><span>🎢 Excursions</span><b id="bd-actCost">R 2,500</b></div></div><button onclick="shareWhatsApp()" style="margin-top:12px;width:100%;background:#059669;border:none;color:white;padding:11px;border-radius:999px;font-weight:700">📲 Send Estimate via WhatsApp</button></div>
+</div></div>
+
+<div class="section"><h2>⭐ Curated Highlights — Tap ❤️ to Save</h2><div id="highlights"></div></div>
+<p class="footer">© Garden Route AI | T Plaatjies Trading (Pty) Ltd - Reg 2026/589356/07 • Real data • Real weather • Real emergency numbers</p>
+
+<!-- FAVORITES DRAWER -->
+<div id="drawer" class="drawer"><div class="drawer-bg" onclick="closeDrawer()"></div><div class="drawer-panel"><div style="display:flex;justify-content:space-between;align-items:center"><h3>❤️ My Saved Itinerary</h3><button onclick="closeDrawer()" style="background:none;border:none;color:white;font-size:20px;cursor:pointer">✕</button></div><div id="favList" style="margin-top:14px"></div><button onclick="shareWhatsApp()" style="width:100%;margin-top:14px;background:#059669;border:none;color:white;padding:12px;border-radius:999px;font-weight:700">📲 Share to WhatsApp</button><button onclick="exportTxt()" style="width:100%;margin-top:8px;background:#1e293b;border:1px solid var(--border);color:white;padding:11px;border-radius:999px;font-weight:700">⬇️ Export .txt</button></div></div>
+
+<!-- EMERGENCY MODAL -->
+<div id="modal" class="modal"><div class="modal-bg" onclick="closeModal()"></div><div class="modal-panel"><div style="display:flex;justify-content:space-between"><h3>🚨 Emergency Directory</h3><button onclick="closeModal()" style="background:none;border:none;color:white;font-size:20px;cursor:pointer">✕</button></div><p style="font-size:12px;color:#94a3b8;margin-top:6px">Tap to call immediately. Real South African numbers.</p>
+<a class="em-card" href="tel:112"><div><b>NSRI Sea Rescue</b><br><small>Coastal & Lagoon Emergencies</small></div><span class="em-btn">Call 112</span></a>
+<a class="em-card" href="tel:10111"><div><b>SAPS Police</b><br><small>Knysna / Plett / George</small></div><span class="em-btn" style="background:#0284c7">Call 10111</span></a>
+<a class="em-card" href="tel:082911"><div><b>ER24 Ambulance</b><br><small>Medical Emergency</small></div><span class="em-btn" style="background:#059669">Call 082 911</span></a>
+<a class="em-card" href="tel:0448735123"><div><b>George Mediclinic</b><br><small>24/7 ER Trauma</small></div><span class="em-btn" style="background:#059669">Call Hospital</span></a>
+<a class="em-card" href="tel:0448745123"><div><b>Knysna Private Hospital</b><br><small>24/7 ER</small></div><span class="em-btn" style="background:#059669">Call Hospital</span></a>
+</div></div>
+
 <script>
-let EVENTS = [];
-let RESTAURANTS = [];
-let FEATURED = [];
-let MODE = 'events';
-let lastTown = null;
-let lastQuery = "";
-let isSending = false;
-const TOWNS = ['knysna','plett','plettenberg bay','george','wilderness','mossel bay','oudtshoorn','sedgefield','buffalo bay',"nature's valley",'natures valley','storms river','great brak','little brak','herolds bay','victoria bay','brenton','belvidere','rheenendal'];
-const TOWNS_SORTED = [...TOWNS].sort((a, b) => b.length - a.length);
-function titleCase(str){ return String(str).split(' ').map(w => w ? w.charAt(0).toUpperCase() + w.slice(1) : w).join(' '); }
-function findTown(lower){ return TOWNS_SORTED.find(t => lower.includes(t)) || null; }
-const SPECIALIST_URL = "https://garden-route-specialist-api.vercel.app/itinerary/generate";
-async function askSpecialist(town, days){
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 15000);
-  try{
-    const res = await fetch(SPECIALIST_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ towns: [town], days: days || 2, travel_style: "backpacker" }), signal: controller.signal });
-    if (!res.ok){ console.log("Specialist returned non-200:", res.status); return null; }
-    return await res.json();
-  }catch(e){ console.log("Specialist offline / timeout, using local data", e); return null; }
-  finally{ clearTimeout(timeoutId); }
-}
-function escapeHtml(str){ if(str==null) return ''; return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
-function startOfDay(d){ const x=new Date(d); x.setHours(0,0,0,0); return x; }
-function parseEventDate(e){ const raw=e.date||e.date_text||e.when||''; if(!raw) return null; let d=new Date(raw); if(!isNaN(d.getTime())) return d; const cleaned=String(raw).replace(/(\d+)(st|nd|rd|th)/gi,'$1'); d=new Date(cleaned); return isNaN(d.getTime())?null:d; }
-function isPast(date){ if(!date) return false; return startOfDay(date) < startOfDay(new Date()); }
-function isToday(date){ if(!date) return false; return startOfDay(date).getTime()===startOfDay(new Date()).getTime(); }
-function isTomorrow(date){ if(!date) return false; const t=new Date(); t.setDate(t.getDate()+1); return startOfDay(date).getTime()===startOfDay(t).getTime(); }
-function isThisWeekend(date){ if(!date) return false; const today=startOfDay(new Date()); const day=today.getDay(); let sat,sun; if(day===0){ sat=new Date(today); sat.setDate(today.getDate()-1); sun=today; } else if(day===6){ sat=today; sun=new Date(today); sun.setDate(today.getDate()+1); } else { const daysToSat=6-day; sat=new Date(today); sat.setDate(today.getDate()+daysToSat); sun=new Date(sat); sun.setDate(sat.getDate()+1); } const ed=startOfDay(date).getTime(); return ed===sat.getTime()||ed===sun.getTime(); }
-function isThisWeek(date){ if(!date) return false; const now=startOfDay(new Date()); const in7=new Date(now); in7.setDate(now.getDate()+7); const d=startOfDay(date); return d>=now&&d<=in7; }
-function getLink(e){ let link=e.link||e.url||''; if(!link||link==='undefined'||link==='null') return null; link=String(link).trim(); if(link.startsWith('/')||link.startsWith('./')||!/^https?:\/\//i.test(link)) return null; return link; }
-function safeLink(url){ if(!url) return null; return getLink({link:url}); }
-function say(text, who, isHtml=false){ const c=document.getElementById('chat'); const d=document.createElement('div'); d.className='msg '+who; if(isHtml) d.innerHTML=text; else d.textContent=text; c.appendChild(d); c.scrollTop=c.scrollHeight; return d; }
-function showTyping(){ const c=document.getElementById('chat'); const d=document.createElement('div'); d.className='typing'; d.id='typing'; d.innerHTML='<span></span><span></span><span></span>'; c.appendChild(d); c.scrollTop=c.scrollHeight; }
-function hideTyping(){ const t=document.getElementById('typing'); if(t) t.remove(); }
-function setMode(mode){
-  MODE=mode;
-  document.getElementById('tab-events').classList.toggle('active', mode==='events');
-  document.getElementById('tab-restaurants').classList.toggle('active', mode==='restaurants');
-  document.getElementById('q').placeholder = mode==='restaurants' ? 'Ask me anything about restaurants...' : 'Ask me anything about events...';
-  document.getElementById('q').setAttribute('aria-label', mode==='restaurants' ? 'Ask about restaurants' : 'Ask about events');
-  if(!document.getElementById('chat').children.length){
-    if(mode==='restaurants') say("Hi! I'm Garden Route AI 🌿\nI can help you find restaurants across the Garden Route.\n\nTry: \"Pizza in Knysna\", \"Seafood in George\", or \"Family friendly in Plett\".", 'ai');
-    else say("Hi! I'm Garden Route AI 🌿\nI can help you find live events across the Garden Route.\n\nAsk me anything, or try the quick buttons above!", 'ai');
-  }
-}
-function filterRestaurants(q){
-  q=(q||'').toLowerCase().trim();
-  let all = [
-    ...FEATURED.map(f => ({...f, is_featured: true})),
-    ...RESTAURANTS.map(r => ({...r, is_featured: false}))
-  ];
-  let list = all.slice();
-  const mentionedTowns=TOWNS_SORTED.filter(t=>q.includes(t));
-  if(mentionedTowns.length){ lastTown=mentionedTowns[0]; list=list.filter(r=>{ const hay=((r.town||'')+' '+(r.name||r.title||'')+' '+(r.area||'')).toLowerCase(); return mentionedTowns.some(t=>hay.includes(t)); }); }
-  let keywords=q;
-  mentionedTowns.forEach(t=>{ keywords=keywords.replace(t,''); });
-  keywords=keywords.replace(/\b(in|near|find|show|me|best|good|any|restaurant|restaurants|eat|food|where|can|i)\b/g,' ').trim();
-  if(keywords){ const words=keywords.split(/\s+/).filter(w=>w.length>2); if(words.length){ list=list.filter(r=>{ const hay=((r.name||r.title||'')+' '+(r.cuisine||'')+' '+(r.category||'')+' '+(r.description||'')+' '+(r.food||'')+' '+(r.tip||'')).toLowerCase(); return words.some(w=>hay.includes(w)) || r.is_featured; }); } }
-  list.sort((a,b) => (b.is_featured?1:0) - (a.is_featured?1:0));
-  return list.slice(0,8);
-}
-function renderRestaurants(list){
-  if(!list.length) return `I couldn't find any restaurants for that.\n\nTry a town (Knysna, George, Plett...) or a type (pizza, seafood, sushi, steakhouse).`;
-  let out=`Here's what I found (${list.length} restaurant${list.length===1?'':'s'}):\n`;
-  list.forEach(r=>{
-    const name=escapeHtml(r.name||r.title||'Untitled');
-    const town=escapeHtml(r.town||r.area||'Garden Route');
-    const cuisine=escapeHtml(r.cuisine||r.category||r.food||'');
-    const desc=r.description?'<br>'+escapeHtml(String(r.description).slice(0,140)):(r.tip?'<br><i>⭐ Local tip: '+escapeHtml(String(r.tip).slice(0,140))+'</i>':'');
-    const badge=r.is_featured?'<span class="featured-badge">⭐ FEATURED</span>':'';
-    const cls=r.is_featured?'event featured':'event';
-    let link=getLink(r);
-    if(!link){ const q=encodeURIComponent((r.name||'')+' '+(r.town||'')+' Garden Route restaurant'); link=`https://www.google.com/search?q=${q}`; } else { link=escapeHtml(link); }
-    const wa = r.whatsapp ? `<br><a href="https://wa.me/${escapeHtml(String(r.whatsapp).replace(/[^0-9]/g,''))}" target="_blank" rel="noopener">📱 Book on WhatsApp →</a>` : '';
-    out+=`\n<div class="${cls}"><b>${name}</b>${badge}<br>📍 ${town}${cuisine?' • 🍽️ '+cuisine:''}${desc}<br><a href="${link}" target="_blank" rel="noopener noreferrer">View Details →</a>${wa}</div>`;
-  });
-  return out;
-}
-function filterEvents(q){
-  q=(q||'').toLowerCase().trim();
-  let list=EVENTS.map(e=>({...e,_date:parseEventDate(e)}));
-  list=list.filter(e=>!isPast(e._date));
-  if(/\b(there|same place|that town)\b/.test(q)&&lastTown){ q+=' '+lastTown; }
-  const mentionedTowns=TOWNS_SORTED.filter(t=>q.includes(t));
-  if(mentionedTowns.length){ lastTown=mentionedTowns[0]; list=list.filter(e=>{ const hay=((e.town||'')+' '+(e.title||'')).toLowerCase(); return mentionedTowns.some(t=>hay.includes(t)); }); }
-  if(/\b(today)\b/.test(q)) list=list.filter(e=>isToday(e._date));
-  else if(/\b(tomorrow)\b/.test(q)) list=list.filter(e=>isTomorrow(e._date));
-  else if(/\b(weekend)\b/.test(q)) list=list.filter(e=>isThisWeekend(e._date));
-  else if(/\b(this week)\b/.test(q)) list=list.filter(e=>isThisWeek(e._date));
-  if(q.includes('market')) list=list.filter(e=>(e.title||'').toLowerCase().includes('market'));
-  if(/\b(music|live music|concert|band|acoustic|gig)\b/.test(q)){ list=list.filter(e=>(e.title||'').toLowerCase().match(/music|concert|band|acoustic|gig|live\s/)); }
-  if(/\b(family|kids|children)\b/.test(q)){ list=list.filter(e=>(e.title||'').toLowerCase().match(/family|kids|children|market|fair/)); }
-  if(q.includes('festival')) list=list.filter(e=>(e.title||'').toLowerCase().includes('festival'));
-  list.sort((a,b)=>{ if(!a._date&&!b._date) return 0; if(!a._date) return 1; if(!b._date) return -1; return a._date-b._date; });
-  return list.slice(0,8);
-}
-function formatDate(e){ if(e._date&&!isNaN(e._date.getTime())){ return e._date.toLocaleDateString('en-ZA',{weekday:'short',day:'numeric',month:'short',year:'numeric'}); } return e.date||e.date_text||'See link for date'; }
-function renderEvents(list){
-  if(!list.length) return `I couldn't find any upcoming events for that.\n\nTry asking about a town (Knysna, George, Plett...), "this weekend", "markets" or "live music".`;
-  let out=`Here's what I found (${list.length} event${list.length===1?'':'s'}):\n`;
-  list.forEach(e=>{
-    const title=escapeHtml(e.title||'Untitled event');
-    const town=escapeHtml(e.town||'Garden Route');
-    const dateStr=escapeHtml(formatDate(e));
-    let link=getLink(e);
-    if(!link){ const q=encodeURIComponent((e.title||'')+' '+(e.town||'')+' Garden Route'); link=`https://www.google.com/search?q=${q}`; } else { link=escapeHtml(link); }
-    out+=`\n<div class="event"><b>${title}</b><br>📍 ${town} • 📅 ${dateStr}<br><a href="${link}" target="_blank" rel="noopener noreferrer">View Full Details →</a></div>`;
-  });
-  return out;
-}
-function getSuggestions(q,list){
-  const suggestions=[];
-  if(list.length>0){ suggestions.push("This weekend"); if(lastTown) suggestions.push(`More in ${titleCase(lastTown)}`); suggestions.push("Markets","Live music","Family events"); }
-  else { suggestions.push("What is on this weekend?","Knysna events","George events","Markets"); }
-  return [...new Set(suggestions)].slice(0,4);
-}
-function generateReply(q,list){
-  q=q.toLowerCase().trim();
-  if(/^(hi|hello|hey|howdy|good morning|good afternoon|good evening)\b/.test(q)) return "Hey! 👋 I'm Garden Route AI. I can show you live events across the Garden Route.\n\nTry asking: \"What's on in Knysna this weekend?\" or just tap one of the chips above.";
-  if(/^(thanks|thank you|thx|cheers)\b/.test(q)) return "You're welcome! 🌿 Anything else you'd like to know about events?";
-  if(/^(help|what can you do|how does this work)\b/.test(q)) return "I can find upcoming events for you. Just tell me:\n• A town (Knysna, George, Plett, etc.)\n• A time (today, tomorrow, this weekend)\n• A type (markets, live music, family)\n\nYou can also combine them: \"Family markets in Sedgefield this weekend\"";
-  if(/^(who are you|what are you)\b/.test(q)) return "I'm Garden Route AI — your local events guide. I pull live data from public listings across the Garden Route and help you discover what's happening.";
-  const intro=list.length?(lastTown?`Looking at ${titleCase(lastTown)}... `:""):"";
-  return intro+renderEvents(list);
-}
-function ask(q){ if(isSending) return; document.getElementById('q').value=q; send(); }
-function formatSlotValue(v){
-  if(v==null) return '';
-  if(typeof v==='string') return escapeHtml(v);
-  if(typeof v==='number') return escapeHtml(String(v));
-  if(typeof v==='object'){
-    const name=v.name||v.title||v.activity||'';
-    const desc=v.description||v.details||'';
-    const time=v.time||v.when||'';
-    let s='';
-    if(name) s+=escapeHtml(String(name));
-    if(time) s+=` • ${escapeHtml(String(time))}`;
-    if(desc) s+=`<br><span style="color:#94a3b8">${escapeHtml(String(desc).slice(0,140))}</span>`;
-    return s || escapeHtml(JSON.stringify(v).slice(0,140));
-  }
-  return escapeHtml(String(v));
-}
-function renderTownEventsCard(town){
-  if(!town) return '';
-  const lower=String(town).toLowerCase();
-  const matches=EVENTS.map(e=>({...e,_date:parseEventDate(e)})).filter(e=>!isPast(e._date)).filter(e=>((e.town||'').toLowerCase().includes(lower)||(e.title||'').toLowerCase().includes(lower))).sort((a,b)=>{ if(!a._date&&!b._date) return 0; if(!a._date) return 1; if(!b._date) return -1; return a._date-b._date; }).slice(0,3);
-  if(!matches.length) return `\n<div class="event"><b>🎉 Live events in ${escapeHtml(titleCase(town))}</b><br><span style="color:#94a3b8">No live events found in our data yet — ask me for markets or live music.</span></div>`;
-  let out=`\n<div class="event"><b>🎉 Live events in ${escapeHtml(titleCase(town))}</b><br>`;
-  matches.forEach(e=>{
-    const title=escapeHtml(e.title||'Untitled event');
-    const dateStr=escapeHtml(formatDate(e));
-    out+=`• ${title} • 📅 ${dateStr}<br>`;
-  });
-  out+=`</div>`;
-  return out;
-}
-function renderItinerary(data, town, days){
-  if(!data||!data.itinerary||!data.itinerary.length) return "Specialist didn't return an itinerary. Try again, or try a different town.";
-  let out=`Here's your ${days}-day plan for ${escapeHtml(town)} — from the Specialist:\n`;
-  if(data.route_order&&Array.isArray(data.route_order)&&data.route_order.length) out+=`Route: ${escapeHtml(data.route_order.join(" → "))}\n`;
-  const SKIP=new Set(['day','day_number','title','name','town','town_verified','towns','dietary_tags','best_time','budget','total_cost','warnings','notes']);
-  const SLOTS=['morning','midday','lunch','afternoon','evening','night','dinner','breakfast'];
-  data.itinerary.forEach((day,i)=>{
-    const dayNum=day.day||day.day_number||(i+1);
-    const dayTitle=day.title||day.name||"";
-    out+=`\n<div class="event"><b>Day ${escapeHtml(String(dayNum))}${dayTitle?" — "+escapeHtml(String(dayTitle)):""}</b><br>`;
-    const items=day.activities||day.items||day.stops||day.plan||day.schedule||[];
-    if(Array.isArray(items)&&items.length){
-      items.forEach(it=>{
-        if(typeof it==="string"){ out+=`• ${escapeHtml(it)}<br>`; return; }
-        const name=escapeHtml(it.name||it.title||"Stop");
-        const cost=it.cost_display?` • ${escapeHtml(String(it.cost_display))}`:(it.cost?` • R${escapeHtml(String(it.cost))}`:"");
-        const desc=it.description?`<br><span style="color:#94a3b8">${escapeHtml(String(it.description).slice(0,140))}</span>`:"";
-        const mapsUrl=safeLink(it.maps);
-        const webUrl=safeLink(it.website||it.url);
-        const link=mapsUrl?`<br><a href="${escapeHtml(mapsUrl)}" target="_blank" rel="noopener">Map →</a>`:(webUrl?`<br><a href="${escapeHtml(webUrl)}" target="_blank" rel="noopener noreferrer">Website →</a>`:"");
-        out+=`• <b>${name}</b>${cost}${desc}${link}<br>`;
-      });
-      out+=`</div>`;
-      return;
-    }
-    let shown=false;
-    SLOTS.forEach(slot=>{
-      if(!day[slot]) return;
-      shown=true;
-      const label=slot.charAt(0).toUpperCase()+slot.slice(1);
-      out+=`• <b>${label}:</b> ${formatSlotValue(day[slot])}<br>`;
-      const mapsKey=slot+'_maps';
-      const mapsUrl=safeLink(day[mapsKey]||day[slot+'_map']);
-      if(mapsUrl) out+=`&nbsp;&nbsp;<a href="${escapeHtml(mapsUrl)}" target="_blank" rel="noopener">📍 Map →</a><br>`;
-    });
-    if(!shown){
-      Object.keys(day).forEach(k=>{
-        if(SKIP.has(k)||k.endsWith('_maps')||k.endsWith('_map')) return;
-        const v=day[k];
-        if(typeof v==="string"&&v.trim()) out+=`• <b>${escapeHtml(k)}:</b> ${escapeHtml(v)}<br>`;
-        else if(typeof v==="number") out+=`• <b>${escapeHtml(k)}:</b> ${escapeHtml(String(v))}<br>`;
-        else if(v&&typeof v==="object") out+=`• <b>${escapeHtml(k)}:</b> ${formatSlotValue(v)}<br>`;
-      });
-    }
-    out+=`</div>`;
-  });
-  out+=renderTownEventsCard(town);
-  if(data.warnings){
-    const warnText=Array.isArray(data.warnings)?data.warnings.join("; "):String(data.warnings);
-    if(warnText) out+=`\n<span style="color:#94a3b8">Note: ${escapeHtml(warnText)}</span>`;
-  }
-  return out;
-}
-async function send(){
-  if(isSending) return;
-  const inp=document.getElementById('q');
-  const q=inp.value.trim();
-  if(!q) return;
-  isSending=true;
-  try{
-    say(q,'user');
-    inp.value='';
-    inp.focus();
-    lastQuery=q;
-    showTyping();
-    await new Promise(r=>setTimeout(r,600+Math.random()*700));
-    const lower=q.toLowerCase();
-    const wantsItinerary=/\b(itinerary|plan|trip|holiday)\b/.test(lower)||/\b\d+\s*-?\s*days?\s+in\b/.test(lower)||/\bday\s+trip\b/.test(lower)||/\b\d+\s*-?\s*day\b/.test(lower);
-    if(wantsItinerary&&MODE!=='restaurants'){
-      const townMatch=findTown(lower);
-      let townRaw=townMatch||lastTown||"knysna";
-      const town=titleCase(townRaw);
-      const daysMatch=lower.match(/(\d+)\s*-?\s*day/);
-      let days=daysMatch?parseInt(daysMatch[1],10):2;
-      if(isNaN(days)) days=2;
-      days=Math.min(7,Math.max(1,days));
-      lastTown=townRaw.toLowerCase();
-      const data=await askSpecialist(town,days);
-      hideTyping();
-      if(data&&data.itinerary){
-        say(renderItinerary(data,town,days),'ai',true);
-        document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
-        return;
-      }
-      say("Specialist didn't answer, showing live events instead:",'ai');
-    } else { hideTyping(); }
-    const list=MODE==='restaurants'?filterRestaurants(q):filterEvents(q);
-    const reply=MODE==='restaurants'?renderRestaurants(list):generateReply(q,list);
-    const msgEl=say(reply,'ai',true);
-    const suggestions=MODE==='restaurants'?[]:getSuggestions(q,list);
-    if(suggestions.length){
-      const sugDiv=document.createElement('div');
-      sugDiv.className='suggestions';
-      suggestions.forEach(s=>{ const btn=document.createElement('button'); btn.textContent=s; btn.onclick=()=>ask(s); sugDiv.appendChild(btn); });
-      msgEl.appendChild(sugDiv);
-    }
-    document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
-  } finally { isSending=false; hideTyping(); }
-}
-function clearChat(){
-  document.getElementById('chat').innerHTML='';
-  lastTown=null;
-  lastQuery='';
-  say("Chat cleared. What would you like to know about Garden Route events?",'ai');
-}
-async function load(){
-  const statusEl=document.getElementById('status');
-  statusEl.textContent='Loading live events...';
-  try{
-    const r=await fetch('data/events.json');
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const j=await r.json();
-    EVENTS=j.events||[];
-    try{
-      const rr=await fetch('data/restaurants.json');
-      if(rr.ok){ const rj=await rr.json(); RESTAURANTS=rj.restaurants||rj.data||(Array.isArray(rj)?rj:[]); }
-    }catch(e){ console.log('No restaurants yet',e); }
-    try{
-      const rf=await fetch('data/featured.json');
-      if(rf.ok){ const fj=await rf.json(); FEATURED=fj.featured||fj.data||(Array.isArray(fj)?fj:[]); }
-    }catch(e){ console.log('No featured yet',e); }
-    const seen=new Set();
-    EVENTS=EVENTS.filter(e=>{
-      const k=((e.title||'').toLowerCase().replace(/\s+/g,' ').trim())+'|'+((e.date||e.date_text||e.when||'').toString().toLowerCase().trim())+'|'+((e.town||'').toLowerCase().trim())+'|'+((e.location||e.venue||'').toLowerCase().trim());
-      if(!k||k==='|||'||seen.has(k)) return false;
-      seen.add(k);
-      return true;
-    });
-    let statusText=`Live • ${EVENTS.length} events • ${RESTAURANTS.length} restaurants • ${FEATURED.length} featured`;
-    let staleWarning='';
-    if(j.last_updated){
-      const updated=new Date(j.last_updated);
-      if(!isNaN(updated.getTime())){
-        statusText+=` • Updated: ${updated.toLocaleString()}`;
-        const ageHours=(Date.now()-updated.getTime())/3600000;
-        if(ageHours>24) staleWarning=' • ⚠️ Data may be stale';
-      }
-    }
-    statusEl.textContent=statusText+staleWarning;
-    say("Hi! I'm Garden Route AI 🌿\nI can help you find live events across the Garden Route.\n\nAsk me anything, or try the quick buttons above!",'ai');
-  }catch(err){
-    console.error(err);
-    statusEl.textContent='No data/events.json yet – run the scraper first.';
-    say("Hi! Events are still loading. Once your scraper has run I’ll show live upcoming events here.",'ai');
-  }
-}
+let EVENTS=[],RESTAURANTS=[],FEATURED=[],MODE='events',lastTown=null,isSending=false,CURR='ZAR';
+let FAVS=JSON.parse(localStorage.getItem('gra_favs')||'[]');
+const TOWNS=['knysna','plett','plettenberg bay','george','wilderness','mossel bay','oudtshoorn','sedgefield','storms river','great brak','little brak','herolds bay','victoria bay'];
+const TS=[...TOWNS].sort((a,b)=>b.length-a.length);
+const RATES={ZAR:{s:'R',r:1},USD:{s:'$',r:0.055},EUR:{s:'€',r:0.051},GBP:{s:'£',r:0.043}};
+const HIGHLIGHTS=[
+{id:'h1',title:'Robberg Nature Reserve Hike',town:'Plettenberg Bay',price:120,desc:'Peninsula trail, seal colony, fynbos cliffs.'},
+{id:'h2',title:'Knysna Waterfront Oyster Tasting',town:'Knysna',price:350,desc:'Wild oysters + Cape wine overlooking lagoon.'},
+{id:'h3',title:'Bloukrans Bridge Bungee',town:'Plettenberg Bay',price:1600,desc:"World's highest commercial bungee - 216m."},
+{id:'h4',title:'Wilderness Lagoon Kayak',town:'Wilderness',price:450,desc:'Paddle Touw River to hidden waterfalls.'},
+];
+function titleCase(s){return String(s).split(' ').map(w=>w?w.charAt(0).toUpperCase()+w.slice(1):w).join(' ')}
+function esc(s){if(s==null)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function startOfDay(d){const x=new Date(d);x.setHours(0,0,0,0);return x}
+function parseDate(e){const r=e.date||e.date_text||e.when||'';if(!r)return null;let d=new Date(r);return isNaN(d.getTime())?null:d}
+function isPast(d){return d&&startOfDay(d)<startOfDay(new Date())}
+function isToday(d){return d&&startOfDay(d).getTime()===startOfDay(new Date()).getTime()}
+function isTomorrow(d){if(!d)return false;const t=new Date();t.setDate(t.getDate()+1);return startOfDay(d).getTime()===startOfDay(t).getTime()}
+function isWeekend(d){if(!d)return false;const t=startOfDay(new Date());const day=t.getDay();let sat,sun;if(day===0){sat=new Date(t);sat.setDate(t.getDate()-1);sun=t}else if(day===6){sat=t;sun=new Date(t);sun.setDate(t.getDate()+1)}else{sat=new Date(t);sat.setDate(t.getDate()+(6-day));sun=new Date(sat);sun.setDate(sat.getDate()+1)}return startOfDay(d).getTime()===sat.getTime()||startOfDay(d).getTime()===sun.getTime()}
+function getLink(e){let l=e.link||e.url||'';if(!l)return null;if(!/^https?:\/\//i.test(String(l).trim()))return null;return l}
+function say(t,who,isHtml=false){const c=document.getElementById('chat');const d=document.createElement('div');d.className='msg '+who;if(isHtml)d.innerHTML=t;else d.textContent=t;c.appendChild(d);c.scrollTop=c.scrollHeight;return d}
+function setMode(m){MODE=m;document.getElementById('tab-events').classList.toggle('active',m==='events');document.getElementById('tab-restaurants').classList.toggle('active',m==='restaurants');document.getElementById('q').placeholder=m==='restaurants'?'Ask me anything about restaurants...':'Ask me anything about events...'}
+function toggleFav(id,name){const i=FAVS.findIndex(f=>f.id===id);if(i>=0)FAVS.splice(i,1);else FAVS.push({id,name});localStorage.setItem('gra_favs',JSON.stringify(FAVS));updateFav();renderHighlights();}
+function updateFav(){document.getElementById('favCount').textContent=FAVS.length?`(${FAVS.length})`:'';const el=document.getElementById('favList');if(!FAVS.length){el.innerHTML='<p style="color:#94a3b8;font-size:13px">No saved yet. Tap ❤️ on any event, restaurant or highlight.</p>';return}el.innerHTML=FAVS.map(f=>`<div class="event"><b>${esc(f.name)}</b><br><button class="fav-btn active" onclick="toggleFav('${f.id}','')">❤️ Remove</button></div>`).join('')}
+function renderHighlights(){document.getElementById('highlights').innerHTML=HIGHLIGHTS.map(h=>{const fav=FAVS.some(f=>f.id===h.id);return `<div class="event"><b>${esc(h.title)}</b> • 📍 ${esc(h.town)}<br><small style="color:#94a3b8">${esc(h.desc)}</small><br><small>From R ${h.price} / person</small><br><button class="fav-btn ${fav?'active':''}" onclick="toggleFav('${h.id}','${esc(h.title)}')">${fav?'❤️ Saved':'🤍 Save to Itinerary'}</button> <button class="fav-btn" onclick="shareWhatsApp()">📲 Share</button></div>`}).join('')}
+function filterEvents(q){q=(q||'').toLowerCase().trim();let list=EVENTS.map(e=>({...e,_date:parseDate(e)})).filter(e=>!isPast(e._date));const mt=TS.filter(t=>q.includes(t));if(mt.length){lastTown=mt[0];list=list.filter(e=>((e.town||'')+' '+(e.title||'')).toLowerCase().includes(mt[0]))}if(q.includes('today'))list=list.filter(e=>isToday(e._date));else if(q.includes('tomorrow'))list=list.filter(e=>isTomorrow(e._date));else if(q.includes('weekend'))list=list.filter(e=>isWeekend(e._date));if(q.includes('market'))list=list.filter(e=>(e.title||'').toLowerCase().includes('market'));if(q.includes('music'))list=list.filter(e=>(e.title||'').toLowerCase().match(/music|concert|band/));list.sort((a,b)=>{if(!a._date)return 1;if(!b._date)return -1;return a._date-b._date});return list.slice(0,8)}
+function filterRestaurants(q){q=(q||'').toLowerCase().trim();let all=[...FEATURED.map(f=>({...f,is_featured:true})),...RESTAURANTS.map(r=>({...r,is_featured:false}))];let list=all.slice();const mt=TS.filter(t=>q.includes(t));if(mt.length){lastTown=mt[0];list=list.filter(r=>((r.town||'')+' '+(r.name||'')).toLowerCase().includes(mt[0]))}return list.slice(0,8)}
+function renderEvents(list){if(!list.length)return `No upcoming events found. Try "this weekend" or a town.`;let out=`Here's what I found (${list.length}):\n`;list.forEach((e,i)=>{const id='ev'+i+'-'+(e.title||'').slice(0,8).replace(/\W/g,'');const fav=FAVS.some(f=>f.id===id);let link=getLink(e)||`https://www.google.com/search?q=${encodeURIComponent((e.title||'')+' '+(e.town||'')+' Garden Route')}`;out+=`\n<div class="event"><b>${esc(e.title||'Untitled')}</b><br>📍 ${esc(e.town||'Garden Route')} • 📅 ${esc(e.date||e.date_text||'See link')}<br><a href="${link}" target="_blank">View Details →</a><br><button class="fav-btn ${fav?'active':''}" onclick="toggleFav('${id}','${esc(e.title||'Event')}')">${fav?'❤️ Saved':'🤍 Save'}</button></div>`});return out}
+function renderRestaurants(list){if(!list.length)return `No restaurants found. Try Knysna, George, Plett.`;let out=`Here's what I found (${list.length}):\n`;list.forEach((r,i)=>{const id='rs'+i+'-'+(r.name||'').slice(0,8).replace(/\W/g,'');const fav=FAVS.some(f=>f.id===id);let link=getLink(r)||`https://www.google.com/search?q=${encodeURIComponent((r.name||'')+' '+(r.town||'')+' restaurant')}`;out+=`\n<div class="event ${r.is_featured?'featured':''}"><b>${esc(r.name||r.title||'Untitled')}</b>${r.is_featured?'<span class="featured-badge">⭐ FEATURED</span>':''}<br>📍 ${esc(r.town||'Garden Route')} • 🍽️ ${esc(r.cuisine||r.category||'')}<br><a href="${link}" target="_blank">View Details →</a><br><button class="fav-btn ${fav?'active':''}" onclick="toggleFav('${id}','${esc(r.name||'Restaurant')}')">${fav?'❤️ Saved':'🤍 Save'}</button></div>`});return out}
+function ask(q){if(isSending)return;document.getElementById('q').value=q;send()}
+function openDrawer(){document.getElementById('drawer').classList.add('open');updateFav()}
+function closeDrawer(){document.getElementById('drawer').classList.remove('open')}
+function openModal(){document.getElementById('modal').classList.add('open')}
+function closeModal(){document.getElementById('modal').classList.remove('open')}
+function shareWhatsApp(){const txt=document.getElementById('chat').innerText.slice(-800)||'Check out Garden Route AI!';window.open('https://wa.me/?text='+encodeURIComponent(txt+'\n\n— via Garden Route AI'),'_blank')}
+function exportTxt(){const txt=document.getElementById('chat').innerText||'Garden Route AI';const b=new Blob([txt],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='garden-route-plan.txt';a.click()}
+function setCurr(c){CURR=c;['ZAR','USD','EUR','GBP'].forEach(x=>document.getElementById('c'+x).classList.toggle('active',x===c));calcBudget()}
+function calcBudget(){const days=parseInt(document.getElementById('bd-days').value||5);const acc=document.getElementById('bd-acc').value;const food=document.getElementById('bd-food').value;const act=document.getElementById('bd-act').value;const accD=acc==='budget'?600:acc==='mid'?1400:3500;const foodD=food==='casual'?350:food==='standard'?700:1500;const actD=act==='low'?150:act==='medium'?500:1200;const aT=accD*days,fT=foodD*days,acT=actD*days,total=aT+fT+acT;const {s,r}=RATES[CURR];const fmt=v=>`${s} ${Math.round(v*r).toLocaleString()}`;document.getElementById('bd-total').textContent=fmt(total);document.getElementById('bd-daily').textContent=fmt(total/days);document.getElementById('bd-daysLabel').textContent=days;document.getElementById('bd-accCost').textContent=fmt(aT);document.getElementById('bd-foodCost').textContent=fmt(fT);document.getElementById('bd-actCost').textContent=fmt(acT)}
+async function send(){if(isSending)return;const inp=document.getElementById('q');const q=inp.value.trim();if(!q)return;isSending=true;try{say(q,'user');inp.value='';await new Promise(r=>setTimeout(r,400));const list=MODE==='restaurants'?filterRestaurants(q):filterEvents(q);const reply=MODE==='restaurants'?renderRestaurants(list):renderEvents(list);say(reply,'ai',true)}finally{isSending=false}}
+function clearChat(){document.getElementById('chat').innerHTML='';say("Chat cleared. What would you like to know?",'ai')}
+async function loadWeather(){const towns=[{n:'Knysna',lat:-34.036,lon:23.047},{n:'Plett',lat:-34.05,lon:23.37},{n:'George',lat:-33.97,lon:22.46},{n:'Wilderness',lat:-33.99,lon:22.58}];try{const grid=document.getElementById('weatherGrid');grid.innerHTML='';for(let t of towns){const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${t.lat}&longitude=${t.lon}&current=temperature_2m,precipitation&timezone=Africa%2FJohannesburg`);const j=await r.json();const temp=Math.round(j.current.temperature_2m);const rain=j.current.precipitation>0;const good=temp>=18&&!rain;grid.innerHTML+=`<div class="w-card"><b>${t.n}</b><div class="temp">${temp}°C ${rain?'🌧️':'☀️'}</div><small>${good?'✅ Great for outdoors':'🧥 Pack layers / rain jacket'}</small><br><small>${rain?'Rain now':'No rain now'} • Real data</small></div>`}}catch(e){document.getElementById('weatherGrid').innerHTML='<div class="w-card">Weather offline — try again.</div>'}}
+async function load(){try{const r=await fetch('data/events.json');const j=await r.json();EVENTS=j.events||[];try{const rr=await fetch('data/restaurants.json');if(rr.ok){const rj=await rr.json();RESTAURANTS=rj.restaurants||[]}}catch(e){}try{const rf=await fetch('data/featured.json');if(rf.ok){const fj=await rf.json();FEATURED=fj.featured||[]}}catch(e){}document.getElementById('status').textContent=`Live • ${EVENTS.length} events • ${RESTAURANTS.length} restaurants • ${FEATURED.length} featured`;document.getElementById('tickerText').textContent=`🌿 Live • ${EVENTS.length} events • ${RESTAURANTS.length} restaurants • ${FEATURED.length} featured • Real weather • Real emergency numbers • Tap a chip to start • `;say("Hi! I'm Garden Route AI 🌿\nMerged version — Gemini's design + real data.\n\nAsk me anything, save ❤️ favourites, check real weather, or try the budget calculator below!",'ai')}catch(e){document.getElementById('status').textContent='No data yet';say("Hi! Events loading...",'ai')}updateFav();renderHighlights();calcBudget();loadWeather()}
 load();
 </script>
 </body>
