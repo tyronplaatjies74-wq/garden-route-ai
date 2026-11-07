@@ -451,50 +451,5 @@ async function load(){
 }
 load();
 </script>
-<!-- GARDEN ROUTE AI CHAT -->
-<div id="ai-chat" style="position:fixed; bottom:20px; right:20px; width:320px; max-width:90vw; background:white; border:2px solid #111; border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,0.2); z-index:9999; font-family:sans-serif;">
-  <div style="background:#111; color:white; padding:12px 14px; border-radius:14px 14px 0 0; font-weight:bold;">🤖 Garden Route AI <span style="font-weight:normal; font-size:12px;">• Ask me about George</span></div>
-  <div id="ai-messages" style="height:220px; overflow-y:auto; padding:12px; font-size:14px; line-height:1.5;">
-    <div style="background:#f1f1f1; padding:8px 10px; border-radius:10px; margin-bottom:8px;">Hi! I'm Garden Route AI. Try me: <br><b>"salon"</b> • <b>"plumber"</b> • <b>"open now"</b> • <b>"cafe"</b></div>
-  </div>
-  <div style="display:flex; padding:10px; gap:6px; border-top:1px solid #eee;">
-    <input id="ai-input" placeholder="Ask about a business..." style="flex:1; padding:10px; border:1px solid #ddd; border-radius:10px; font-size:14px;">
-    <button onclick="askAI()" style="background:#25D366; border:none; color:white; padding:10px 14px; border-radius:10px; font-weight:bold;">Send</button>
-  </div>
-</div>
-
-<script>
-const businesses = [
-  { name: "Mary's Salon", type: "salon", area: "York Street, George", hours: "Mon-Sat 8am-5pm", phone: "076 570 06689", desc: "Hair, nails, braids. Walk-ins welcome." },
-  { name: "George Plumbing Pro", type: "plumber", area: "George Central", hours: "Mon-Fri 7am-6pm, Emergencies 24h", phone: "076 570 06689", desc: "Leaks, geysers, blocked drains. Same-day service." },
-  { name: "Outeniqua Cafe", type: "cafe", area: "Knysna Road, George", hours: "Daily 7am-4pm", phone: "076 570 06689", desc: "Coffee, breakfast, cakes. Free WiFi." },
-];
-
-function askAI() {
-  const input = document.getElementById('ai-input');
-  const box = document.getElementById('ai-messages');
-  const q = input.value.toLowerCase().trim();
-  if(!q) return;
-  box.innerHTML += `<div style="background:#dcf8c6; padding:8px 10px; border-radius:10px; margin-bottom:8px; text-align:right;">${input.value}</div>`;
-  input.value = '';
-
-  let reply = "";
-  if(q.includes("open now") || q.includes("open")) {
-    reply = "These are open today:<br><br>" + businesses.map(b => `✅ <b>${b.name}</b> - ${b.hours}<br>${b.area}`).join("<br><br>");
-  } else {
-    const found = businesses.filter(b => q.includes(b.type) || q.includes(b.name.toLowerCase()) || b.type.includes(q) || q.includes("salon") && b.type=="salon");
-    if(found.length > 0) {
-      reply = found.map(b => `<b>${b.name}</b><br>📍 ${b.area}<br>🕒 ${b.hours}<br>📞 ${b.phone}<br>${b.desc}`).join("<br><br>");
-    } else if(q.includes("hi") || q.includes("hello")) {
-      reply = "Hello! Ask me for a salon, plumber, or cafe in George and I'll find one for you.";
-    } else {
-      reply = `I don't have a "${q}" yet in George. But I can help with salon, plumber, or cafe. Want to add your business? Fill in the Join form for R50!`;
-    }
-  }
-  box.innerHTML += `<div style="background:#f1f1f1; padding:8px 10px; border-radius:10px; margin-bottom:8px;">${reply}</div>`;
-  box.scrollTop = box.scrollHeight;
-}
-document.getElementById('ai-input').addEventListener('keypress', e => { if(e.key==='Enter') askAI(); });
-</script>
 </body>
 </html>
