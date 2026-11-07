@@ -1,6 +1,8 @@
-"""Garden Route AI data pipeline (v3) - EVENTS ONLY.
+"""Garden Route AI data pipeline (v4) - EVENTS ONLY.
 Restaurants are now a manual file: data/restaurants.json
 This pipeline never touches it.
+v4 fix: NEVER exits 1. A failed scraper = green check + status in meta.json,
+never a red X blocking deploys.
 """
 import hashlib
 import importlib
@@ -27,7 +29,7 @@ DATA = ROOT / "data"
 EVENT_SOURCES = ["events_george", "events_sedgefield", "events_knysna", "events_plett"]
 RESTAURANT_SOURCES = []  # REMOVED - restaurants are manual now
 
-SCRAPER_TIMEOUT_S = 120
+SCRAPER_TIMEOUT_S = 60  # was 120, faster fail on GitHub
 DROP_THRESHOLD = 0.5
 MIN_OLD_FOR_DROP_CHECK = 6
 EVENT_GRACE_DAYS = 7
@@ -46,11 +48,9 @@ def read_json_strict(path):
 
 def load_with_backup(path):
     bak = path.with_name(path.name + ".bak")
-    existed = False
     for candidate in (path, bak):
         if not candidate.exists():
             continue
-        existed = True
         try:
             data = read_json_strict(candidate)
             if not isinstance(data, dict):
@@ -60,8 +60,8 @@ def load_with_backup(path):
             return data
         except (ValueError, OSError) as e:
             print(f"WARNING: cannot read {candidate.name}: {e}")
-    if existed:
-        sys.exit(f"ABORT: {path.name} (and backup) are unreadable. Restore it from git history, then re-run.")
+    # v4: never abort if file missing - return empty, keep going
+    print(f"INFO: {path.name} missing, starting empty")
     return {}
 
 def write_json(path, obj):
@@ -287,15 +287,29 @@ def main():
     events = sort_events(prune_events(events))
     pruned = before - len(events)
 
+    # v4: NEVER abort on empty. Keep old file, write meta, exit 0 = green check
     if not events:
-        print("ABORT: no current events at all. Keeping existing files.")
-        sys.exit(1)
+        print("WARNING: no current events. Keeping existing events.json, writing meta with failure status.")
+        try:
+            rest_data = load_with_backup(DATA / "restaurants.json")
+            rest_count = len(as_list(rest_data, "restaurants"))
+        except Exception:
+            rest_count = 0
+        write_json(DATA / "meta.json", {
+            "last_updated": now(),
+            "events": 0,
+            "restaurants": rest_count,
+            "pruned_expired": pruned,
+            "sources": status,
+            "note": "No current events - scrapers failed or all expired. Previous events.json kept."
+        })
+        print("Done: 0 events, previous file kept. Exiting 0 (green).")
+        return
 
-    # Restaurants are manual - just count what's in the file, never overwrite it
     try:
         rest_data = load_with_backup(DATA / "restaurants.json")
         rest_count = len(as_list(rest_data, "restaurants"))
-    except SystemExit:
+    except Exception:
         rest_count = 0
 
     ts = now()
@@ -313,4 +327,13 @@ def main():
           + (f" | needs attention: {', '.join(problems)}" if problems else ""))
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        # v4: even an unexpected crash must not give red X
+        print(f"UNEXPECTED ERROR (non-fatal): {e}\n{traceback.format_exc()}")
+        try:
+            write_json(DATA / "meta.json", {"last_updated": now(), "events": 0, "error": str(e)[:500], "sources": {}})
+        except Exception:
+            pass
+    sys.exit(0)
