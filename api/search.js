@@ -1,100 +1,141 @@
-import fs from 'fs';
-import path from 'path';
+// api/search.js - FULL FILE - Brain INCLUDED inside, no extra file needed
+// Paste this OVER your old api/search.js
 
-function parseDate(d) {
-  if (!d) return null;
-  // "2026-11-14" -> Date. Also handles "2026-11-14T..." and "14 Nov 2026" as fallback
-  const iso = new Date(d);
-  if (!isNaN(iso)) return iso;
-  return null;
+import eventsData from '../data/events.json' assert { type: 'json' };
+import restaurantsData from '../data/restaurants.json' assert { type: 'json' };
+
+const events = eventsData.events || eventsData;
+const restaurants = restaurantsData.restaurants || restaurantsData;
+
+// ================= BRAIN - START =================
+// This is api/brain.js merged in here so you only have 1 file
+
+function tagVibe(item) {
+  const text = `${item.title || item.name || ''} ${item.description || ''} ${item.category || ''} ${item.cuisine || ''}`.toLowerCase();
+  const vibes = [];
+  if (/market|food|wine|braai|farm/.test(text)) vibes.push('foodie');
+  if (/music|concert|live|dj|jazz/.test(text)) vibes.push('music');
+  if (/kids|family|easter|school/.test(text)) vibes.push('family');
+  if (/hike|trail|surf|adventure|run|bike/.test(text)) vibes.push('adventure');
+  if (/art|gallery|theatre|book|poetry/.test(text)) vibes.push('culture');
+  if (/romantic|sunset|wine|couple/.test(text)) vibes.push('romantic');
+  if (/free/.test(text) || item.price === 0 || item.price === 'Free') vibes.push('free');
+  return vibes.length ? vibes : ['general'];
 }
 
-function getWeekendRange() {
+function scoreItem(item, query) {
+  let score = 0;
+  const q = query.toLowerCase();
+  const text = `${item.title || item.name || ''} ${item.description || ''} ${item.town || ''} ${item.cuisine || ''}`.toLowerCase();
+  const vibes = tagVibe(item);
+  if (vibes.some(v => q.includes(v))) score += 50;
+  q.split(' ').forEach(word => {
+    if (word.length > 3 && text.includes(word)) score += 10;
+  });
+  if (item.date) score += 20;
+  if (item.link || item.url) score += 10;
+  return score;
+}
+
+function recommend(allItems, query, limit = 12) {
+  return allItems
+    .map(item => ({ ...item, vibes: tagVibe(item), score: scoreItem(item, query) }))
+    .filter(i => i.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit);
+}
+
+function explain(item, query) {
+  if (item.vibes.includes('free')) return `Free and matches "${query}" - good for a budget day in ${item.town}.`;
+  if (item.vibes.includes('family')) return `Family-friendly in ${item.town} - fits "${query}".`;
+  return `Matches "${query}" in ${item.town} - ${item.vibes.join(', ')}.`;
+}
+
+// ================= BRAIN - END =================
+
+function isWeekend(dateStr) {
+  if (!dateStr) return false;
+  const d = new Date(dateStr);
+  const day = d.getDay();
+  return day === 0 || day === 6;
+}
+
+function isThisWeekend(dateStr) {
+  if (!dateStr) return false;
+  const d = new Date(dateStr);
   const now = new Date();
-  // Saturday = 6, Sunday = 0 in JS. Find next Saturday, then Sunday after it.
-  const day = now.getDay();
-  const toSat = (6 - day + 7) % 7;
   const sat = new Date(now);
+  sat.setDate(now.getDate() + ((6 - now.getDay() + 7) % 7));
   sat.setHours(0, 0, 0, 0);
-  sat.setDate(sat.getDate() + toSat);
   const sun = new Date(sat);
-  sun.setDate(sun.getDate() + 1);
+  sun.setDate(sat.getDate() + 1);
   sun.setHours(23, 59, 59, 999);
-  return { sat, sun };
+  return d >= sat && d <= sun;
 }
 
-export default function handler(req, res) {
-  try {
-    const q = (req.query.q || "").toLowerCase().trim();
-    const town = (req.query.town || "").toLowerCase().trim();
-    const weekend = req.query.weekend === "1" || req.query.weekend === "true";
-    const from = req.query.from ? parseDate(req.query.from) : null;
-    const to = req.query.to ? parseDate(req.query.to) : null;
-    const limit = Math.min(parseInt(req.query.limit || "100", 10) || 100, 500);
+export function search({ query = '', town = '', when = 'any', type = 'all' } = {}) {
+  const q = query.toLowerCase().trim();
+  let eventResults = [...events];
+  let restaurantResults = [...restaurants];
 
-    const file = path.join(process.cwd(), 'data', 'events.json');
-    const data = JSON.parse(fs.readFileSync(file, 'utf8'));
-    let events = data.events || [];
-
-    // 1. Text search - title + town
-    if (q) {
-      events = events.filter(e =>
-        (e.title || "").toLowerCase().includes(q) ||
-        (e.town || "").toLowerCase().includes(q)
-      );
-    }
-
-    // 2. Town filter - "plett" matches "Plettenberg Bay"
-    if (town && town !== "all" && town !== "garden route") {
-      events = events.filter(e => {
-        const t = (e.town || "").toLowerCase();
-        if (t.includes(town)) return true;
-        // alias
-        if (town === "plett" && t.includes("plettenberg")) return true;
-        return false;
-      });
-    }
-
-    // 3. Weekend filter - uses ISO dates from new sources.py
-    let weekendRange = null;
-    if (weekend) {
-      weekendRange = getWeekendRange();
-    }
-
-    events = events.filter(e => {
-      const d = parseDate(e.date);
-      // If no parseable date, keep it ONLY if not filtering by date
-      // (so "See link for date" events still show in All, but not in Weekend)
-      if (!d) {
-        return !weekend && !from && !to;
-      }
-      if (weekendRange && (d < weekendRange.sat || d > weekendRange.sun)) return false;
-      if (from && d < from) return false;
-      if (to && d > to) return false;
-      return true;
-    });
-
-    // 4. Sort: dated first (soonest first), undated last
-    events.sort((a, b) => {
-      const da = parseDate(a.date);
-      const db = parseDate(b.date);
-      if (!da && !db) return 0;
-      if (!da) return 1;
-      if (!db) return -1;
-      return da - db;
-    });
-
-    res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=60');
-    res.json({
-      q,
-      town: req.query.town || "",
-      weekend,
-      total: events.length,
-      events: events.slice(0, limit),
-      last_updated: data.last_updated || null
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Could not load events.json", detail: String(err).slice(0, 200) });
+  if (town) {
+    const t = town.toLowerCase();
+    eventResults = eventResults.filter(e => (e.town || '').toLowerCase().includes(t));
+    restaurantResults = restaurantResults.filter(r => (r.town || '').toLowerCase().includes(t));
   }
+
+  if (when === 'weekend') {
+    eventResults = eventResults.filter(e => isWeekend(e.date));
+  }
+  if (when === 'this-weekend') {
+    eventResults = eventResults.filter(e => isThisWeekend(e.date));
+  }
+
+  if (q) {
+    eventResults = recommend(eventResults, q, 12).map(item => ({
+      ...item,
+      vibes: tagVibe(item),
+      why: explain(item, q)
+    }));
+
+    restaurantResults = recommend(
+      restaurantResults.map(r => ({
+        ...r,
+        title: r.name,
+        description: `${r.cuisine || ''} ${r.category || ''} ${r.description || ''}`
+      })),
+      q,
+      12
+    ).map(item => ({
+      ...item,
+      vibes: tagVibe(item),
+      why: explain(item, q)
+    }));
+  } else {
+    eventResults.sort((a, b) => new Date(a.date || '2100-01-01') - new Date(b.date || '2100-01-01'));
+    eventResults = eventResults.slice(0, 20).map(item => ({
+      ...item,
+      vibes: tagVibe(item),
+      why: `In ${item.town}${item.date ? ` on ${item.date}` : ''}`
+    }));
+    restaurantResults = restaurantResults.slice(0, 20).map(item => ({
+      ...item,
+      vibes: tagVibe(item),
+      why: `In ${item.town}`
+    }));
+  }
+
+  if (type === 'events') return { events: eventResults, restaurants: [] };
+  if (type === 'restaurants') return { events: [], restaurants: restaurantResults };
+  return { events: eventResults, restaurants: restaurantResults };
 }
+
+export function searchEvents(query, town, when) {
+  return search({ query, town, when, type: 'events' }).events;
+}
+
+export function searchRestaurants(query, town) {
+  return search({ query, town, type: 'restaurants' }).restaurants;
+}
+
+export default search;
