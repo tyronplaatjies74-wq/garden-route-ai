@@ -21,8 +21,10 @@
   input, select, textarea { width:100%; padding:12px 14px; margin:8px 0 14px; border-radius:12px; border:1px solid var(--border); background:rgba(15,23,42,0.6); color:white; outline:none; font-size:15px; font-family:inherit; }
   input:focus, select:focus, textarea:focus { border-color:rgba(249,115,22,0.5); }
   button { background:linear-gradient(135deg,#f97316,#ea580c); color:white; padding:14px; width:100%; border:none; border-radius:999px; font-size:15px; font-weight:700; cursor:pointer; box-shadow:0 4px 18px rgba(249,115,22,0.35); }
+  button.secondary { background:transparent; border:1px solid var(--border); box-shadow:none; margin-top:10px; }
   .note { text-align:center; font-size:12px; color:var(--muted); margin-top:10px; }
   .success { display:none; background:rgba(34,197,94,0.15); border:1px solid rgba(34,197,94,0.4); padding:16px; border-radius:16px; text-align:center; margin-top:16px; }
+  .success pre { background:rgba(0,0,0,0.3); padding:12px; border-radius:12px; text-align:left; white-space:pre-wrap; font-size:13px; margin:12px 0; color:#e2e8f0; }
   a.back { color:#94a3b8; font-size:13px; text-decoration:none; display:block; text-align:center; margin-top:16px; }
 </style>
 </head>
@@ -48,42 +50,30 @@
   <form id="joinForm">
     <label>1. Business Name</label>
     <input name="name" required placeholder="e.g. Knysna Seafood Shack">
-
     <label>2. Town</label>
     <select name="town" required>
       <option>George</option><option>Knysna</option><option>Plettenberg Bay</option><option>Mossel Bay</option><option>Sedgefield</option><option>Wilderness</option>
     </select>
-
     <label>3. What are you?</label>
     <select name="type"><option>Restaurant</option><option>Guesthouse / BnB</option><option>Activity</option><option>Shop</option><option>Other</option></select>
-
     <label>4. Price</label>
     <select name="price"><option value="R">R - Under R200</option><option value="RR">RR - R200-R500</option><option value="RRR">RRR - R500+</option></select>
-
     <label>5. Best for?</label>
     <select name="best_for"><option>Family</option><option>Couples</option><option>Friends</option><option>Solo</option></select>
-
     <label>6. Vibe?</label>
     <select name="vibe"><option>Family</option><option>Romantic</option><option>Quiet</option><option>Party</option><option>Adventure</option></select>
-
     <label>7. Food / Speciality / Diet</label>
     <input name="food" placeholder="Seafood, Halaal, Vegan, etc - or N/A">
-
     <label>8. Kid-friendly? Wheelchair? Parking? Sea view?</label>
     <input name="facilities" placeholder="e.g. Yes, Yes, Yes, No">
-
     <label>9. Opening Hours</label>
     <input name="hours" placeholder="e.g. 11:00 - 21:00, closed Mon">
-
     <label>10. WhatsApp for Bookings</label>
     <input name="whatsapp" required placeholder="082...">
-
     <label>Your Local Tip (This is what sells you)</label>
     <textarea name="tip" placeholder="e.g. Come at 5pm for sunset, ask for corner table"></textarea>
-
     <label>Your Email</label>
     <input name="email" type="email" required placeholder="you@business.co.za">
-
     <button type="submit">Submit → Get R50 Payment Link</button>
     <p class="note">After you submit, we will WhatsApp you the R50 payment link to activate you within 24 hours.</p>
   </form>
@@ -91,25 +81,54 @@
 
   <div id="successBox" class="success">
     <b>✅ Done! Thanks!</b><br>
-    We got your details. Check your WhatsApp — we will send you the R50 link to go live.
+    <span id="successText">We got your details.</span>
+    <pre id="copyText"></pre>
+    <button type="button" id="copyBtn">📋 Copy Details</button>
+    <button type="button" class="secondary" id="waBtn">💬 Open WhatsApp to Send</button>
+    <button type="button" class="secondary" id="emailBtn">📧 Send by Email Instead</button>
+    <p class="note">On phone, tap WhatsApp. On tablet/computer without WhatsApp, tap Copy or Email.</p>
   </div>
 
   <a class="back" href="index.html">← Back to Garden Route AI</a>
 </div>
 
 <script>
+  // TODO: REPLACE WITH YOUR NUMBER - 27 + number, no + or spaces
+  const MY_NUMBER = "27821234567";
+  // TODO: REPLACE WITH YOUR EMAIL
+  const MY_EMAIL = "you@example.co.za";
+  let lastMsg = "";
+
   document.getElementById('joinForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(e.target).entries());
-    const msg = `NEW FEATURED SIGNUP:%0AName: ${data.name}%0ATown: ${data.town}%0AType: ${data.type}%0APrice: ${data.price}%0ABest for: ${data.best_for}%0AVibe: ${data.vibe}%0AFood: ${data.food}%0AFacilities: ${data.facilities}%0AHours: ${data.hours}%0AWhatsApp: ${data.whatsapp}%0ATip: ${data.tip}%0AEmail: ${data.email}`;
-    // TODO: REPLACE WITH YOUR NUMBER - 27 + number, no + or spaces
-    const MY_NUMBER = "27657006689";
-    window.open(`https://wa.me/${MY_NUMBER}?text=${msg}`, '_blank');
-    // TODO: ADD YOCO LINK HERE LATER
-    // window.location.href = "PASTE_YOCO_LINK_HERE";
+    lastMsg = `NEW FEATURED SIGNUP:\nName: ${data.name}\nTown: ${data.town}\nType: ${data.type}\nPrice: ${data.price}\nBest for: ${data.best_for}\nVibe: ${data.vibe}\nFood: ${data.food}\nFacilities: ${data.facilities}\nHours: ${data.hours}\nWhatsApp: ${data.whatsapp}\nTip: ${data.tip}\nEmail: ${data.email}`;
+    
     document.getElementById('joinForm').style.display = 'none';
+    document.getElementById('copyText').textContent = lastMsg;
     document.getElementById('successBox').style.display = 'block';
+
+    // If on phone, try WhatsApp automatically
+    const isPhone = /Android|iPhone|iPad|Mobile/i.test(navigator.userAgent);
+    if (isPhone) {
+      window.open(`https://api.whatsapp.com/send?phone=${MY_NUMBER}&text=${encodeURIComponent(lastMsg)}`, '_blank');
+      document.getElementById('successText').textContent = "WhatsApp should have opened. If not, tap below:";
+    } else {
+      document.getElementById('successText').textContent = "Your tablet has no WhatsApp, no problem - send it this way:";
+    }
   });
+
+  document.getElementById('copyBtn').onclick = function() {
+    navigator.clipboard.writeText(lastMsg).then(()=>{ this.textContent = "✅ Copied! Now paste it to us on WhatsApp"; });
+  };
+  document.getElementById('waBtn').onclick = function() {
+    window.open(`https://api.whatsapp.com/send?phone=${MY_NUMBER}&text=${encodeURIComponent(lastMsg)}`, '_blank');
+  };
+  document.getElementById('emailBtn').onclick = function() {
+    window.location.href = `mailto:${MY_EMAIL}?subject=${encodeURIComponent("New Featured Signup")}&body=${encodeURIComponent(lastMsg)}`;
+  };
+  // TODO: ADD YOCO LINK HERE LATER
+  // window.location.href = "PASTE_YOCO_LINK_HERE";
 </script>
 </body>
 </html>
