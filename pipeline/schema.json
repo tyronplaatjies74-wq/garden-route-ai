@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Garden Route AI Data Schema",
+  "type": "object",
+  "properties": {
+    "events": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/event" }
+    },
+    "restaurants": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/restaurant" }
+    },
+    "last_updated": { "type": "string" }
+  },
+  "definitions": {
+    "event": {
+      "type": "object",
+      "required": ["id", "title", "town", "date", "source"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "town": { "type": "string", "minLength": 1 },
+        "date": {
+          "type": "string",
+          "description": "ISO date YYYY-MM-DD. Use null only if truly undated.",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "date_text": { "type": "string" },
+        "source": { "type": "string", "minLength": 1 },
+        "link": { "type": "string" },
+        "url": { "type": "string" },
+        "price": { "type": ["string", "number", "null"] },
+        "category": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "restaurant": {
+      "type": "object",
+      "required": ["id", "name", "town", "source"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "town": { "type": "string", "minLength": 1 },
+        "source": { "type": "string", "minLength": 1 },
+        "cuisine": { "type": "string" },
+        "category": { "type": "string" },
+        "link": { "type": "string" },
+        "url": { "type": "string" },
+        "price_range": { "type": "string" },
+        "is_featured": { "type": "boolean" },
+        "description": { "type": "string" }
+      },
+      "additionalProperties": true
+    }
+  }
+}
