@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Garden Route AI - Your live AI guide to events, restaurants and itineraries across the Garden Route.">
+<meta name="theme-color" content="#0b1120">
+<meta property="og:title" content="Garden Route AI">
+<meta property="og:description" content="Your live AI guide to the Garden Route">
 <title>Garden Route AI</title>
 <style>
   :root {
@@ -21,6 +25,7 @@
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -44,274 +49,59 @@
     0% { transform: scale(1) translate(0, 0); }
     100% { transform: scale(1.05) translate(-2%, 1%); }
   }
-  .top {
-    width: 100%;
-    max-width: 720px;
-    text-align: center;
-    padding: 12px 0 8px;
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   }
-  .orb-wrap {
-    position: relative;
-    width: 96px;
-    height: 96px;
-    margin: 0 auto 14px;
-  }
+  .top { width: 100%; max-width: 720px; text-align: center; padding: 12px 0 8px; }
+  .orb-wrap { position: relative; width: 96px; height: 96px; margin: 0 auto 14px; }
   .orb {
-    width: 84px;
-    height: 84px;
-    border-radius: 50%;
+    width: 84px; height: 84px; border-radius: 50%;
     background: radial-gradient(circle at 30% 28%, #fde68a, #f97316 45%, #7c3aed 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 36px;
-    box-shadow:
-      0 0 0 1px rgba(255,255,255,0.12),
-      0 0 40px var(--glow),
-      0 0 80px rgba(124, 58, 237, 0.25);
-    animation: pulse 3s ease-in-out infinite;
-    position: relative;
-    z-index: 2;
+    display: flex; align-items: center; justify-content: center; font-size: 36px;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.12), 0 0 40px var(--glow), 0 0 80px rgba(124, 58, 237, 0.25);
+    animation: pulse 3s ease-in-out infinite; position: relative; z-index: 2;
   }
-  .orb-ring {
-    position: absolute;
-    inset: -8px;
-    border-radius: 50%;
-    border: 1px solid rgba(249, 115, 22, 0.35);
-    animation: spin 12s linear infinite;
-  }
-  .orb-ring:nth-child(2) {
-    inset: -16px;
-    border-color: rgba(124, 58, 237, 0.25);
-    animation-duration: 18s;
-    animation-direction: reverse;
-  }
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-  }
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-  h1 {
-    margin: 4px 0 2px;
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: -0.03em;
-    background: linear-gradient(135deg, #fff 30%, #fdba74);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  p.sub {
-    color: var(--muted);
-    margin: 0 0 18px;
-    font-size: 14px;
-  }
-  .tabs, .chips {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-bottom: 14px;
-  }
-  .tabs button,
-  .chips button,
-  .suggestions button {
-    background: rgba(30, 41, 59, 0.6);
-    color: white;
-    border: 1px solid var(--border);
-    padding: 8px 15px;
-    border-radius: 999px;
-    cursor: pointer;
-    font-size: 13px;
-    backdrop-filter: blur(8px);
-    transition: all 0.2s ease;
-  }
-  .tabs button:hover:not(:disabled),
-  .chips button:hover,
-  .suggestions button:hover {
-    background: rgba(51, 65, 85, 0.8);
-    border-color: rgba(249, 115, 22, 0.4);
-    transform: translateY(-1px);
-  }
-  .tabs button.active {
-    background: linear-gradient(135deg, #f97316, #ea580c);
-    border-color: transparent;
-    box-shadow: 0 4px 20px rgba(249, 115, 22, 0.35);
-  }
-  .tabs button:disabled {
-    opacity: 0.38;
-    cursor: not-allowed;
-  }
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 22px;
-    padding: 16px;
-    width: 100%;
-    max-width: 720px;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow:
-      0 4px 30px rgba(0, 0, 0, 0.25),
-      inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  }
-  #chat {
-    height: 380px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 14px;
-    scroll-behavior: smooth;
-    padding-right: 4px;
-  }
-  .msg {
-    padding: 11px 14px;
-    border-radius: 16px;
-    max-width: 88%;
-    font-size: 14px;
-    line-height: 1.55;
-    white-space: pre-wrap;
-  }
-  .user {
-    align-self: flex-end;
-    background: linear-gradient(135deg, #f97316, #ea580c);
-    box-shadow: 0 4px 15px rgba(249, 115, 22, 0.25);
-  }
-  .ai {
-    align-self: flex-start;
-    background: rgba(15, 23, 42, 0.7);
-    border: 1px solid var(--border);
-  }
-  .typing {
-    align-self: flex-start;
-    background: rgba(15, 23, 42, 0.7);
-    border: 1px solid var(--border);
-    padding: 12px 16px;
-    border-radius: 16px;
-    display: flex;
-    gap: 5px;
-    width: fit-content;
-  }
-  .typing span {
-    width: 7px;
-    height: 7px;
-    background: #94a3b8;
-    border-radius: 50%;
-    animation: bounce 1.2s infinite ease-in-out;
-  }
+  .orb-ring { position: absolute; inset: -8px; border-radius: 50%; border: 1px solid rgba(249, 115, 22, 0.35); animation: spin 12s linear infinite; }
+  .orb-ring:nth-child(2) { inset: -16px; border-color: rgba(124, 58, 237, 0.25); animation-duration: 18s; animation-direction: reverse; }
+  @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  h1 { margin: 4px 0 2px; font-size: 28px; font-weight: 700; letter-spacing: -0.03em; background: linear-gradient(135deg, #fff 30%, #fdba74); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  p.sub { color: var(--muted); margin: 0 0 18px; font-size: 14px; }
+  .tabs, .chips { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin-bottom: 14px; }
+  .tabs button, .chips button, .suggestions button { background: rgba(30, 41, 59, 0.6); color: white; border: 1px solid var(--border); padding: 8px 15px; border-radius: 999px; cursor: pointer; font-size: 13px; backdrop-filter: blur(8px); transition: all 0.2s ease; }
+  .tabs button:hover:not(:disabled), .chips button:hover, .suggestions button:hover { background: rgba(51, 65, 85, 0.8); border-color: rgba(249, 115, 22, 0.4); transform: translateY(-1px); }
+  .tabs button.active { background: linear-gradient(135deg, #f97316, #ea580c); border-color: transparent; box-shadow: 0 4px 20px rgba(249, 115, 22, 0.35); }
+  .tabs button:disabled { opacity: 0.38; cursor: not-allowed; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 22px; padding: 16px; width: 100%; max-width: 720px; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.06); }
+  #chat { height: 380px; height: 55dvh; max-height: 520px; min-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; margin-bottom: 14px; scroll-behavior: smooth; padding-right: 4px; }
+  .msg { padding: 11px 14px; border-radius: 16px; max-width: 88%; font-size: 14px; line-height: 1.55; white-space: pre-wrap; }
+  .user { align-self: flex-end; background: linear-gradient(135deg, #f97316, #ea580c); box-shadow: 0 4px 15px rgba(249, 115, 22, 0.25); }
+  .ai { align-self: flex-start; background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border); }
+  .typing { align-self: flex-start; background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border); padding: 12px 16px; border-radius: 16px; display: flex; gap: 5px; width: fit-content; }
+  .typing span { width: 7px; height: 7px; background: #94a3b8; border-radius: 50%; animation: bounce 1.2s infinite ease-in-out; }
   .typing span:nth-child(2) { animation-delay: 0.15s; }
   .typing span:nth-child(3) { animation-delay: 0.3s; }
-  @keyframes bounce {
-    0%, 80%, 100% { transform: translateY(0); }
-    40% { transform: translateY(-6px); }
-  }
-  .suggestions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 10px;
-  }
-  .row {
-    display: flex;
-    gap: 10px;
-  }
-  input {
-    flex: 1;
-    padding: 13px 18px;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    background: rgba(15, 23, 42, 0.6);
-    color: white;
-    outline: none;
-    font-size: 14px;
-    backdrop-filter: blur(8px);
-    transition: border-color 0.2s;
-  }
-  input:focus {
-    border-color: rgba(249, 115, 22, 0.5);
-  }
-  button.send {
-    background: linear-gradient(135deg, #f97316, #ea580c);
-    border: none;
-    color: white;
-    padding: 13px 20px;
-    border-radius: 999px;
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 14px;
-    box-shadow: 0 4px 18px rgba(249, 115, 22, 0.35);
-    transition: all 0.2s ease;
-  }
-  button.send:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 22px rgba(249, 115, 22, 0.45);
-  }
-  button.send:active {
-    transform: scale(0.97);
-  }
-  .toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-  }
-  #status {
-    font-size: 12px;
-    color: var(--muted);
-  }
-  .clear-btn {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--muted);
-    padding: 5px 12px;
-    border-radius: 999px;
-    font-size: 12px;
-    cursor: pointer;
-  }
-  .clear-btn:hover {
-    border-color: #f97316;
-    color: #f97316;
-  }
-  .event {
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 13px 14px;
-    margin-top: 10px;
-    background: rgba(15, 23, 42, 0.55);
-    transition: transform 0.2s, border-color 0.2s, background 0.2s;
-  }
-  .event:hover {
-    transform: translateY(-2px);
-    border-color: rgba(249, 115, 22, 0.35);
-    background: rgba(15, 23, 42, 0.75);
-  }
-  .event b {
-    color: #fbbf24;
-    font-size: 15px;
-  }
-  .event a {
-    color: var(--link);
-    text-decoration: none;
-    font-weight: 500;
-  }
-  .event a:hover {
-    text-decoration: underline;
-  }
-  .footer {
-    font-size: 11px;
-    color: #64748b;
-    text-align: center;
-    margin-top: 18px;
-  }
+  @keyframes bounce { 0%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-6px); } }
+  .suggestions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .row { display: flex; gap: 10px; }
+  input { flex: 1; padding: 13px 18px; border-radius: 999px; border: 1px solid var(--border); background: rgba(15, 23, 42, 0.6); color: white; outline: none; font-size: 16px; backdrop-filter: blur(8px); transition: border-color 0.2s; }
+  input:focus { border-color: rgba(249, 115, 22, 0.5); }
+  button.send { background: linear-gradient(135deg, #f97316, #ea580c); border: none; color: white; padding: 13px 20px; border-radius: 999px; cursor: pointer; font-weight: 700; font-size: 14px; box-shadow: 0 4px 18px rgba(249, 115, 22, 0.35); transition: all 0.2s ease; }
+  button.send:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(249, 115, 22, 0.45); }
+  button.send:active { transform: scale(0.97); }
+  .toolbar { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+  #status { font-size: 12px; color: var(--muted); }
+  .clear-btn { background: transparent; border: 1px solid var(--border); color: var(--muted); padding: 5px 12px; border-radius: 999px; font-size: 12px; cursor: pointer; }
+  .clear-btn:hover { border-color: #f97316; color: #f97316; }
+  .event { border: 1px solid var(--border); border-radius: 14px; padding: 13px 14px; margin-top: 10px; background: rgba(15, 23, 42, 0.55); transition: transform 0.2s, border-color 0.2s, background 0.2s; }
+  .event:hover { transform: translateY(-2px); border-color: rgba(249, 115, 22, 0.35); background: rgba(15, 23, 42, 0.75); }
+  .event b { color: #fbbf24; font-size: 15px; }
+  .event a { color: var(--link); text-decoration: none; font-weight: 500; }
+  .event a:hover { text-decoration: underline; }
+  .footer { font-size: 11px; color: #64748b; text-align: center; margin-top: 18px; }
   #chat::-webkit-scrollbar { width: 6px; }
   #chat::-webkit-scrollbar-track { background: transparent; }
-  #chat::-webkit-scrollbar-thumb {
-    background: rgba(148, 163, 184, 0.25);
-    border-radius: 99px;
-  }
+  #chat::-webkit-scrollbar-thumb { background: rgba(148, 163, 184, 0.25); border-radius: 99px; }
 </style>
 </head>
 <body>
@@ -324,14 +114,12 @@
     <h1>Garden Route AI</h1>
     <p class="sub">Your live AI guide to the Garden Route</p>
   </div>
-
   <div class="tabs" role="tablist">
     <button id="tab-events" class="active" role="tab" onclick="setMode('events')">🎉 Events</button>
     <button id="tab-restaurants" role="tab" onclick="setMode('restaurants')">🍽️ Restaurants</button>
     <button disabled>🛏️ Stays • Soon</button>
     <button disabled>🥾 Activities • Soon</button>
   </div>
-
   <div class="chips">
     <button type="button" onclick="ask('What is on this weekend?')">This Weekend</button>
     <button type="button" onclick="ask('Markets')">Markets</button>
@@ -341,13 +129,10 @@
     <button type="button" onclick="ask('Family events')">Family Fun</button>
     <button type="button" onclick="ask('Generate itinerary for 2 days in Knysna')">🗓️ 2-Day Itinerary</button>
   </div>
-
   <div class="card">
     <div id="chat" role="log" aria-live="polite"></div>
     <div class="row">
-      <input id="q" type="text" placeholder="Ask me anything about events..."
-             aria-label="Ask about events"
-             onkeydown="if(event.key==='Enter')send()">
+      <input id="q" type="text" placeholder="Ask me anything about events..." aria-label="Ask about events" onkeydown="if(event.key==='Enter')send()">
       <button class="send" type="button" onclick="send()">Ask</button>
     </div>
     <div class="toolbar">
@@ -355,466 +140,296 @@
       <button class="clear-btn" onclick="clearChat()">Clear chat</button>
     </div>
   </div>
-
-  <p class="footer">
-    © Garden Route AI | T Plaatjies Trading (Pty) Ltd - Reg 2026/589356/07
-  </p>
-
+  <p class="footer">© Garden Route AI | T Plaatjies Trading (Pty) Ltd - Reg 2026/589356/07</p>
 <script>
 let EVENTS = [];
 let RESTAURANTS = [];
 let MODE = 'events';
 let lastTown = null;
 let lastQuery = "";
-const TOWNS = [
-  'knysna', 'plett', 'plettenberg bay', 'george', 'wilderness',
-  'mossel bay', 'oudtshoorn', 'sedgefield', 'buffalo bay',
-  "nature's valley", 'natures valley', 'storms river',
-  'great brak', 'little brak', 'herolds bay', 'victoria bay',
-  'brenton', 'belvidere', 'rheenendal'
-];
-// Longest first so "Plettenberg Bay" beats "plett"
+let isSending = false;
+const TOWNS = ['knysna','plett','plettenberg bay','george','wilderness','mossel bay','oudtshoorn','sedgefield','buffalo bay',"nature's valley",'natures valley','storms river','great brak','little brak','herolds bay','victoria bay','brenton','belvidere','rheenendal'];
 const TOWNS_SORTED = [...TOWNS].sort((a, b) => b.length - a.length);
-function titleCase(str) {
-  return String(str).split(' ').map(w => w ? w.charAt(0).toUpperCase() + w.slice(1) : w).join(' ');
-}
-function findTown(lower) {
-  return TOWNS_SORTED.find(t => lower.includes(t)) || null;
-}
-// --- Garden Route Specialist - the brain - DIRECT, no Hub ---
+function titleCase(str){ return String(str).split(' ').map(w => w ? w.charAt(0).toUpperCase() + w.slice(1) : w).join(' '); }
+function findTown(lower){ return TOWNS_SORTED.find(t => lower.includes(t)) || null; }
 const SPECIALIST_URL = "https://garden-route-specialist-api.vercel.app/itinerary/generate";
-
-async function askSpecialist(town, days) {
+async function askSpecialist(town, days){
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 15000);
-  try {
-    const res = await fetch(SPECIALIST_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ towns: [town], days: days || 2, travel_style: "backpacker" }),
-      signal: controller.signal
-    });
-    if (!res.ok) {
-      console.log("Specialist returned non-200:", res.status);
-      return null;
-    }
-    const data = await res.json();
-    return data;
-  } catch (e) {
-    console.log("Specialist offline / timeout, using local data", e);
-    return null;
-  } finally {
-    clearTimeout(timeoutId);
+  try{
+    const res = await fetch(SPECIALIST_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ towns: [town], days: days || 2, travel_style: "backpacker" }), signal: controller.signal });
+    if (!res.ok){ console.log("Specialist returned non-200:", res.status); return null; }
+    return await res.json();
+  }catch(e){ console.log("Specialist offline / timeout, using local data", e); return null; }
+  finally{ clearTimeout(timeoutId); }
+}
+function escapeHtml(str){ if(str==null) return ''; return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function startOfDay(d){ const x=new Date(d); x.setHours(0,0,0,0); return x; }
+function parseEventDate(e){ const raw=e.date||e.date_text||e.when||''; if(!raw) return null; let d=new Date(raw); if(!isNaN(d.getTime())) return d; const cleaned=String(raw).replace(/(\d+)(st|nd|rd|th)/gi,'$1'); d=new Date(cleaned); return isNaN(d.getTime())?null:d; }
+function isPast(date){ if(!date) return false; return startOfDay(date) < startOfDay(new Date()); }
+function isToday(date){ if(!date) return false; return startOfDay(date).getTime()===startOfDay(new Date()).getTime(); }
+function isTomorrow(date){ if(!date) return false; const t=new Date(); t.setDate(t.getDate()+1); return startOfDay(date).getTime()===startOfDay(t).getTime(); }
+function isThisWeekend(date){ if(!date) return false; const today=startOfDay(new Date()); const day=today.getDay(); let sat,sun; if(day===0){ sat=new Date(today); sat.setDate(today.getDate()-1); sun=today; } else if(day===6){ sat=today; sun=new Date(today); sun.setDate(today.getDate()+1); } else { const daysToSat=6-day; sat=new Date(today); sat.setDate(today.getDate()+daysToSat); sun=new Date(sat); sun.setDate(sat.getDate()+1); } const ed=startOfDay(date).getTime(); return ed===sat.getTime()||ed===sun.getTime(); }
+function isThisWeek(date){ if(!date) return false; const now=startOfDay(new Date()); const in7=new Date(now); in7.setDate(now.getDate()+7); const d=startOfDay(date); return d>=now&&d<=in7; }
+function getLink(e){ let link=e.link||e.url||''; if(!link||link==='undefined'||link==='null') return null; link=String(link).trim(); if(link.startsWith('/')||link.startsWith('./')||!/^https?:\/\//i.test(link)) return null; return link; }
+function safeLink(url){ if(!url) return null; return getLink({link:url}); }
+function say(text, who, isHtml=false){ const c=document.getElementById('chat'); const d=document.createElement('div'); d.className='msg '+who; if(isHtml) d.innerHTML=text; else d.textContent=text; c.appendChild(d); c.scrollTop=c.scrollHeight; return d; }
+function showTyping(){ const c=document.getElementById('chat'); const d=document.createElement('div'); d.className='typing'; d.id='typing'; d.innerHTML='<span></span><span></span><span></span>'; c.appendChild(d); c.scrollTop=c.scrollHeight; }
+function hideTyping(){ const t=document.getElementById('typing'); if(t) t.remove(); }
+function setMode(mode){
+  MODE=mode;
+  document.getElementById('tab-events').classList.toggle('active', mode==='events');
+  document.getElementById('tab-restaurants').classList.toggle('active', mode==='restaurants');
+  document.getElementById('q').placeholder = mode==='restaurants' ? 'Ask me anything about restaurants...' : 'Ask me anything about events...';
+  document.getElementById('q').setAttribute('aria-label', mode==='restaurants' ? 'Ask about restaurants' : 'Ask about events');
+  if(!document.getElementById('chat').children.length){
+    if(mode==='restaurants') say("Hi! I'm Garden Route AI 🌿\nI can help you find restaurants across the Garden Route.\n\nTry: \"Pizza in Knysna\", \"Seafood in George\", or \"Family friendly in Plett\".", 'ai');
+    else say("Hi! I'm Garden Route AI 🌿\nI can help you find live events across the Garden Route.\n\nAsk me anything, or try the quick buttons above!", 'ai');
   }
 }
-function escapeHtml(str) {
-  if (str == null) return '';
-  return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;');
+function filterRestaurants(q){
+  q=(q||'').toLowerCase().trim();
+  let list=RESTAURANTS.slice();
+  const mentionedTowns=TOWNS_SORTED.filter(t=>q.includes(t));
+  if(mentionedTowns.length){ lastTown=mentionedTowns[0]; list=list.filter(r=>{ const hay=((r.town||'')+' '+(r.name||r.title||'')+' '+(r.area||'')).toLowerCase(); return mentionedTowns.some(t=>hay.includes(t)); }); }
+  let keywords=q;
+  mentionedTowns.forEach(t=>{ keywords=keywords.replace(t,''); });
+  keywords=keywords.replace(/\b(in|near|find|show|me|best|good|any|restaurant|restaurants|eat|food|where|can|i)\b/g,' ').trim();
+  if(keywords){ const words=keywords.split(/\s+/).filter(w=>w.length>2); if(words.length){ list=list.filter(r=>{ const hay=((r.name||r.title||'')+' '+(r.cuisine||'')+' '+(r.category||'')+' '+(r.description||'')).toLowerCase(); return words.some(w=>hay.includes(w)); }); } }
+  return list.slice(0,8);
 }
-function startOfDay(d) {
-  const x = new Date(d);
-  x.setHours(0, 0, 0, 0);
-  return x;
-}
-function parseEventDate(e) {
-  const raw = e.date || e.date_text || e.when || '';
-  if (!raw) return null;
-  let d = new Date(raw);
-  if (!isNaN(d.getTime())) return d;
-  const cleaned = String(raw).replace(/(\d+)(st|nd|rd|th)/gi, '$1');
-  d = new Date(cleaned);
-  return isNaN(d.getTime()) ? null : d;
-}
-function isPast(date) {
-  if (!date) return false;
-  return startOfDay(date) < startOfDay(new Date());
-}
-function isToday(date) {
-  if (!date) return false;
-  return startOfDay(date).getTime() === startOfDay(new Date()).getTime();
-}
-function isTomorrow(date) {
-  if (!date) return false;
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  return startOfDay(date).getTime() === startOfDay(tomorrow).getTime();
-}
-function isThisWeekend(date) {
-  if (!date) return false;
-  const today = startOfDay(new Date());
-  const day = today.getDay();
-  let sat, sun;
-  if (day === 0) {
-    sat = new Date(today); sat.setDate(today.getDate() - 1);
-    sun = today;
-  } else if (day === 6) {
-    sat = today;
-    sun = new Date(today); sun.setDate(today.getDate() + 1);
-  } else {
-    const daysToSat = 6 - day;
-    sat = new Date(today); sat.setDate(today.getDate() + daysToSat);
-    sun = new Date(sat); sun.setDate(sat.getDate() + 1);
-  }
-  const eventDay = startOfDay(date).getTime();
-  return eventDay === sat.getTime() || eventDay === sun.getTime();
-}
-function isThisWeek(date) {
-  if (!date) return false;
-  const now = startOfDay(new Date());
-  const in7 = new Date(now);
-  in7.setDate(now.getDate() + 7);
-  const d = startOfDay(date);
-  return d >= now && d <= in7;
-}
-function getLink(e) {
-  let link = e.link || e.url || '';
-  if (!link || link === 'undefined' || link === 'null') return null;
-  link = String(link).trim();
-  if (link.startsWith('/') || link.startsWith('./') || !/^https?:\/\//i.test(link)) return null;
-  return link;
-}
-function safeLink(url) {
-  if (!url) return null;
-  return getLink({ link: url });
-}
-function say(text, who, isHtml = false) {
-  const c = document.getElementById('chat');
-  const d = document.createElement('div');
-  d.className = 'msg ' + who;
-  if (isHtml) d.innerHTML = text;
-  else d.textContent = text;
-  c.appendChild(d);
-  c.scrollTop = c.scrollHeight;
-  return d;
-}
-function showTyping() {
-  const c = document.getElementById('chat');
-  const d = document.createElement('div');
-  d.className = 'typing';
-  d.id = 'typing';
-  d.innerHTML = '<span></span><span></span><span></span>';
-  c.appendChild(d);
-  c.scrollTop = c.scrollHeight;
-}
-function hideTyping() {
-  const t = document.getElementById('typing');
-  if (t) t.remove();
-}
-function setMode(mode) {
-  MODE = mode;
-  lastTown = null;
-  document.getElementById('tab-events').classList.toggle('active', mode === 'events');
-  document.getElementById('tab-restaurants').classList.toggle('active', mode === 'restaurants');
-  document.getElementById('q').placeholder = mode === 'restaurants' ? 'Ask me anything about restaurants...' : 'Ask me anything about events...';
-  document.getElementById('q').setAttribute('aria-label', mode === 'restaurants' ? 'Ask about restaurants' : 'Ask about events');
-  clearChat();
-  if (mode === 'restaurants') {
-    say("Hi! I'm Garden Route AI 🌿\nI can help you find restaurants across the Garden Route.\n\nTry: \"Pizza in Knysna\", \"Seafood in George\", or \"Family friendly in Plett\".", 'ai');
-  } else {
-    say("Hi! I'm Garden Route AI 🌿\nI can help you find live events across the Garden Route.\n\nAsk me anything, or try the quick buttons above!", 'ai');
-  }
-}
-function filterRestaurants(q) {
-  q = (q || '').toLowerCase().trim();
-  let list = RESTAURANTS.slice();
-  const mentionedTowns = TOWNS_SORTED.filter(t => q.includes(t));
-  if (mentionedTowns.length) {
-    lastTown = mentionedTowns[0];
-    list = list.filter(r => {
-      const hay = ((r.town || '') + ' ' + (r.name || r.title || '') + ' ' + (r.area || '')).toLowerCase();
-      return mentionedTowns.some(t => hay.includes(t));
-    });
-  }
-  let keywords = q;
-  mentionedTowns.forEach(t => { keywords = keywords.replace(t, ''); });
-  keywords = keywords.replace(/in|near|find|show|me|best|good|any|restaurant|restaurants|eat|food|where|can|i/g, ' ').trim();
-  if (keywords) {
-    const words = keywords.split(/\s+/).filter(w => w.length > 2);
-    if (words.length) {
-      list = list.filter(r => {
-        const hay = ((r.name || r.title || '') + ' ' + (r.cuisine || '') + ' ' + (r.category || '') + ' ' + (r.description || '')).toLowerCase();
-        return words.some(w => hay.includes(w));
-      });
-    }
-  }
-  return list.slice(0, 8);
-}
-function renderRestaurants(list) {
-  if (!list.length) {
-    return `I couldn't find any restaurants for that.\n\nTry a town (Knysna, George, Plett...) or a type (pizza, seafood, sushi, steakhouse).`;
-  }
-  let out = `Here's what I found (${list.length} restaurant${list.length === 1 ? '' : 's'}):\n`;
-  list.forEach(r => {
-    const name = escapeHtml(r.name || r.title || 'Untitled');
-    const town = escapeHtml(r.town || r.area || 'Garden Route');
-    const cuisine = escapeHtml(r.cuisine || r.category || '');
-    const desc = r.description ? '<br>' + escapeHtml(String(r.description).slice(0, 140)) : '';
-    let link = getLink(r);
-    if (!link) {
-      const q = encodeURIComponent((r.name || '') + ' ' + (r.town || '') + ' Garden Route restaurant');
-      link = `https://www.google.com/search?q=${q}`;
-    } else {
-      link = escapeHtml(link);
-    }
-    out += `\n<div class="event"><b>${name}</b><br>📍 ${town}${cuisine ? ' • 🍽️ ' + cuisine : ''}${desc}<br><a href="${link}" target="_blank" rel="noopener noreferrer">View Details →</a></div>`;
+function renderRestaurants(list){
+  if(!list.length) return `I couldn't find any restaurants for that.\n\nTry a town (Knysna, George, Plett...) or a type (pizza, seafood, sushi, steakhouse).`;
+  let out=`Here's what I found (${list.length} restaurant${list.length===1?'':'s'}):\n`;
+  list.forEach(r=>{
+    const name=escapeHtml(r.name||r.title||'Untitled');
+    const town=escapeHtml(r.town||r.area||'Garden Route');
+    const cuisine=escapeHtml(r.cuisine||r.category||'');
+    const desc=r.description?'<br>'+escapeHtml(String(r.description).slice(0,140)):'';
+    let link=getLink(r);
+    if(!link){ const q=encodeURIComponent((r.name||'')+' '+(r.town||'')+' Garden Route restaurant'); link=`https://www.google.com/search?q=${q}`; } else { link=escapeHtml(link); }
+    out+=`\n<div class="event"><b>${name}</b><br>📍 ${town}${cuisine?' • 🍽️ '+cuisine:''}${desc}<br><a href="${link}" target="_blank" rel="noopener noreferrer">View Details →</a></div>`;
   });
   return out;
 }
-function filterEvents(q) {
-  q = (q || '').toLowerCase().trim();
-  let list = EVENTS.map(e => ({ ...e, _date: parseEventDate(e) }));
-  list = list.filter(e => !isPast(e._date));
-  if (/\b(there|same place|that town)\b/.test(q) && lastTown) {
-    q += ' ' + lastTown;
-  }
-  const mentionedTowns = TOWNS_SORTED.filter(t => q.includes(t));
-  if (mentionedTowns.length) {
-    lastTown = mentionedTowns[0];
-    list = list.filter(e => {
-      const hay = ((e.town || '') + ' ' + (e.title || '')).toLowerCase();
-      return mentionedTowns.some(t => hay.includes(t));
-    });
-  }
-  if (/\b(today)\b/.test(q)) list = list.filter(e => isToday(e._date));
-  else if (/\b(tomorrow)\b/.test(q)) list = list.filter(e => isTomorrow(e._date));
-  else if (/\b(weekend)\b/.test(q)) list = list.filter(e => isThisWeekend(e._date));
-  else if (/\b(this week)\b/.test(q)) list = list.filter(e => isThisWeek(e._date));
-  if (q.includes('market')) list = list.filter(e => (e.title || '').toLowerCase().includes('market'));
-  if (/\b(music|live music|concert|band|acoustic|gig)\b/.test(q)) {
-    list = list.filter(e => (e.title || '').toLowerCase().match(/music|concert|band|acoustic|gig|live\s/));
-  }
-  if (/\b(family|kids|children)\b/.test(q)) {
-    list = list.filter(e => (e.title || '').toLowerCase().match(/family|kids|children|market|fair/));
-  }
-  if (q.includes('festival')) list = list.filter(e => (e.title || '').toLowerCase().includes('festival'));
-  list.sort((a, b) => {
-    if (!a._date && !b._date) return 0;
-    if (!a._date) return 1;
-    if (!b._date) return -1;
-    return a._date - b._date;
-  });
-  return list.slice(0, 8);
+function filterEvents(q){
+  q=(q||'').toLowerCase().trim();
+  let list=EVENTS.map(e=>({...e,_date:parseEventDate(e)}));
+  list=list.filter(e=>!isPast(e._date));
+  if(/\b(there|same place|that town)\b/.test(q)&&lastTown){ q+=' '+lastTown; }
+  const mentionedTowns=TOWNS_SORTED.filter(t=>q.includes(t));
+  if(mentionedTowns.length){ lastTown=mentionedTowns[0]; list=list.filter(e=>{ const hay=((e.town||'')+' '+(e.title||'')).toLowerCase(); return mentionedTowns.some(t=>hay.includes(t)); }); }
+  if(/\b(today)\b/.test(q)) list=list.filter(e=>isToday(e._date));
+  else if(/\b(tomorrow)\b/.test(q)) list=list.filter(e=>isTomorrow(e._date));
+  else if(/\b(weekend)\b/.test(q)) list=list.filter(e=>isThisWeekend(e._date));
+  else if(/\b(this week)\b/.test(q)) list=list.filter(e=>isThisWeek(e._date));
+  if(q.includes('market')) list=list.filter(e=>(e.title||'').toLowerCase().includes('market'));
+  if(/\b(music|live music|concert|band|acoustic|gig)\b/.test(q)){ list=list.filter(e=>(e.title||'').toLowerCase().match(/music|concert|band|acoustic|gig|live\s/)); }
+  if(/\b(family|kids|children)\b/.test(q)){ list=list.filter(e=>(e.title||'').toLowerCase().match(/family|kids|children|market|fair/)); }
+  if(q.includes('festival')) list=list.filter(e=>(e.title||'').toLowerCase().includes('festival'));
+  list.sort((a,b)=>{ if(!a._date&&!b._date) return 0; if(!a._date) return 1; if(!b._date) return -1; return a._date-b._date; });
+  return list.slice(0,8);
 }
-function formatDate(e) {
-  if (e._date && !isNaN(e._date.getTime())) {
-    return e._date.toLocaleDateString('en-ZA', {
-      weekday: 'short', day: 'numeric', month: 'short', year: 'numeric'
-    });
-  }
-  return e.date || e.date_text || 'See link for date';
-}
-function renderEvents(list) {
-  if (!list.length) {
-    return `I couldn't find any upcoming events for that.\n\nTry asking about a town (Knysna, George, Plett...), "this weekend", "markets" or "live music".`;
-  }
-  let out = `Here's what I found (${list.length} event${list.length === 1 ? '' : 's'}):\n`;
-  list.forEach(e => {
-    const title = escapeHtml(e.title || 'Untitled event');
-    const town  = escapeHtml(e.town || 'Garden Route');
-    const dateStr = escapeHtml(formatDate(e));
-    let link = getLink(e);
-    if (!link) {
-      const q = encodeURIComponent((e.title || '') + ' ' + (e.town || '') + ' Garden Route');
-      link = `https://www.google.com/search?q=${q}`;
-    } else {
-      link = escapeHtml(link);
-    }
-    out += `\n<div class="event"><b>${title}</b><br>📍 ${town} • 📅 ${dateStr}<br><a href="${link}" target="_blank" rel="noopener noreferrer">View Full Details →</a></div>`;
+function formatDate(e){ if(e._date&&!isNaN(e._date.getTime())){ return e._date.toLocaleDateString('en-ZA',{weekday:'short',day:'numeric',month:'short',year:'numeric'}); } return e.date||e.date_text||'See link for date'; }
+function renderEvents(list){
+  if(!list.length) return `I couldn't find any upcoming events for that.\n\nTry asking about a town (Knysna, George, Plett...), "this weekend", "markets" or "live music".`;
+  let out=`Here's what I found (${list.length} event${list.length===1?'':'s'}):\n`;
+  list.forEach(e=>{
+    const title=escapeHtml(e.title||'Untitled event');
+    const town=escapeHtml(e.town||'Garden Route');
+    const dateStr=escapeHtml(formatDate(e));
+    let link=getLink(e);
+    if(!link){ const q=encodeURIComponent((e.title||'')+' '+(e.town||'')+' Garden Route'); link=`https://www.google.com/search?q=${q}`; } else { link=escapeHtml(link); }
+    out+=`\n<div class="event"><b>${title}</b><br>📍 ${town} • 📅 ${dateStr}<br><a href="${link}" target="_blank" rel="noopener noreferrer">View Full Details →</a></div>`;
   });
   return out;
 }
-function getSuggestions(q, list) {
-  const suggestions = [];
-  if (list.length > 0) {
-    suggestions.push("This weekend");
-    if (lastTown) suggestions.push(`More in ${titleCase(lastTown)}`);
-    suggestions.push("Markets", "Live music", "Family events");
-  } else {
-    suggestions.push("What is on this weekend?", "Knysna events", "George events", "Markets");
-  }
-  return [...new Set(suggestions)].slice(0, 4);
+function getSuggestions(q,list){
+  const suggestions=[];
+  if(list.length>0){ suggestions.push("This weekend"); if(lastTown) suggestions.push(`More in ${titleCase(lastTown)}`); suggestions.push("Markets","Live music","Family events"); }
+  else { suggestions.push("What is on this weekend?","Knysna events","George events","Markets"); }
+  return [...new Set(suggestions)].slice(0,4);
 }
-function generateReply(q, list) {
-  q = q.toLowerCase().trim();
-  if (/^(hi|hello|hey|howdy|good morning|good afternoon|good evening)\b/.test(q)) {
-    return "Hey! 👋 I'm Garden Route AI. I can show you live events across the Garden Route.\n\nTry asking: \"What's on in Knysna this weekend?\" or just tap one of the chips above.";
-  }
-  if (/^(thanks|thank you|thx|cheers)\b/.test(q)) {
-    return "You're welcome! 🌿 Anything else you'd like to know about events?";
-  }
-  if (/^(help|what can you do|how does this work)\b/.test(q)) {
-    return "I can find upcoming events for you. Just tell me:\n• A town (Knysna, George, Plett, etc.)\n• A time (today, tomorrow, this weekend)\n• A type (markets, live music, family)\n\nYou can also combine them: \"Family markets in Sedgefield this weekend\"";
-  }
-  if (/^(who are you|what are you)\b/.test(q)) {
-    return "I'm Garden Route AI — your local events guide. I pull live data from public listings across the Garden Route and help you discover what's happening.";
-  }
-  const intro = list.length
-    ? (lastTown ? `Looking at ${titleCase(lastTown)}... ` : "")
-    : "";
-  return intro + renderEvents(list);
+function generateReply(q,list){
+  q=q.toLowerCase().trim();
+  if(/^(hi|hello|hey|howdy|good morning|good afternoon|good evening)\b/.test(q)) return "Hey! 👋 I'm Garden Route AI. I can show you live events across the Garden Route.\n\nTry asking: \"What's on in Knysna this weekend?\" or just tap one of the chips above.";
+  if(/^(thanks|thank you|thx|cheers)\b/.test(q)) return "You're welcome! 🌿 Anything else you'd like to know about events?";
+  if(/^(help|what can you do|how does this work)\b/.test(q)) return "I can find upcoming events for you. Just tell me:\n• A town (Knysna, George, Plett, etc.)\n• A time (today, tomorrow, this weekend)\n• A type (markets, live music, family)\n\nYou can also combine them: \"Family markets in Sedgefield this weekend\"";
+  if(/^(who are you|what are you)\b/.test(q)) return "I'm Garden Route AI — your local events guide. I pull live data from public listings across the Garden Route and help you discover what's happening.";
+  const intro=list.length?(lastTown?`Looking at ${titleCase(lastTown)}... `:""):"";
+  return intro+renderEvents(list);
 }
-function ask(q) {
-  document.getElementById('q').value = q;
-  send();
-}
-function renderItinerary(data, town, days) {
-  if (!data || !data.itinerary || !data.itinerary.length) {
-    return "Specialist didn't return an itinerary. Try again, or try a different town.";
+function ask(q){ if(isSending) return; document.getElementById('q').value=q; send(); }
+function formatSlotValue(v){
+  if(v==null) return '';
+  if(typeof v==='string') return escapeHtml(v);
+  if(typeof v==='number') return escapeHtml(String(v));
+  if(typeof v==='object'){
+    const name=v.name||v.title||v.activity||'';
+    const desc=v.description||v.details||'';
+    const time=v.time||v.when||'';
+    let s='';
+    if(name) s+=escapeHtml(String(name));
+    if(time) s+=` • ${escapeHtml(String(time))}`;
+    if(desc) s+=`<br><span style="color:#94a3b8">${escapeHtml(String(desc).slice(0,140))}</span>`;
+    return s || escapeHtml(JSON.stringify(v).slice(0,140));
   }
-  let out = `Here's your ${days}-day plan for ${escapeHtml(town)} — from the Specialist:\n`;
-  if (data.route_order && Array.isArray(data.route_order) && data.route_order.length) out += `Route: ${escapeHtml(data.route_order.join(" → "))}\n`;
-
-  const SKIP = new Set(['day','day_number','title','name','town','town_verified','towns','dietary_tags','best_time','budget','total_cost','warnings','notes']);
-  const SLOTS = ['morning','midday','lunch','afternoon','evening','night','dinner','breakfast'];
-
-  data.itinerary.forEach((day, i) => {
-    const dayNum = day.day || day.day_number || (i + 1);
-    const dayTitle = day.title || day.name || "";
-    out += `\n<div class="event"><b>Day ${escapeHtml(String(dayNum))}${dayTitle ? " — " + escapeHtml(String(dayTitle)) : ""}</b><br>`;
-
-    const items = day.activities || day.items || day.stops || day.plan || day.schedule || [];
-    if (Array.isArray(items) && items.length) {
-      items.forEach(it => {
-        if (typeof it === "string") { out += `• ${escapeHtml(it)}<br>`; return; }
-        const name = escapeHtml(it.name || it.title || "Stop");
-        const cost = it.cost_display ? ` • ${escapeHtml(String(it.cost_display))}` : (it.cost ? ` • R${escapeHtml(String(it.cost))}` : "");
-        const desc = it.description ? `<br><span style="color:#94a3b8">${escapeHtml(String(it.description).slice(0, 140))}</span>` : "";
-        const mapsUrl = safeLink(it.maps);
-        const webUrl = safeLink(it.website || it.url);
-        const link = mapsUrl ? `<br><a href="${escapeHtml(mapsUrl)}" target="_blank" rel="noopener">Map →</a>` : (webUrl ? `<br><a href="${escapeHtml
-        out += `• <b>${name}</b>${cost}${desc}${link}<br>`;
+  return escapeHtml(String(v));
+}
+function renderTownEventsCard(town){
+  if(!town) return '';
+  const lower=String(town).toLowerCase();
+  const matches=EVENTS.map(e=>({...e,_date:parseEventDate(e)})).filter(e=>!isPast(e._date)).filter(e=>((e.town||'').toLowerCase().includes(lower)||(e.title||'').toLowerCase().includes(lower))).sort((a,b)=>{ if(!a._date&&!b._date) return 0; if(!a._date) return 1; if(!b._date) return -1; return a._date-b._date; }).slice(0,3);
+  if(!matches.length) return `\n<div class="event"><b>🎉 Live events in ${escapeHtml(titleCase(town))}</b><br><span style="color:#94a3b8">No live events found in our data yet — ask me for markets or live music.</span></div>`;
+  let out=`\n<div class="event"><b>🎉 Live events in ${escapeHtml(titleCase(town))}</b><br>`;
+  matches.forEach(e=>{
+    const title=escapeHtml(e.title||'Untitled event');
+    const dateStr=escapeHtml(formatDate(e));
+    out+=`• ${title} • 📅 ${dateStr}<br>`;
+  });
+  out+=`</div>`;
+  return out;
+}
+function renderItinerary(data, town, days){
+  if(!data||!data.itinerary||!data.itinerary.length) return "Specialist didn't return an itinerary. Try again, or try a different town.";
+  let out=`Here's your ${days}-day plan for ${escapeHtml(town)} — from the Specialist:\n`;
+  if(data.route_order&&Array.isArray(data.route_order)&&data.route_order.length) out+=`Route: ${escapeHtml(data.route_order.join(" → "))}\n`;
+  const SKIP=new Set(['day','day_number','title','name','town','town_verified','towns','dietary_tags','best_time','budget','total_cost','warnings','notes']);
+  const SLOTS=['morning','midday','lunch','afternoon','evening','night','dinner','breakfast'];
+  data.itinerary.forEach((day,i)=>{
+    const dayNum=day.day||day.day_number||(i+1);
+    const dayTitle=day.title||day.name||"";
+    out+=`\n<div class="event"><b>Day ${escapeHtml(String(dayNum))}${dayTitle?" — "+escapeHtml(String(dayTitle)):""}</b><br>`;
+    const items=day.activities||day.items||day.stops||day.plan||day.schedule||[];
+    if(Array.isArray(items)&&items.length){
+      items.forEach(it=>{
+        if(typeof it==="string"){ out+=`• ${escapeHtml(it)}<br>`; return; }
+        const name=escapeHtml(it.name||it.title||"Stop");
+        const cost=it.cost_display?` • ${escapeHtml(String(it.cost_display))}`:(it.cost?` • R${escapeHtml(String(it.cost))}`:"");
+        const desc=it.description?`<br><span style="color:#94a3b8">${escapeHtml(String(it.description).slice(0,140))}</span>`:"";
+        const mapsUrl=safeLink(it.maps);
+        const webUrl=safeLink(it.website||it.url);
+        const link=mapsUrl?`<br><a href="${escapeHtml(mapsUrl)}" target="_blank" rel="noopener">Map →</a>`:(webUrl?`<br><a href="${escapeHtml(webUrl)}" target="_blank" rel="noopener noreferrer">Website →</a>`:"");
+        out+=`• <b>${name}</b>${cost}${desc}${link}<br>`;
       });
-      out += `</div>`;
+      out+=`</div>`;
       return;
     }
-
-    let shown = false;
-    SLOTS.forEach(slot => {
-      if (!day[slot]) return;
-      shown = true;
-      const label = slot.charAt(0).toUpperCase() + slot.slice(1);
-      out += `• <b>${label}:</b> ${escapeHtml(String(day[slot]))}<br>`;
-      const mapsKey = slot + '_maps';
-      const mapsUrl = safeLink(day[mapsKey] || day[slot + '_map']);
-      if (mapsUrl) out += `&nbsp;&nbsp;<a href="${escapeHtml(mapsUrl)}" target="_blank" rel="noopener">📍 Map →</a><br>`;
+    let shown=false;
+    SLOTS.forEach(slot=>{
+      if(!day[slot]) return;
+      shown=true;
+      const label=slot.charAt(0).toUpperCase()+slot.slice(1);
+      out+=`• <b>${label}:</b> ${formatSlotValue(day[slot])}<br>`;
+      const mapsKey=slot+'_maps';
+      const mapsUrl=safeLink(day[mapsKey]||day[slot+'_map']);
+      if(mapsUrl) out+=`&nbsp;&nbsp;<a href="${escapeHtml(mapsUrl)}" target="_blank" rel="noopener">📍 Map →</a><br>`;
     });
-
-    if (!shown) {
-      Object.keys(day).forEach(k => {
-        if (SKIP.has(k) || k.endsWith('_maps') || k.endsWith('_map')) return;
-        const v = day[k];
-        if (typeof v === "string" && v.trim()) out += `• <b>${escapeHtml(k)}:</b> ${escapeHtml(v)}<br>`;
-        else if (typeof v === "number") out += `• <b>${escapeHtml(k)}:</b> ${escapeHtml(String(v))}<br>`;
+    if(!shown){
+      Object.keys(day).forEach(k=>{
+        if(SKIP.has(k)||k.endsWith('_maps')||k.endsWith('_map')) return;
+        const v=day[k];
+        if(typeof v==="string"&&v.trim()) out+=`• <b>${escapeHtml(k)}:</b> ${escapeHtml(v)}<br>`;
+        else if(typeof v==="number") out+=`• <b>${escapeHtml(k)}:</b> ${escapeHtml(String(v))}<br>`;
+        else if(v&&typeof v==="object") out+=`• <b>${escapeHtml(k)}:</b> ${formatSlotValue(v)}<br>`;
       });
     }
-    out += `</div>`;
+    out+=`</div>`;
   });
-
-  if (data.warnings) {
-    const warnText = Array.isArray(data.warnings) ? data.warnings.join("; ") : String(data.warnings);
-    if (warnText) out += `\n<span style="color:#94a3b8">Note: ${escapeHtml(warnText)}</span>`;
+  out+=renderTownEventsCard(town);
+  if(data.warnings){
+    const warnText=Array.isArray(data.warnings)?data.warnings.join("; "):String(data.warnings);
+    if(warnText) out+=`\n<span style="color:#94a3b8">Note: ${escapeHtml(warnText)}</span>`;
   }
   return out;
-  }                                                                                                                                           
-async function send() {
-  const inp = document.getElementById('q');
-  const q = inp.value.trim();
-  if (!q) return;
-  say(q, 'user');
-  inp.value = '';
-  inp.focus();
-  lastQuery = q;
-  showTyping();
-  await new Promise(r => setTimeout(r, 600 + Math.random() * 700));
-
-  // --- If user wants an itinerary / plan, go DIRECT to Specialist ---
-  const lower = q.toLowerCase();
-  const wantsItinerary = /\b(itinerary|plan|trip|holiday)\b/.test(lower) || /\b\d+\s*-?\s*days?\s+in\b/.test(lower) || /\bday\s+trip\b/.test(lower) || /\b\d+\s*-?\s*day\b/.test(lower);
-  if (wantsItinerary && MODE !== 'restaurants') {
-    const townMatch = findTown(lower);
-        let townRaw = townMatch || lastTown || "knysna";
-    const town = titleCase(townRaw);
-    const daysMatch = lower.match(/(\d+)\s*-?\s*day/);
-    let days = daysMatch ? parseInt(daysMatch[1], 10) : 2;
-    if (isNaN(days)) days = 2;
-    days = Math.min(7, Math.max(1, days));
-    lastTown = townRaw.toLowerCase();
-    // Keep typing dots ON while Specialist answers - hide after response
-    const data = await askSpecialist(town, days);
-    hideTyping();
-    if (data && data.itinerary) {
-      say(renderItinerary(data, town, days), 'ai', true);
-      document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
-      return;
-    }
-    say("Specialist didn't answer, showing live events instead:", 'ai');
-  } else {
-    hideTyping();
-  }
-
-  const list = MODE === 'restaurants' ? filterRestaurants(q) : filterEvents(q);
-  const reply = MODE === 'restaurants' ? renderRestaurants(list) : generateReply(q, list);
-  const msgEl = say(reply, 'ai', true);
-  const suggestions = MODE === 'restaurants' ? [] : getSuggestions(q, list);
-  if (suggestions.length) {
-    const sugDiv = document.createElement('div');
-    sugDiv.className = 'suggestions';
-    suggestions.forEach(s => {
-      const btn = document.createElement('button');
-      btn.textContent = s;
-      btn.onclick = () => ask(s);
-      sugDiv.appendChild(btn);
-    });
-    msgEl.appendChild(sugDiv);
-  }
-  document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
 }
-function clearChat() {
-  document.getElementById('chat').innerHTML = '';
-  lastTown = null;
-  lastQuery = '';
-  say("Chat cleared. What would you like to know about Garden Route events?", 'ai');
-}
-async function load() {
-  const statusEl = document.getElementById('status');
-  statusEl.textContent = 'Loading live events...';
-  try {
-    const r = await fetch('data/events.json?t=' + Date.now());
-    if (!r.ok) throw new Error('HTTP ' + r.status);
-    const j = await r.json();
-    EVENTS = j.events || [];
-    try {
-      const rr = await fetch('data/restaurants.json?t=' + Date.now());
-      if (rr.ok) {
-        const rj = await rr.json();
-        RESTAURANTS = rj.restaurants || rj.data || (Array.isArray(rj) ? rj : []);
+async function send(){
+  if(isSending) return;
+  const inp=document.getElementById('q');
+  const q=inp.value.trim();
+  if(!q) return;
+  isSending=true;
+  try{
+    say(q,'user');
+    inp.value='';
+    inp.focus();
+    lastQuery=q;
+    showTyping();
+    await new Promise(r=>setTimeout(r,600+Math.random()*700));
+    const lower=q.toLowerCase();
+    const wantsItinerary=/\b(itinerary|plan|trip|holiday)\b/.test(lower)||/\b\d+\s*-?\s*days?\s+in\b/.test(lower)||/\bday\s+trip\b/.test(lower)||/\b\d+\s*-?\s*day\b/.test(lower);
+    if(wantsItinerary&&MODE!=='restaurants'){
+      const townMatch=findTown(lower);
+      let townRaw=townMatch||lastTown||"knysna";
+      const town=titleCase(townRaw);
+      const daysMatch=lower.match(/(\d+)\s*-?\s*day/);
+      let days=daysMatch?parseInt(daysMatch[1],10):2;
+      if(isNaN(days)) days=2;
+      days=Math.min(7,Math.max(1,days));
+      lastTown=townRaw.toLowerCase();
+      const data=await askSpecialist(town,days);
+      hideTyping();
+      if(data&&data.itinerary){
+        say(renderItinerary(data,town,days),'ai',true);
+        document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
+        return;
       }
-    } catch(e) { console.log('No restaurants yet', e); }
-    const seen = new Set();
-    EVENTS = EVENTS.filter(e => {
-      const k = (e.title || '').toLowerCase().replace(/\s+/g, ' ').trim();
-      if (!k || seen.has(k)) return false;
+      say("Specialist didn't answer, showing live events instead:",'ai');
+    } else { hideTyping(); }
+    const list=MODE==='restaurants'?filterRestaurants(q):filterEvents(q);
+    const reply=MODE==='restaurants'?renderRestaurants(list):generateReply(q,list);
+    const msgEl=say(reply,'ai',true);
+    const suggestions=MODE==='restaurants'?[]:getSuggestions(q,list);
+    if(suggestions.length){
+      const sugDiv=document.createElement('div');
+      sugDiv.className='suggestions';
+      suggestions.forEach(s=>{ const btn=document.createElement('button'); btn.textContent=s; btn.onclick=()=>ask(s); sugDiv.appendChild(btn); });
+      msgEl.appendChild(sugDiv);
+    }
+    document.getElementById('chat').scrollTop=document.getElementById('chat').scrollHeight;
+  } finally { isSending=false; hideTyping(); }
+}
+function clearChat(){
+  document.getElementById('chat').innerHTML='';
+  lastTown=null;
+  lastQuery='';
+  say("Chat cleared. What would you like to know about Garden Route events?",'ai');
+}
+async function load(){
+  const statusEl=document.getElementById('status');
+  statusEl.textContent='Loading live events...';
+  try{
+    const r=await fetch('data/events.json');
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const j=await r.json();
+    EVENTS=j.events||[];
+    try{
+      const rr=await fetch('data/restaurants.json');
+      if(rr.ok){ const rj=await rr.json(); RESTAURANTS=rj.restaurants||rj.data||(Array.isArray(rj)?rj:[]); }
+    }catch(e){ console.log('No restaurants yet',e); }
+    const seen=new Set();
+    EVENTS=EVENTS.filter(e=>{
+      const k=((e.title||'').toLowerCase().replace(/\s+/g,' ').trim())+'|'+((e.date||e.date_text||e.when||'').toString().toLowerCase().trim())+'|'+((e.town||'').toLowerCase().trim())+'|'+((e.location||e.venue||'').toLowerCase().trim());
+      if(!k||k==='|||'||seen.has(k)) return false;
       seen.add(k);
       return true;
     });
-    let statusText = `Live • ${EVENTS.length} events • ${RESTAURANTS.length} restaurants`;
-    if (j.last_updated) {
-      const updated = new Date(j.last_updated);
-      if (!isNaN(updated.getTime())) {
-        statusText += ` • Updated: ${updated.toLocaleString()}`;
+    let statusText=`Live • ${EVENTS.length} events • ${RESTAURANTS.length} restaurants`;
+    let staleWarning='';
+    if(j.last_updated){
+      const updated=new Date(j.last_updated);
+      if(!isNaN(updated.getTime())){
+        statusText+=` • Updated: ${updated.toLocaleString()}`;
+        const ageHours=(Date.now()-updated.getTime())/3600000;
+        if(ageHours>24) staleWarning=' • ⚠️ Data may be stale';
       }
     }
-    statusEl.textContent = statusText;
-    say("Hi! I'm Garden Route AI 🌿\nI can help you find live events across the Garden Route.\n\nAsk me anything, or try the quick buttons above!", 'ai');
-  } catch (err) {
+    statusEl.textContent=statusText+staleWarning;
+    say("Hi! I'm Garden Route AI 🌿\nI can help you find live events across the Garden Route.\n\nAsk me anything, or try the quick buttons above!",'ai');
+  }catch(err){
     console.error(err);
-    statusEl.textContent = 'No data/events.json yet – run the scraper first.';
-    say("Hi! Events are still loading. Once your scraper has run I’ll show live upcoming events here.", 'ai');
+    statusEl.textContent='No data/events.json yet – run the scraper first.';
+    say("Hi! Events are still loading. Once your scraper has run I’ll show live upcoming events here.",'ai');
   }
 }
 load();
