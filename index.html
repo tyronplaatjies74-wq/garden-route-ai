@@ -19,7 +19,7 @@
     --muted: #94a3b8;
     --link: #60a5fa;
   }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     background: var(--bg);
@@ -117,7 +117,7 @@
     <h1>Garden Route AI</h1>
     <p class="sub">Your live AI guide to the Garden Route</p>
   </div>
-  <a href="/join.html" class="join-btn">Are you a business? Get Featured for R50/mo →</a>
+  <a href="join.html" class="join-btn">Are you a business? Get Featured for R50/mo →</a>
   <div class="tabs" role="tablist">
     <button id="tab-events" class="active" role="tab" onclick="setMode('events')">🎉 Events</button>
     <button id="tab-restaurants" role="tab" onclick="setMode('restaurants')">🍽️ Restaurants</button>
@@ -194,7 +194,6 @@ function setMode(mode){
 }
 function filterRestaurants(q){
   q=(q||'').toLowerCase().trim();
-  // Featured always first - combine featured + normal, featured flagged
   let all = [
     ...FEATURED.map(f => ({...f, is_featured: true})),
     ...RESTAURANTS.map(r => ({...r, is_featured: false}))
@@ -206,7 +205,6 @@ function filterRestaurants(q){
   mentionedTowns.forEach(t=>{ keywords=keywords.replace(t,''); });
   keywords=keywords.replace(/\b(in|near|find|show|me|best|good|any|restaurant|restaurants|eat|food|where|can|i)\b/g,' ').trim();
   if(keywords){ const words=keywords.split(/\s+/).filter(w=>w.length>2); if(words.length){ list=list.filter(r=>{ const hay=((r.name||r.title||'')+' '+(r.cuisine||'')+' '+(r.category||'')+' '+(r.description||'')+' '+(r.food||'')+' '+(r.tip||'')).toLowerCase(); return words.some(w=>hay.includes(w)) || r.is_featured; }); } }
-  // Sort: featured first, then rest
   list.sort((a,b) => (b.is_featured?1:0) - (a.is_featured?1:0));
   return list.slice(0,8);
 }
