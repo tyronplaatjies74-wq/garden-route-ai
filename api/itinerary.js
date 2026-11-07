@@ -6,7 +6,6 @@ async function loadData() {
   if (_events && _restaurants) return { events: _events, restaurants: _restaurants };
   try {
     const base = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : '';
-    // Try fetch from same site, fallback to relative
     const [eRes, rRes] = await Promise.all([
       fetch(`${base}/data/events.json`),
       fetch(`${base}/data/restaurants.json`)
@@ -58,7 +57,6 @@ function inTown(item, town) {
   return (item.town || '').toLowerCase().includes(town.toLowerCase());
 }
 
-// THIS is what Vercel needs - a handler, not just a function
 export default async function handler(req, res) {
   try {
     const town = req.query.town || 'Knysna';
