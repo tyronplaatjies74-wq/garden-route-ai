@@ -1,0 +1,15 @@
+{
+  "featured": [
+    {
+      "name": "Knysna Seafood Shack - TEST",
+      "town": "Knysna",
+      "type": "Restaurant",
+      "cuisine": "Seafood, Halaal",
+      "food": "Seafood, Halaal",
+      "description": "Family, Halaal, Kid-friendly",
+      "tip": "Come at 5pm for sunset, ask for corner table",
+      "whatsapp": "27821234567",
+      "price": "RR"
+    }
+  ]
+}
