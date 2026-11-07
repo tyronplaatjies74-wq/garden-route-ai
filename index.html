@@ -668,10 +668,15 @@ function renderItinerary(data, town, days) {
   }
   let out = `Here's your ${days}-day plan for ${escapeHtml(town)} — from the Specialist:\n`;
   if (data.route_order && Array.isArray(data.route_order) && data.route_order.length) out += `Route: ${escapeHtml(data.route_order.join(" → "))}\n`;
+
+  const SKIP = new Set(['day','day_number','title','name','town','town_verified','towns','dietary_tags','best_time','budget','total_cost','warnings','notes']);
+  const SLOTS = ['morning','midday','lunch','afternoon','evening','night','dinner','breakfast'];
+
   data.itinerary.forEach((day, i) => {
     const dayNum = day.day || day.day_number || (i + 1);
     const dayTitle = day.title || day.name || "";
     out += `\n<div class="event"><b>Day ${escapeHtml(String(dayNum))}${dayTitle ? " — " + escapeHtml(String(dayTitle)) : ""}</b><br>`;
+
     const items = day.activities || day.items || day.stops || day.plan || day.schedule || [];
     if (Array.isArray(items) && items.length) {
       items.forEach(it => {
@@ -681,29 +686,41 @@ function renderItinerary(data, town, days) {
         const desc = it.description ? `<br><span style="color:#94a3b8">${escapeHtml(String(it.description).slice(0, 140))}</span>` : "";
         const mapsUrl = safeLink(it.maps);
         const webUrl = safeLink(it.website || it.url);
-        const link = mapsUrl ? `<br><a href="${escapeHtml(mapsUrl)}" target="_blank" rel="noopener">Map →</a>` : (webUrl ? `<br><a href="${escapeHtml(webUrl)}" target="_blank" rel="noopener">Website →</a>` : "");
+        const link = mapsUrl ? `<br><a href="${escapeHtml(mapsUrl)}" target="_blank" rel="noopener">Map →</a>` : (webUrl ? `<br><a href="${escapeHtml
         out += `• <b>${name}</b>${cost}${desc}${link}<br>`;
       });
-    } else {
-      const keys = Object.keys(day).filter(k => !["day","day_number","title","name"].includes(k));
-      if (keys.length) {
-        keys.forEach(k => {
-          const v = day[k];
-          if (typeof v === "string" || typeof v === "number") out += `• ${escapeHtml(k)}: ${escapeHtml(String(v))}<br>`;
-          else if (Array.isArray(v)) v.forEach(x => { out += `• ${escapeHtml(typeof x === "string" ? x : (x.name || JSON.stringify(x)))}<br>`; });
-        });
-      } else {
-        out += escapeHtml(JSON.stringify(day).slice(0, 400)) + "<br>";
-      }
+      out += `</div>`;
+      return;
+    }
+
+    let shown = false;
+    SLOTS.forEach(slot => {
+      if (!day[slot]) return;
+      shown = true;
+      const label = slot.charAt(0).toUpperCase() + slot.slice(1);
+      out += `• <b>${label}:</b> ${escapeHtml(String(day[slot]))}<br>`;
+      const mapsKey = slot + '_maps';
+      const mapsUrl = safeLink(day[mapsKey] || day[slot + '_map']);
+      if (mapsUrl) out += `&nbsp;&nbsp;<a href="${escapeHtml(mapsUrl)}" target="_blank" rel="noopener">📍 Map →</a><br>`;
+    });
+
+    if (!shown) {
+      Object.keys(day).forEach(k => {
+        if (SKIP.has(k) || k.endsWith('_maps') || k.endsWith('_map')) return;
+        const v = day[k];
+        if (typeof v === "string" && v.trim()) out += `• <b>${escapeHtml(k)}:</b> ${escapeHtml(v)}<br>`;
+        else if (typeof v === "number") out += `• <b>${escapeHtml(k)}:</b> ${escapeHtml(String(v))}<br>`;
+      });
     }
     out += `</div>`;
   });
+
   if (data.warnings) {
     const warnText = Array.isArray(data.warnings) ? data.warnings.join("; ") : String(data.warnings);
     if (warnText) out += `\n<span style="color:#94a3b8">Note: ${escapeHtml(warnText)}</span>`;
   }
   return out;
-}
+  }                                                                                                                                           
 async function send() {
   const inp = document.getElementById('q');
   const q = inp.value.trim();
