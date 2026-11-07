@@ -1,3 +1,532 @@
 {
-  "events": []
+  "events": [
+    {
+      "id": "a129bbaee850",
+      "title": "George Used Car Parts Race 2026",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/george-used-car-parts-race-2026/",
+      "source": "george"
+    },
+    {
+      "id": "dc438733b6c7",
+      "title": "George Open Gardens 2026",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/george-open-gardens-2026/",
+      "source": "george"
+    },
+    {
+      "id": "deaa6a3495eb",
+      "title": "Chicago",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/chicago/",
+      "source": "george"
+    },
+    {
+      "id": "31fd00a5e090",
+      "title": "George Botanical Gardens Parkrun",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/george-botanical-gardens-parkrun/",
+      "source": "george"
+    },
+    {
+      "id": "e162925e866d",
+      "title": "Showground Sundays \u2013 George",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/showground-sundays-george/",
+      "source": "george"
+    },
+    {
+      "id": "3cad3a655b3f",
+      "title": "Candy Crush",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/candy-crush/",
+      "source": "george"
+    },
+    {
+      "id": "342f9a49e973",
+      "title": "Move. Sweat. Connect. Refresh. \u2013 Outdoor Fitness & Community Event",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/move-sweat-connect-refresh-outdoor-fitness-community-event/",
+      "source": "george"
+    },
+    {
+      "id": "0b72fdb265d7",
+      "title": "Demi Lee Moore Live on Stage",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/demi-lee-moore-die-bush-lapa-george/",
+      "source": "george"
+    },
+    {
+      "id": "2a8538c9179b",
+      "title": "Guns \u2018n Roses Jol",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/guns-n-roses-jol/",
+      "source": "george"
+    },
+    {
+      "id": "ddeaa4b4e594",
+      "title": "Helen OGrady Drama Academy Year End Production 2026",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/helen-ogrady-drama-academy-year-end-production-2026/",
+      "source": "george"
+    },
+    {
+      "id": "8c49b9d8a8d8",
+      "title": "One Night Only \u2013 An Evening of Jazz with Elrine Lottino",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/one-night-only-jazz-experience-george/",
+      "source": "george"
+    },
+    {
+      "id": "4e2a78b34e7a",
+      "title": "Uncle George Party at Step Aside Farm",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/uncle-george-party-at-step-aside-farm/",
+      "source": "george"
+    },
+    {
+      "id": "24299a99bf7c",
+      "title": "Outeniqua Kersmark 2026 \u2013 George",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/outeniqua-kersmark-2026-george/",
+      "source": "george"
+    },
+    {
+      "id": "7d96c0f506d8",
+      "title": "The Wizard of Oz at The George Arts Theatre",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/the-wizard-of-oz-at-the-george-arts-theatre/",
+      "source": "george"
+    },
+    {
+      "id": "94e84bb838e3",
+      "title": "George Picnic Fiesta \u2013 Summer Edition",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/george-picnic-fiesta-summer-edition/",
+      "source": "george"
+    },
+    {
+      "id": "e11dd371eb42",
+      "title": "Festive Ginger Biscuit Decorating \u2013 George",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/ginger-biscuit-decorating-george/",
+      "source": "george"
+    },
+    {
+      "id": "29144533d852",
+      "title": "Incognito \u2013 A One-Woman Show with Anita Overcomer",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/incognito-anita-overcomer-george-2027/",
+      "source": "george"
+    },
+    {
+      "id": "8359a5ce8072",
+      "title": "Latest",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://ontheroute.co.za/",
+      "source": "george"
+    },
+    {
+      "id": "ed49d46eb806",
+      "title": "Your Garden Route Event Guide - 29 October",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://ontheroute.co.za/",
+      "source": "george"
+    },
+    {
+      "id": "df440375fa82",
+      "title": "Your Garden Route Event Guide - 22 October",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://ontheroute.co.za/",
+      "source": "george"
+    },
+    {
+      "id": "acecc01c5d2a",
+      "title": "Your Garden Route Event Guide - 15 October",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://ontheroute.co.za/",
+      "source": "george"
+    },
+    {
+      "id": "d10dd752073e",
+      "title": "Your Garden Route Event Guide - 8 October",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://ontheroute.co.za/",
+      "source": "george"
+    },
+    {
+      "id": "6bc4b7b28d90",
+      "title": "Your Garden Route Event Guide - 3 September",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://ontheroute.co.za/",
+      "source": "george"
+    },
+    {
+      "id": "10226977c118",
+      "title": "Your Garden Route Event Guide - 27 August",
+      "town": "George",
+      "date": "See link for date",
+      "link": "https://ontheroute.co.za/",
+      "source": "george"
+    },
+    {
+      "id": "e4bf40f9134f",
+      "title": "Outeniqua Family Market",
+      "town": "George",
+      "date": "Every Saturday 08:00-14:00",
+      "link": "https://ontheroute.co.za/garden-route-market-guide/",
+      "source": "george"
+    },
+    {
+      "id": "b9bee673023c",
+      "title": "Sunday Market at the Botanical Garden",
+      "town": "George",
+      "date": "Every Sunday 09:00-14:00",
+      "link": "https://ontheroute.co.za/garden-route-market-guide/",
+      "source": "george"
+    },
+    {
+      "id": "ea495f1181cf",
+      "title": "November | Chicago: The Musical",
+      "town": "George",
+      "date": "28 October-7",
+      "link": "https://georgeherald.com/Entertainment/Article/eyes-on-arts-upcoming-entertainment-highlights-in-george-and-surrounds-202611050156",
+      "source": "george"
+    },
+    {
+      "id": "07fec5aa014c",
+      "title": "November | Chicago: The MusicalThe George Society of Arts presents Chicago: The Musical at",
+      "town": "George",
+      "date": "28 October-7",
+      "link": "https://georgeherald.com/Entertainment/Article/eyes-on-arts-upcoming-entertainment-highlights-in-george-and-surrounds-202611050156",
+      "source": "george"
+    },
+    {
+      "id": "f2df52cb9005",
+      "title": "Arrival is",
+      "town": "George",
+      "date": "6 November.",
+      "link": "https://georgeherald.com/Entertainment/Article/eyes-on-arts-upcoming-entertainment-highlights-in-george-and-surrounds-202611050156",
+      "source": "george"
+    },
+    {
+      "id": "cf7c9f514b5f",
+      "title": "Three in One",
+      "town": "George",
+      "date": "14 November |",
+      "link": "https://georgeherald.com/Entertainment/Article/eyes-on-arts-upcoming-entertainment-highlights-in-george-and-surrounds-202611050156",
+      "source": "george"
+    },
+    {
+      "id": "5ea0f9c3fcfb",
+      "title": "Live Jazz",
+      "town": "George",
+      "date": "21 November |",
+      "link": "https://georgeherald.com/Entertainment/Article/eyes-on-arts-upcoming-entertainment-highlights-in-george-and-surrounds-202611050156",
+      "source": "george"
+    },
+    {
+      "id": "e0a94d9e3053",
+      "title": "December | Carpe Musicam! Christmas ConcertsCarpe Musicam! presents five festive concerts a",
+      "town": "George",
+      "date": "29 November - 13",
+      "link": "https://georgeherald.com/Entertainment/Article/eyes-on-arts-upcoming-entertainment-highlights-in-george-and-surrounds-202611050156",
+      "source": "george"
+    },
+    {
+      "id": "d410f79cdbe2",
+      "title": "Kingswood Golf Estate in George on 4 December, featuring carol singing with \u201cBarefoot\u201d Bea",
+      "town": "George",
+      "date": "29 November and",
+      "link": "https://georgeherald.com/Entertainment/Article/eyes-on-arts-upcoming-entertainment-highlights-in-george-and-surrounds-202611050156",
+      "source": "george"
+    },
+    {
+      "id": "5c0b9558fbc6",
+      "title": "December | Carpe Musicam! Christmas Concerts11 December | The Music of Bee Gees and Friends",
+      "town": "George",
+      "date": "29 November - 13",
+      "link": "https://georgeherald.com/Entertainment/Article/eyes-on-arts-upcoming-entertainment-highlights-in-george-and-surrounds-202611050156",
+      "source": "george"
+    },
+    {
+      "id": "991cc484b751",
+      "title": "Support local journalism",
+      "town": "George",
+      "date": "05 November 2026",
+      "link": "https://georgeherald.com/Entertainment/Article/eyes-on-arts-upcoming-entertainment-highlights-in-george-and-surrounds-202611050156",
+      "source": "george"
+    },
+    {
+      "id": "cc807d30e9ed",
+      "title": "Wild Oats Community Farmers\u2019 Market",
+      "town": "Sedgefield",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/wild-oats-community-farmers-market/",
+      "source": "sedgefield"
+    },
+    {
+      "id": "6cf07e3f709a",
+      "title": "Experience the Sedgefield Mosaic Market",
+      "town": "Sedgefield",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/the-sedgefield-mosaic-market/",
+      "source": "sedgefield"
+    },
+    {
+      "id": "b76f4e03d9a3",
+      "title": "Sedgefield Sunset Family Festive Fun",
+      "town": "Sedgefield",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/sedgefield-sunset-family-festive-fun/",
+      "source": "sedgefield"
+    },
+    {
+      "id": "a96c9521db90",
+      "title": "Nianell Live in Sedgefield",
+      "town": "Sedgefield",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/nianell-live-in-sedgefield/",
+      "source": "sedgefield"
+    },
+    {
+      "id": "55d5ec89f60f",
+      "title": "Dance Through the Decades \u2013 Elle Dance Academy",
+      "town": "Sedgefield",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/dance-through-the-decades-elle-dance-academy/",
+      "source": "sedgefield"
+    },
+    {
+      "id": "60243e453799",
+      "title": "Vinyl Krispies \u2013 Bassline Society",
+      "town": "Sedgefield",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/vinyl-krispies-sedgefield/",
+      "source": "sedgefield"
+    },
+    {
+      "id": "133204efd0e9",
+      "title": "SAM Charity Shop Festive Decoration Sale",
+      "town": "Sedgefield",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/sam-charity-shop-festive-decoration-sale/",
+      "source": "sedgefield"
+    },
+    {
+      "id": "129d43c93acc",
+      "title": "Wild Oats Community Farmers Market",
+      "town": "Sedgefield",
+      "date": "Every Saturday 07:30-12:00",
+      "link": "https://ontheroute.co.za/garden-route-market-guide/",
+      "source": "sedgefield"
+    },
+    {
+      "id": "2200e5cf65f0",
+      "title": "Mosaic Village Market",
+      "town": "Sedgefield",
+      "date": "Every Saturday 08:00-14:00",
+      "link": "https://ontheroute.co.za/garden-route-market-guide/",
+      "source": "sedgefield"
+    },
+    {
+      "id": "af1021a8523c",
+      "title": "Scarab Village Craft Market",
+      "town": "Sedgefield",
+      "date": "Every Saturday 08:30-13:00",
+      "link": "https://ontheroute.co.za/garden-route-market-guide/",
+      "source": "sedgefield"
+    },
+    {
+      "id": "c27415ba318d",
+      "title": "Leisure Isle Festival \u2013 21st Anniversary",
+      "town": "Knysna",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/leisure-isle-festival-knysna-2026/",
+      "source": "knysna"
+    },
+    {
+      "id": "a1dc65ef4b39",
+      "title": "ForestJAZZ in November",
+      "town": "Knysna",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/forestjazz-in-november/",
+      "source": "knysna"
+    },
+    {
+      "id": "f3c3e927750b",
+      "title": "Radiate",
+      "town": "Knysna",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/radiate/",
+      "source": "knysna"
+    },
+    {
+      "id": "6f3d97ee9484",
+      "title": "A Night of Comedy with Alan Committie",
+      "town": "Knysna",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/a-night-of-comedy-with-alan-committie/",
+      "source": "knysna"
+    },
+    {
+      "id": "c72d4a94e50e",
+      "title": "Waterfront Half Marathon",
+      "town": "Knysna",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/knysna-waterfront-half-marathon/",
+      "source": "knysna"
+    },
+    {
+      "id": "0f04848cfb8d",
+      "title": "Clarinet (Danre Strydom) and Piano (Catherine Foxcroft) Duo Recital",
+      "town": "Knysna",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/danre-strydom-catherine-foxcroft-duo-recital-knysna/",
+      "source": "knysna"
+    },
+    {
+      "id": "ec7db840a605",
+      "title": "Ancient history of Robberg Coastal Corridor Protected Environment",
+      "town": "Knysna",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/ancient-history-of-robberg-coastal-corridor-protected-environment/",
+      "source": "knysna"
+    },
+    {
+      "id": "52b47aa2e51e",
+      "title": "Spoilt Knysna Gift Fair 2026",
+      "town": "Knysna",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/spoilt-knysna-gift-fair-2026/",
+      "source": "knysna"
+    },
+    {
+      "id": "cdf91b0ca0a3",
+      "title": "Woodstock & Beyond: 1965-1975 Live",
+      "town": "Knysna",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/woodstock-beyond-1965-1975-live/",
+      "source": "knysna"
+    },
+    {
+      "id": "a312fd7de4c5",
+      "title": "V-SPOKE Pop-Up Shop \u2013 Knysna",
+      "town": "Knysna",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/v-spoke-pop-up-shop-knysna-2026/",
+      "source": "knysna"
+    },
+    {
+      "id": "eee289f40c89",
+      "title": "PJ Powers Live at Blend Country Restaurant",
+      "town": "Knysna",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/pj-powers-live-at-blend-country-restaurant/",
+      "source": "knysna"
+    },
+    {
+      "id": "87c933c5ed12",
+      "title": "Your Garden Route Event Guide - 5 November",
+      "town": "Knysna",
+      "date": "See link for date",
+      "link": "https://ontheroute.co.za/",
+      "source": "knysna"
+    },
+    {
+      "id": "b010b39b90e3",
+      "title": "Your Garden Route Event Guide - 17 September",
+      "town": "Knysna",
+      "date": "See link for date",
+      "link": "https://ontheroute.co.za/",
+      "source": "knysna"
+    },
+    {
+      "id": "9402b1cd4a0d",
+      "title": "Your Garden Route Event Guide - 10 September",
+      "town": "Knysna",
+      "date": "See link for date",
+      "link": "https://ontheroute.co.za/",
+      "source": "knysna"
+    },
+    {
+      "id": "2bc6fcaeecb0",
+      "title": "Your Garden Route Event Guide - 20 August",
+      "town": "Knysna",
+      "date": "See link for date",
+      "link": "https://ontheroute.co.za/",
+      "source": "knysna"
+    },
+    {
+      "id": "83b6197a3a74",
+      "title": "Friday Market Knysna",
+      "town": "Knysna",
+      "date": "Every Friday 16:00-20:00",
+      "link": "https://ontheroute.co.za/garden-route-market-guide/",
+      "source": "knysna"
+    },
+    {
+      "id": "68360af26802",
+      "title": "Frank Opperman Re\u00fcnie",
+      "town": "Plettenberg Bay",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/frank-opperman-reunie/",
+      "source": "plettenberg bay"
+    },
+    {
+      "id": "0b1bed9edbad",
+      "title": "Mermaid Ball 2026",
+      "town": "Plettenberg Bay",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/mermaid-ball-2026/",
+      "source": "plettenberg bay"
+    },
+    {
+      "id": "8ba9192bb8a6",
+      "title": "Rocksteady\u2019s Ultimate 80s Experience",
+      "town": "Plettenberg Bay",
+      "date": "See link for date",
+      "link": "https://www.toodoo.co.za/rocksteadys-ultimate-80s-experience/",
+      "source": "plettenberg bay"
+    },
+    {
+      "id": "40b569ab5c45",
+      "title": "Your Garden Route Event Guide - 1 October",
+      "town": "Plettenberg Bay",
+      "date": "See link for date",
+      "link": "https://ontheroute.co.za/",
+      "source": "plettenberg bay"
+    },
+    {
+      "id": "9a0305253d34",
+      "title": "Wednesday Market at Old Nick",
+      "town": "Plettenberg Bay",
+      "date": "Every Wednesday 09:00-14:00",
+      "link": "https://ontheroute.co.za/garden-route-market-guide/",
+      "source": "plettenberg bay"
+    }
+  ]
 }
