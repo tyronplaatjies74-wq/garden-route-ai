@@ -2,7 +2,7 @@ name: Update Events
 
 on:
   schedule:
-    - cron: '0 */6 * * *'
+    - cron: '0 6 * * *'
   workflow_dispatch:
 
 permissions:
@@ -17,10 +17,10 @@ jobs:
         with:
           python-version: '3.11'
       - run: pip install requests beautifulsoup4
-      - run: python scrapers/scrape_events.py
+      - run: python build.py
       - run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add data/events.json
+          git add data.json
           git commit -m "Auto-update events" || echo "No changes"
           git push
