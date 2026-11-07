@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 from scrapers.common import normalise_town, make_id, clean_date
 
 HEADERS = {"User-Agent": "Mozilla/5.0 GardenRouteAI-Bot/1.0"}
-TOWNS = ["George","Knysna","Plettenberg Bay","Plett","Mossel Bay","Sedgefield","Wilderness","Oudtshoorn","Hartenbos","Great Brak River","Little Brak River","Tsitsikamma","Nature's Valley","Stilbaai","Riversdale","Heidelberg"]
+TOWNS = ["George","Knysna","Plettenberg Bay","Plett","Mossel Bay","Sedgefield","Wilderness","Oudtshoorn","Hartenbos","Great Brak River","Little Brak River","Tsitsikamma","Natures Valley","Stilbaai","Riversdale","Heidelberg"]
 
 def guess_town(text):
     text = (text or "").lower()
@@ -13,7 +13,7 @@ def guess_town(text):
     return "Garden Route"
 
 def clean(s):
-    return re.sub(r'\s+', ' ', s or '').strip()
+    return re.sub(r"\s+", " ", s or "").strip()
 
 def add_event(events, title, town, date, link):
     title = clean(title)
@@ -70,7 +70,29 @@ def scrape_all():
             m = re.search(r"Date:\s*([^\n\-]+)", txt, re.I)
             add_event(events, title, guess_town(txt), m.group(1).strip() if m else "", url)
     markets = [
-        ("Wild Oats Community Farmers' Market", "Sedgefield", "Every Saturday 07:30-12:00"),
+        ("Wild Oats Community Farmers Market", "Sedgefield", "Every Saturday 07:30-12:00"),
         ("Outeniqua Family Market", "George", "Every Saturday 08:00-14:00"),
         ("Mosaic Village Market", "Sedgefield", "Every Saturday 08:00-14:00"),
-        ("Scarab Village Craft
+        ("Scarab Village Craft Market", "Sedgefield", "Every Saturday 08:30-13:00"),
+        ("Friday Market Knysna", "Knysna", "Every Friday 16:00-20:00"),
+        ("Milkwood Village Friday Night Market", "Wilderness", "Every Friday from 17:00"),
+        ("Sunday Market at the Botanical Garden", "George", "Every Sunday 09:00-14:00"),
+        ("Wednesday Market at Old Nick", "Plettenberg Bay", "Every Wednesday 09:00-14:00"),
+        ("The Goods Shed Outside Market", "Mossel Bay", "3rd Saturday 09:00-14:00"),
+        ("Hartenbos Boeremark", "Hartenbos", "2nd and last Saturday 08:00-14:00"),
+    ]
+    for title, town, date in markets:
+        add_event(events, title, town, date, "https://ontheroute.co.za/garden-route-market-guide/")
+    soup = fetch("https://georgeherald.com/search/?q=Eyes+on+arts") or fetch("https://georgeherald.com/")
+    if soup:
+        for a in soup.find_all("a", href=True):
+            if "eyes-on-arts" in a["href"].lower():
+                link = a["href"] if a["href"].startswith("http") else "https://georgeherald.com" + a["href"]
+                sub = fetch(link)
+                if not sub: continue
+                text = sub.get_text()
+                for m in re.finditer(r"(\d{1,2}(?:-\d{1,2})?\s*(?:October|November|December|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[^\n|]{0,5}\|?\s*)([A-Z][^\n]{5,90})", text):
+                    title = m.group(2).strip().split(" at ")[0].split(" - ")[0]
+                    add_event(events, title, guess_town(text[m.start():m.start()+500]), m.group(1).strip(), link)
+                break
+    return events
