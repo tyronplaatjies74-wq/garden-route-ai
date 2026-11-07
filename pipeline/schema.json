@@ -1,0 +1,8 @@
+{
+  "event": {
+    "required": ["id", "title", "town", "date", "source"]
+  },
+  "restaurant": {
+    "required": ["id", "name", "town", "source"]
+  }
+}
