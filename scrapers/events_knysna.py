@@ -1,3 +1,3 @@
+from scrapers.sources import scrape_all
 def scrape():
-    # TODO: move Knysna logic here from scrape_events.py
-    return []
+    return [e for e in scrape_all() if e["town"] == "Knysna"]
