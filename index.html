@@ -3,24 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Garden Route AI | Live Guide</title>
+<title>Garden Route AI</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
-  body{background:#0f2a33;color:#fff;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding-bottom:90px}
-  header{background:#000;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;position:sticky;top:0;z-index:10}
-  header h1{font-size:22px;display:flex;align-items:center;gap:8px}
+  body{background:linear-gradient(180deg,#0f2a33 0%,#1a3a44 60%,#0f2a33 100%);color:#fff;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh;padding-bottom:100px}
+  header{background:#000;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;position:sticky;top:0;z-index:20}
+  header h1{font-size:21px;display:flex;align-items:center;gap:8px}
   header h1 span{color:#3b82f6}
-  .dots{font-size:24px;letter-spacing:2px;opacity:.8}
-  /* OLD LAYOUT - SEPARATE PILLS */
-  .pills{display:flex;gap:8px;overflow-x:auto;padding:12px 12px 4px;white-space:nowrap;-webkit-overflow-scrolling:touch;scrollbar-width:none}
-  .pills::-webkit-scrollbar{display:none}
-  .pill{background:#1e3a44;color:#fff;border:none;padding:9px 16px;border-radius:999px;font-size:14px;flex-shrink:0;cursor:pointer}
-  .pill.active{background:#ff6b00}
-  .pill small{display:block;font-size:11px;opacity:.7}
-  .wrap{padding:12px}
-  .user-msg{background:#ff6b00;color:#fff;padding:12px 16px;border-radius:20px 20px 4px 20px;max-width:85%;margin:12px 0 12px auto;font-weight:600;width:fit-content}
-  .ai-card{background:#162f3a;border-radius:20px;padding:16px;margin:12px 0}
-  .ai-card h3{font-size:18px;margin-bottom:10px}
+  .menu-btn{font-size:26px;background:none;border:none;color:#fff;cursor:pointer;padding:0 6px;position:relative}
+  .menu{position:absolute;top:52px;right:12px;background:#162f3a;border:1px solid #2a4a5a;border-radius:16px;padding:8px;width:230px;display:none;z-index:30;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+  .menu.show{display:block}
+  .menu button{display:block;width:100%;text-align:left;background:none;border:none;color:#fff;padding:12px 12px;border-radius:10px;font-size:15px;cursor:pointer}
+  .menu button:hover{background:#243a44}
+  .wrap{padding:14px}
+  .card{background:#162f3a;background:rgba(22,47,58,.85);border-radius:18px;padding:18px;margin:12px 0;line-height:1.6}
+  .card p{font-size:16px;color:#e6eef1;margin-bottom:12px}
+  .card p:last-child{margin-bottom:0}
+  .ai-card{background:#162f3a;border-radius:18px;padding:16px;margin:12px 0}
+  .ai-card h3{font-size:18px;margin-bottom:8px}
   .ai-card p{line-height:1.6;color:#d1e3e8;font-size:15px}
   .ai-card a{color:#7db8ff}
   .event{background:#1a3442;border:1px solid #2a4a5a;border-radius:16px;padding:14px;margin:12px 0}
@@ -34,52 +34,55 @@
   .panel h4{margin-bottom:8px}
   .panel p,.panel li{font-size:14px;line-height:1.6;color:#d1e3e8}
   .panel ul{padding-left:18px}
-  .composer{position:fixed;bottom:0;left:0;right:0;background:#0f2a33;padding:10px 12px 14px;display:flex;gap:8px;border-top:1px solid #1e3a44}
-  .composer input{flex:1;background:#1e3a44;border:none;color:#fff;padding:14px 16px;border-radius:999px;font-size:15px;outline:none}
-  .composer input::placeholder{color:#8aa5ad}
-  .composer button{background:#ff6b00;color:#fff;border:none;padding:0 22px;border-radius:999px;font-weight:700;font-size:15px;cursor:pointer}
-  .chip-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-  .chip{background:#243a44;border:none;color:#fff;padding:7px 12px;border-radius:999px;font-size:13px;cursor:pointer}
+  .user-msg{background:#ff6b00;color:#fff;padding:12px 16px;border-radius:20px 20px 4px 20px;max-width:85%;margin:12px 0 12px auto;font-weight:600;width:fit-content}
   .wiki-box{background:#fff;color:#111;border-radius:14px;padding:14px;margin-top:10px}
   .wiki-box h4{color:#111;margin-bottom:6px}
   .wiki-box p{color:#333;font-size:14px;line-height:1.6}
   .wiki-box a{color:#2563eb}
+  .chip-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .chip{background:#243a44;border:none;color:#fff;padding:7px 12px;border-radius:999px;font-size:13px;cursor:pointer}
+  .composer{position:fixed;bottom:0;left:0;right:0;background:#0f2a33;padding:10px 12px 16px;display:flex;gap:8px;border-top:1px solid #1e3a44}
+  .composer input{flex:1;background:#2a2a2a;background:#1e3a44;border:none;color:#fff;padding:14px 16px;border-radius:999px;font-size:15px;outline:none}
+  .composer input::placeholder{color:#8aa5ad}
+  .composer button{background:#ff6b00;color:#fff;border:none;padding:0 22px;border-radius:999px;font-weight:700;font-size:15px;cursor:pointer}
 </style>
 </head>
 <body>
 
 <header>
   <h1>🌿 Garden Route AI <span>✓</span></h1>
-  <div class="dots">⋮</div>
+  <button class="menu-btn" onclick="toggleMenu(event)">⋮</button>
+  <div class="menu" id="menu">
+    <button onclick="showPanel('eventsPanel')">📅 Events</button>
+    <button onclick="showPanel('restaurantsPanel')">🍽️ Restaurants</button>
+    <button onclick="showPanel('savedPanel')">❤️ Saved</button>
+    <button onclick="showPanel('emergencyPanel')">🚨 Emergency</button>
+    <button onclick="showPanel('weatherPanel')">🌤️ Weather</button>
+    <button onclick="showPanel('budgetPanel')">💰 Budget</button>
+    <button onclick="showPanel('highlightsPanel')">⭐ Highlights</button>
+  </div>
 </header>
 
-<!-- OLD SEPARATE PILLS - NOT SQUASHED -->
-<div class="pills">
-  <button class="pill" onclick="togglePanel('savedPanel',this)">Saved</button>
-  <button class="pill" onclick="togglePanel('emergencyPanel',this)">Emergency</button>
-  <button class="pill" onclick="togglePanel('weatherPanel',this)">Weather</button>
-  <button class="pill" onclick="togglePanel('budgetPanel',this)">Budget</button>
-  <button class="pill" onclick="togglePanel('highlightsPanel',this)">Highlights</button>
-</div>
-
 <div class="wrap" id="main">
-  <div class="ai-card">
-    <h3>👋 Welcome to Garden Route AI</h3>
-    <p>I build itineraries for George, Knysna, Plett, Sedgefield, Wilderness & Mossel Bay.</p>
-    <p style="margin-top:8px">Try: <b>“2 days in Knysna”</b> or <b>“Tell me about George”</b></p>
+  <!-- EXACT BEFORE CARD -->
+  <div class="card">
+    <p>Hi! I'm Garden Route AI 🌿</p>
+    <p>I build itineraries. Tell me where you want to go and how many days — e.g. '2 days in Knysna'.</p>
+    <p>Tap : at the top for Events, Restaurants, Saved, Emergency, Weather, Budget & Highlights.</p>
     <div class="chip-row">
       <button class="chip" onclick="quickAsk('2 days in Knysna')">2 days in Knysna</button>
       <button class="chip" onclick="quickAsk('Tell me about George')">Tell me about George</button>
-      <button class="chip" onclick="quickAsk('Tell me about Plett')">Tell me about Plett</button>
       <button class="chip" onclick="quickAsk('Events in Knysna')">Events in Knysna</button>
     </div>
   </div>
 
+  <div id="eventsPanel" class="panel"><h4>📅 Events</h4><div id="eventsList"></div></div>
+  <div id="restaurantsPanel" class="panel"><h4>🍽️ Restaurants</h4><ul><li><b>The Fat Fish</b> - George - Seafood, waterfront</li><li><b>34° South</b> - Knysna Waterfront - Sushi & seafood</li><li><b>Emily Moon</b> - Plett - River view, wood-fired</li><li><b>East Head Café</b> - Knysna Heads - Breakfast with view</li></ul></div>
   <div id="savedPanel" class="panel"><h4>❤️ Saved</h4><div id="savedList"><p>No saved items yet. Tap Save on any event.</p></div></div>
-  <div id="emergencyPanel" class="panel"><h4>🚨 Emergency</h4><ul><li>Emergency: <b>10111</b> / Ambulance: <b>10177</b></li><li>George Hospital: <b>044 874 5122</b></li><li>Knysna Hospital: <b>044 302 8400</b></li><li>Sea Rescue NSRI: <b>082 990 5975</b></li><li>Tourist Safety: Save your hotel + location when hiking.</li></ul></div>
-  <div id="weatherPanel" class="panel"><h4>🌤️ Weather</h4><p>George: 18°C, light rain possible. Knysna: 19°C, partly cloudy. Plett: 20°C, sunny spells. Wind: SE 15-25 km/h. Best beach window: 10am - 3pm.</p><p style="margin-top:6px"><i>Live weather needs an API key - this is a guide estimate for today.</i></p></div>
-  <div id="budgetPanel" class="panel"><h4>💰 Budget Planner</h4><ul><li>Budget day: R450 - R750 (self-catering + 1 activity)</li><li>Mid-range: R900 - R1500 (restaurant + activity)</li><li>Splurge: R2000+ (lagoon cruise + fine dining)</li></ul><p>Tip: Knysna Heads + Featherbed, George Outeniqua trails, Plett Robberg are best value.</p></div>
-  <div id="highlightsPanel" class="panel"><h4>⭐ Highlights</h4><ul><li>Knysna Heads Viewpoint</li><li>Robberg Nature Reserve, Plett</li><li>Outeniqua Mountains, George</li><li>Wilderness Beach & Map of Africa</li><li>Sedgefield Lagoon & Slow Town</li></ul></div>
+  <div id="emergencyPanel" class="panel"><h4>🚨 Emergency</h4><ul><li>Emergency: <b>10111</b> / Ambulance: <b>10177</b></li><li>George Hospital: <b>044 874 5122</b></li><li>Knysna Hospital: <b>044 302 8400</b></li><li>NSRI Sea Rescue: <b>082 990 5975</b></li></ul></div>
+  <div id="weatherPanel" class="panel"><h4>🌤️ Weather</h4><p>George: 18°C, light rain possible. Knysna: 19°C, partly cloudy. Plett: 20°C, sunny spells. Wind SE 15-25 km/h. Best beach window: 10am - 3pm.</p></div>
+  <div id="budgetPanel" class="panel"><h4>💰 Budget</h4><ul><li>Budget day: R450 - R750</li><li>Mid-range: R900 - R1500</li><li>Splurge: R2000+</li></ul></div>
+  <div id="highlightsPanel" class="panel"><h4>⭐ Highlights</h4><ul><li>Knysna Heads Viewpoint</li><li>Robberg Nature Reserve, Plett</li><li>Outeniqua Mountains, George</li><li>Wilderness Beach & Map of Africa</li><li>Sedgefield Lagoon</li></ul></div>
 
   <div id="chat"></div>
 </div>
@@ -101,43 +104,46 @@ const WIKI_MAP = {
   "oudtshoorn":"Oudtshoorn",
   "garden route":"Garden_Route"
 };
-
 const EVENTS = [
-  {title:"Leisure Isle Festival – 21st Anniversary", town:"Knysna", date:"See link", link:"#", desc:"Family festival on Leisure Isle, Knysna."},
-  {title:"ForestJAZZ in November", town:"Knysna", date:"See link", link:"#", desc:"Jazz in the Knysna forest."},
-  {title:"Radiate", town:"Knysna", date:"See link", link:"#", desc:"Music / arts event in Knysna."},
-  {title:"Knysna Heads Sunset Cruise", town:"Knysna", date:"Daily", link:"#", desc:"Lagoon cruise to the Heads."},
-  {title:"Outeniqua Farmers Market", town:"George", date:"Sat 8am", link:"#", desc:"Local food & crafts in George."},
-  {title:"Robberg Hike & Beach Day", town:"Plett", date:"Daily", link:"#", desc:"Seal colony, dolphins, peninsula hike."},
-  {title:"Wilderness Map of Africa Viewpoint", town:"Wilderness", date:"Daily", link:"#", desc:"Famous viewpoint over the Kaaimans River."},
-  {title:"Sedgefield Slow Market", town:"Sedgefield", date:"Sat", link:"#", desc:"Slow Town market, lagoon side."}
+  {title:"Leisure Isle Festival – 21st Anniversary", town:"Knysna", date:"See link", desc:"Family festival on Leisure Isle."},
+  {title:"ForestJAZZ in November", town:"Knysna", date:"See link", desc:"Jazz in the Knysna forest."},
+  {title:"Radiate", town:"Knysna", date:"See link", desc:"Music / arts in Knysna."},
+  {title:"Knysna Heads Sunset Cruise", town:"Knysna", date:"Daily", desc:"Lagoon cruise to the Heads."},
+  {title:"Outeniqua Farmers Market", town:"George", date:"Sat 8am", desc:"Local food & crafts."},
+  {title:"Robberg Hike & Beach Day", town:"Plett", date:"Daily", desc:"Seal colony, dolphins."},
+  {title:"Wilderness Map of Africa Viewpoint", town:"Wilderness", date:"Daily", desc:"Viewpoint over Kaaimans River."},
+  {title:"Sedgefield Slow Market", town:"Sedgefield", date:"Sat", desc:"Slow Town market, lagoon side."}
 ];
-
 let saved = JSON.parse(localStorage.getItem('gr_saved')||'[]');
-function saveState(){ localStorage.setItem('gr_saved', JSON.stringify(saved)); renderSaved(); }
-function toggleSave(i, btn){
-  if(saved.includes(i)){ saved = saved.filter(x=>x!==i); btn.textContent='🤍 Save'; btn.classList.remove('saved'); }
+function toggleMenu(e){ e.stopPropagation(); document.getElementById('menu').classList.toggle('show'); }
+document.addEventListener('click',()=>{ document.getElementById('menu').classList.remove('show'); });
+function showPanel(id){
+  document.getElementById('menu').classList.remove('show');
+  document.querySelectorAll('.panel').forEach(p=>{ if(p.id!==id) p.classList.remove('show'); });
+  const el=document.getElementById(id);
+  const wasOpen=el.classList.contains('show');
+  el.classList.remove('show');
+  if(!wasOpen){ el.classList.add('show'); if(id==='eventsPanel') renderEvents(); el.scrollIntoView({behavior:'smooth'}); }
+}
+function renderEvents(){
+  document.getElementById('eventsList').innerHTML = EVENTS.map((e,i)=>{
+    const s=saved.includes(i);
+    return `<div class="event"><h4>${e.title}</h4><div class="meta">📍 ${e.town} • 📅 ${e.date}</div><p style="color:#d1e3e8;font-size:14px">${e.desc}</p><a href="#" onclick="return false">View Details →</a><br><button class="save-btn ${s?'saved':''}" onclick="toggleSave(${i},this)">${s?'❤️ Saved':'🤍 Save'}</button></div>`;
+  }).join('');
+}
+function toggleSave(i,btn){
+  if(saved.includes(i)){ saved=saved.filter(x=>x!==i); btn.textContent='🤍 Save'; btn.classList.remove('saved'); }
   else { saved.push(i); btn.textContent='❤️ Saved'; btn.classList.add('saved'); }
-  saveState();
+  localStorage.setItem('gr_saved',JSON.stringify(saved)); renderSaved();
 }
 function renderSaved(){
-  const el = document.getElementById('savedList');
+  const el=document.getElementById('savedList');
   if(!saved.length){ el.innerHTML='<p>No saved items yet.</p>'; return; }
-  el.innerHTML = saved.map(i=>`<div class="event"><h4>${EVENTS[i].title}</h4><div class="meta">📍 ${EVENTS[i].town}</div></div>`).join('');
+  el.innerHTML=saved.map(i=>`<div class="event"><h4>${EVENTS[i].title}</h4><div class="meta">📍 ${EVENTS[i].town}</div></div>`).join('');
 }
 renderSaved();
-
-function togglePanel(id, btn){
-  document.querySelectorAll('.panel').forEach(p=>{ if(p.id!==id) p.classList.remove('show'); });
-  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
-  const el = document.getElementById(id);
-  const wasOpen = el.classList.contains('show');
-  el.classList.remove('show');
-  if(!wasOpen){ el.classList.add('show'); btn.classList.add('active'); el.scrollIntoView({behavior:'smooth'}); }
-}
-
-function detectTown(text){
-  const t = text.toLowerCase();
+function detectTown(t){
+  t=t.toLowerCase();
   if(t.includes('knysna')) return 'Knysna';
   if(t.includes('plett')) return 'Plett';
   if(t.includes('george')) return 'George';
@@ -146,77 +152,44 @@ function detectTown(text){
   if(t.includes('mossel')) return 'Mossel Bay';
   return null;
 }
-
 function quickAsk(text){ document.getElementById('q').value=text; ask(); }
-
 async function ask(){
-  const input = document.getElementById('q');
-  const text = input.value.trim();
-  if(!text) return;
-  const chat = document.getElementById('chat');
-  chat.innerHTML += `<div class="user-msg">${text}</div>`;
-  input.value='';
-  window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});
-
-  const lower = text.toLowerCase();
-  const town = detectTown(text) || 'Knysna';
-
-  // WIKIPEDIA - FIXED WITH WIKI_MAP
-  if(lower.includes('tell me about') || lower.includes('about')){
-    const wikiTitle = WIKI_MAP[town.toLowerCase()] || town;
-    const card = document.createElement('div');
-    card.className='ai-card';
-    card.innerHTML=`<h3>About ${town}</h3><p>Loading Wikipedia...</p>`;
-    chat.appendChild(card);
+  const input=document.getElementById('q'); const text=input.value.trim(); if(!text) return;
+  const chat=document.getElementById('chat');
+  chat.innerHTML+=`<div class="user-msg">${text}</div>`; input.value='';
+  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+  const lower=text.toLowerCase(); const town=detectTown(text)||'Knysna';
+  if(lower.includes('tell me about')||lower.includes('about')){
+    const wikiTitle=WIKI_MAP[town.toLowerCase()]||town;
+    const card=document.createElement('div'); card.className='ai-card';
+    card.innerHTML=`<h3>About ${town}</h3><p>Loading Wikipedia...</p>`; chat.appendChild(card);
     try{
-      const r = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${wikiTitle}`);
-      const d = await r.json();
-      // Guard: never show disambiguation page
-      if(d.type==='disambiguation' || (d.extract||'').toLowerCase().includes('may refer to')){
-        card.innerHTML=`<h3>About ${town}</h3><div class="wiki-box"><h4>${town}, Garden Route</h4><p>${town} is a beautiful town on South Africa's Garden Route, famous for its lagoon, forests and outdoor activities. Perfect base for 2-3 days exploring beaches, hikes and local markets.</p><p><a href="https://en.wikipedia.org/wiki/${wikiTitle}" target="_blank">Read more on Wikipedia →</a></p></div>`;
+      const r=await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${wikiTitle}`);
+      const d=await r.json();
+      if(d.type==='disambiguation'||(d.extract||'').toLowerCase().includes('may refer to')){
+        card.innerHTML=`<h3>About ${town}</h3><div class="wiki-box"><h4>${town}, Garden Route</h4><p>${town} is a beautiful town on South Africa's Garden Route, famous for its lagoon, forests and outdoor activities.</p><p><a href="https://en.wikipedia.org/wiki/${wikiTitle}" target="_blank">Read more →</a></p></div>`;
       } else {
-        card.innerHTML=`<h3>About ${town}</h3><div class="wiki-box"><h4>${d.title||town}</h4><p>${d.extract||'No summary available.'}</p><p><a href="${d.content_urls?.desktop?.page||'https://en.wikipedia.org/wiki/'+wikiTitle}" target="_blank">Read more on Wikipedia →</a></p></div>`;
+        card.innerHTML=`<h3>About ${town}</h3><div class="wiki-box"><h4>${d.title||town}</h4><p>${d.extract||'No summary.'}</p><p><a href="${d.content_urls?.desktop?.page||'https://en.wikipedia.org/wiki/'+wikiTitle}" target="_blank">Read more →</a></p></div>`;
       }
-    }catch(e){
-      card.innerHTML=`<h3>About ${town}</h3><p>${town} is on the Garden Route - lagoon, forest, beaches and great restaurants. Try the Heads in Knysna, Robberg in Plett, or the Outeniqua trails in George.</p>`;
-    }
-    window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});
-    return;
+    }catch(e){ card.innerHTML=`<h3>About ${town}</h3><p>${town} is on the Garden Route - lagoon, forest, beaches and great restaurants.</p>`; }
+    window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}); return;
   }
-
-  // EVENTS
   if(lower.includes('event')){
-    const list = EVENTS.filter(e=> e.town.toLowerCase()===town.toLowerCase() || lower.includes('all'));
-    const shown = list.length? list : EVENTS;
-    let html = `<div class="ai-card"><h3>Here's what I found (${shown.length}):</h3>`;
-    shown.forEach((e,i)=>{
-      const idx = EVENTS.indexOf(e);
-      const isSaved = saved.includes(idx);
-      html += `<div class="event"><h4>${e.title}</h4><div class="meta">📍 ${e.town} • 📅 ${e.date} • See link</div><a href="#" onclick="return false">View Details →</a><br><button class="save-btn ${isSaved?'saved':''}" onclick="toggleSave(${idx},this)">${isSaved?'❤️ Saved':'🤍 Save'}</button></div>`;
-    });
-    html += `</div>`;
-    chat.innerHTML += html;
-    window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});
-    return;
+    const list=EVENTS.filter(e=>e.town.toLowerCase()===town.toLowerCase());
+    const shown=list.length?list:EVENTS;
+    let html=`<div class="ai-card"><h3>Here's what I found (${shown.length}):</h3>`;
+    shown.forEach(e=>{ const idx=EVENTS.indexOf(e); const s=saved.includes(idx);
+      html+=`<div class="event"><h4>${e.title}</h4><div class="meta">📍 ${e.town} • 📅 ${e.date} • See link</div><a href="#" onclick="return false">View Details →</a><br><button class="save-btn ${s?'saved':''}" onclick="toggleSave(${idx},this)">${s?'❤️ Saved':'🤍 Save'}</button></div>`; });
+    html+=`</div>`; chat.innerHTML+=html; window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}); return;
   }
-
-  // ITINERARY - default
-  const daysMatch = text.match(/(\d+)\s*day/);
-  const days = daysMatch? parseInt(daysMatch[1]) : 2;
-  let html = `<div class="ai-card"><h3>${days}-day itinerary in ${town}</h3>`;
-  if(town==='Knysna'){
-    html += `<p><b>Day 1:</b> Knysna Heads viewpoint → Waterfront lunch → Lagoon cruise at sunset.</p><p><b>Day 2:</b> Featherbed Nature Reserve → Leisure Isle walk → ForestJAZZ / local market.</p>`;
-    if(days>2) html += `<p><b>Day 3:</b> Day trip to Plett - Robberg hike + beach.</p>`;
-  } else if(town==='George'){
-    html += `<p><b>Day 1:</b> Outeniqua trails → Garden Route Botanical Garden → Outeniqua Farmers Market.</p><p><b>Day 2:</b> Wilderness beach → Map of Africa → Kaaimans River.</p>`;
-  } else if(town==='Plett'){
-    html += `<p><b>Day 1:</b> Robberg Nature Reserve hike → Central Beach.</p><p><b>Day 2:</b> Monkeyland / Birds of Eden → Lagoon cruise.</p>`;
-  } else {
-    html += `<p><b>Day 1:</b> Explore town centre, lagoon / beach, local market.</p><p><b>Day 2:</b> Nature reserve hike + sunset viewpoint + local restaurant.</p>`;
-  }
-  html += `<p style="margin-top:10px">Want me to add budget + weather? Tap <b>Budget</b> or <b>Weather</b> above.</p></div>`;
-  chat.innerHTML += html;
-  window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});
+  const m=text.match(/(\d+)\s*day/); const days=m?parseInt(m[1]):2;
+  let html=`<div class="ai-card"><h3>${days}-day itinerary in ${town}</h3>`;
+  if(town==='Knysna') html+=`<p><b>Day 1:</b> Knysna Heads → Waterfront lunch → Lagoon cruise.</p><p><b>Day 2:</b> Featherbed → Leisure Isle → Forest / market.</p>`;
+  else if(town==='George') html+=`<p><b>Day 1:</b> Outeniqua trails → Botanical Garden → Farmers Market.</p><p><b>Day 2:</b> Wilderness beach → Map of Africa.</p>`;
+  else if(town==='Plett') html+=`<p><b>Day 1:</b> Robberg hike → Central Beach.</p><p><b>Day 2:</b> Monkeyland / Birds of Eden → Lagoon cruise.</p>`;
+  else html+=`<p><b>Day 1:</b> Town centre, lagoon / beach, market.</p><p><b>Day 2:</b> Nature reserve + sunset viewpoint.</p>`;
+  if(days>2) html+=`<p><b>Day 3:</b> Day trip to nearby town.</p>`;
+  html+=`</div>`; chat.innerHTML+=html; window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
 }
 </script>
 </body>
