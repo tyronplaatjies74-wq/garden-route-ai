@@ -186,6 +186,29 @@ async function loadTowns(){
   }catch(e){ /* fall back to Wikipedia */ }
 }
 loadTowns();
+function editDist(a,b){
+  const m=a.length,n=b.length; const d=[];
+  for(let i=0;i<=m;i++){ d[i]=[i]; }
+  for(let j=1;j<=n;j++) d[0][j]=j;
+  for(let i=1;i<=m;i++) for(let j=1;j<=n;j++){
+    d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+    if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1]) d[i][j]=Math.min(d[i][j],d[i-2][j-2]+1);
+  }
+  return d[m][n];
+}
+const FUZZY_TOWNS={knysna:'Knysna',plettenberg:'Plett',george:'George',sedgefield:'Sedgefield',wilderness:'Wilderness',mossel:'Mossel Bay',mosselbay:'Mossel Bay',hartenbos:'Hartenbos',oudtshoorn:'Oudtshoorn',tsitsikamma:'Storms River',stormsriver:'Storms River',naturesvalley:"Nature's Valley",greatbrak:'Great Brak River'};
+function fuzzyTown(t){
+  const words=t.match(/[a-z]+/g)||[]; const cand=[...words];
+  for(let i=0;i<words.length-1;i++) cand.push(words[i]+words[i+1]);
+  for(const w of cand){
+    if(w.length<6) continue;
+    for(const k in FUZZY_TOWNS){
+      const lim=k.length>=8?2:1;
+      if(Math.abs(w.length-k.length)<=lim&&editDist(w,k)<=lim) return FUZZY_TOWNS[k];
+    }
+  }
+  return null;
+}
 function detectTown(t){
   t=t.toLowerCase().replace(/’/g,"'");
   if(t.includes('knysna')) return 'Knysna';
@@ -199,6 +222,11 @@ function detectTown(t){
   if(t.includes("nature's valley")||t.includes('natures valley')) return "Nature's Valley";
   if(t.includes('storms river')||t.includes('stormsrivier')||t.includes('tsitsikamma')) return 'Storms River';
   if(t.includes('oudtshoorn')) return 'Oudtshoorn';
+  const c=t.replace(/[^a-z]/g,'');
+  if(c.includes('stormsriver')) return 'Storms River';
+  if(c.includes('naturesvalley')||c.includes('naturevalley')) return "Nature's Valley";
+  if(c.includes('greatbrak')||c.includes('littlebrak')) return 'Great Brak River';
+  const f=fuzzyTown(t); if(f) return f;
   return null;
 }
 function add(html){ document.getElementById('chat').insertAdjacentHTML('beforeend',html); window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}); }
@@ -663,6 +691,9 @@ function thingsHtml(it,town){
     (it.tag==='wildlife'?'<p style="opacity:.7;font-size:13px">Wildlife sightings can never be guaranteed.</p>':'')+
     `<p style="opacity:.7;font-size:13px">Want dates? Try 'events in ${esc(town||'Knysna')}'.</p></div></div>`;
 }
+function askWhichTown(){
+  return `<div class="ai-card"><p>Which town do you mean? I can tell you about Knysna, Plett, George, Sedgefield, Wilderness, Mossel Bay, Hartenbos, Great Brak River, Nature's Valley, Storms River and Oudtshoorn.</p><p>Try 'Tell me about Plett'.</p></div>`;
+}
 function smallTalk(lower){
   const tips="<p>Try:</p><p>• '3 days in Plett'<br>• 'Tell me about George'<br>• 'Weather in Knysna'<br>• 'Beaches in Plett'<br>• 'Events in Sedgefield'<br>• 'Holidays' or 'Rates'</p>";
   if(/^\s*(hi|hello|hey|howzit|hallo|yo|good (morning|afternoon|evening))\b/.test(lower))
@@ -679,6 +710,7 @@ async function ask(){
   const lower=text.toLowerCase(); const town=detectTown(text)||'Knysna';
   if(!/\babout\b/.test(lower)){ for(const t of TOPICS){ if(t.re.test(lower)){ await runTopic(t.id,detectTown(text),lower); return; } } }
   if(lower.includes('about')){
+    if(!detectTown(text)){ add(askWhichTown()); return; }
     const wikiTitle=WIKI_MAP[town.toLowerCase()]||town;
     const t=TOWNS[town];
     if(t&&t.text){
