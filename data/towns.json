@@ -1,0 +1,107 @@
+{
+  "Knysna": {
+    "title": "Knysna",
+    "text": [
+      "Knysna sits on a large tidal lagoon, with the two sandstone cliffs known as the Heads guarding its narrow mouth to the sea. Indigenous forest runs right up to the edge of town, which gives Knysna a green, tucked-away feel that is different from the open beaches further along the coast.",
+      "The waterfront is the social heart of town, with restaurants, craft shops and boat trips. Across the lagoon, Thesen Island and Leisure Isle give you quiet walks and views back to the Heads, and the forest around town has short trails and a boardwalk if you want shade and birdsong.",
+      "Knysna is a good base for two or three days. You can combine lagoon time, forest walks and a half-day at the beaches east and west of town without long drives."
+    ],
+    "highlights": [
+      "Knysna Heads viewpoint, best at sunset",
+      "Lagoon cruise from the waterfront",
+      "Featherbed Nature Reserve, reached by ferry",
+      "Forest walks and the Garden of Eden boardwalk",
+      "Noetzie beach and its stone castles",
+      "Oysters and seafood at the waterfront"
+    ],
+    "best_time": "Spring and autumn are mild and quieter. Summer is the busiest, so book restaurants and boat trips ahead.",
+    "tip": "Go to the Heads viewpoint late afternoon, then have dinner on the waterfront."
+  },
+  "Plett": {
+    "title": "Plettenberg Bay",
+    "text": [
+      "Plettenberg Bay, known as Plett, is the Garden Route's beach town. A long curve of sand looks out over the bay, with mountains behind, and the water is a popular place for swimming, surfing and boat trips.",
+      "The Robberg Nature Reserve is the main walking attraction. This rocky peninsula has several hiking routes of different lengths, coastal views and a Cape fur seal colony at the tip. Boat trips from the bay offer dolphin watching, and in winter and spring there is a chance of whales.",
+      "Around Plett you will also find wildlife attractions such as Monkeyland and Birds of Eden, river and lagoon outings on the Keurbooms River, and easy access to the forests and coast of Nature's Valley."
+    ],
+    "highlights": [
+      "Robberg Nature Reserve hikes and seal colony",
+      "Central Beach and the Beacon Island area",
+      "Dolphin and whale watching boat trips",
+      "Keurbooms River and lagoon",
+      "Monkeyland and Birds of Eden",
+      "Nature's Valley, a short drive east"
+    ],
+    "best_time": "Summer is peak beach season and very busy. Winter and spring are quieter and good for whale watching.",
+    "tip": "Hike Robberg in the morning when it is cooler and the light is good, then relax at the beach."
+  },
+  "George": {
+    "title": "George",
+    "text": [
+      "George is the largest town on the Garden Route and sits at the foot of the Outeniqua Mountains. It is less of a holiday town than its neighbours and more of a working hub, which means good shops, restaurants and services, and a useful base for exploring the region.",
+      "The mountains are the draw here. There are forest and mountain trails above town, scenic drives over the Outeniqua and Montagu passes, and local markets on weekends. The coast is close too, with Victoria Bay and Herold's Bay a short drive away for surfing and swimming.",
+      "If you want variety, George works well as a central stop: mountains in the morning, beach in the afternoon, and Wilderness or Mossel Bay as easy day trips."
+    ],
+    "highlights": [
+      "Outeniqua Mountains trails and viewpoints",
+      "Montagu Pass scenic drive",
+      "Outeniqua Farmers Market",
+      "Garden Route Botanical Garden",
+      "Outeniqua Transport Museum",
+      "Victoria Bay and Herold's Bay beaches"
+    ],
+    "best_time": "Mild year-round. Spring and autumn are good for hiking, and summer for the nearby beaches.",
+    "tip": "Visit the farmers market on Saturday morning, then drive one of the mountain passes."
+  },
+  "Sedgefield": {
+    "title": "Sedgefield",
+    "text": [
+      "Sedgefield is a small, relaxed town between Wilderness and Knysna, known as a Slow Town. It is popular with people who want a quiet pace, local markets and nature rather than big attractions.",
+      "The Swartvlei lagoon is the centre of outdoor life, with kayaking, paddle boarding and birdwatching. A long beach runs along the sea side of town, and the Goukamma Nature Reserve nearby offers walks, dunes and coastal scenery.",
+      "Sedgefield is best as a slow stop. Give it a morning or an afternoon around the market, the lagoon and a walk on the beach."
+    ],
+    "highlights": [
+      "Slow Market on Saturdays",
+      "Swartvlei lagoon for kayaking and birds",
+      "Long sandy beach",
+      "Goukamma Nature Reserve nearby",
+      "Local cafés and craft shops"
+    ],
+    "best_time": "Weekends are the best time for the market. Summer is busiest, and the rest of the year is calm.",
+    "tip": "Plan your visit for a Saturday so you can browse the market and then walk on the lagoon."
+  },
+  "Wilderness": {
+    "title": "Wilderness",
+    "text": [
+      "Wilderness is a small coastal village between George and Sedgefield. It has a wide, long beach, a system of lakes and rivers, and forested hills behind, which makes it one of the prettier stops on the Garden Route.",
+      "The Map of Africa viewpoint looks over the Kaaimans River as it winds toward the sea, and gets its name from the shape of the river bend. The Wilderness section of the Garden Route National Park has lakes, rivers and bird hides, and you can paddle on the Touw River.",
+      "Wilderness is also well known for paragliding and for its beach walks. It works as a half-day stop from George or a quiet base for a night or two."
+    ],
+    "highlights": [
+      "Map of Africa viewpoint",
+      "Kaaimans River and Touw River kayaking",
+      "Long Wilderness beach",
+      "Lakes and bird hides in the national park",
+      "Paragliding from the hills"
+    ],
+    "best_time": "Spring and early summer are lovely for walking and kayaking. Summer is busiest on the beach.",
+    "tip": "Do the Map of Africa viewpoint early in the day, then walk along the beach."
+  },
+  "Mossel Bay": {
+    "title": "Mossel Bay",
+    "text": [
+      "Mossel Bay is a historic harbour town at the western end of the Garden Route. It has one of the longest stories of any town on the coast, linked to early Portuguese sailors and the Dias Museum Complex.",
+      "The Cape St Blaize lighthouse sits on the cliffs above town, with a walking path beneath it that gives coastal views and a look at old caves. Beaches such as Santos are good for swimming, and boat trips go out to see the seals at Seal Island.",
+      "Mossel Bay works well as a first or last stop on a Garden Route trip, with history, beaches and sea activities close together."
+    ],
+    "highlights": [
+      "Dias Museum Complex",
+      "Cape St Blaize lighthouse and cliff walk",
+      "Santos Beach",
+      "Seal Island boat trips",
+      "Pinnacle Point archaeological area nearby"
+    ],
+    "best_time": "Summer for the beaches and boat trips. Autumn and spring are quieter and still pleasant.",
+    "tip": "Walk the cliff path below the lighthouse in the late afternoon for the best light."
+  }
+}
