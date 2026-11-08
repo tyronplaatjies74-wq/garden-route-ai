@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 
 // ===== BRAIN (shared search logic) =====
-const BRAIN_TOWNS=[['plettenberg','Plett'],['plett','Plett'],['knysna','Knysna'],['george','George'],['sedgefield','Sedgefield'],['wilderness','Wilderness'],['mossel','Mossel Bay']];
+const BRAIN_TOWNS=[['plettenberg','Plett'],['plett','Plett'],['knysna','Knysna'],['george','George'],['sedgefield','Sedgefield'],['wilderness','Wilderness'],['mossel','Mossel Bay'],['hartenbos','Hartenbos'],['great brak','Great Brak River'],['little brak','Great Brak River'],['brak river','Great Brak River'],["nature's valley","Nature's Valley"],['natures valley',"Nature's Valley"],['storms river','Storms River'],['stormsrivier','Storms River'],['tsitsikamma','Storms River'],['oudtshoorn','Oudtshoorn']];
 function brainTown(text){ const t=String(text||'').toLowerCase(); for(const [k,v] of BRAIN_TOWNS) if(t.includes(k)) return v; return null; }
 const BRAIN_TAGS={
   foodie:/\b(market|markets|food|wine|braai|farm|farmers|oyster|oysters|tasting|brunch)\b/,
@@ -38,7 +38,8 @@ function brainParse(text){
   else if(/\b(today|tonight)\b/.test(lower)) when='today';
   else if(/\b(this|next) week\b|\bnext 7 days\b/.test(lower)) when='week';
   const vibes=[]; for(const [re,v] of BRAIN_QUERY) if(re.test(lower)&&!vibes.includes(v)) vibes.push(v);
-  const words=(lower.replace(/'/g,'').match(/[a-z0-9]+/g)||[]).filter(w=>w.length>=3&&!BRAIN_STOP.has(w)&&!BRAIN_TOWN_WORDS.includes(w));
+  let cleaned=lower; for(const [k] of BRAIN_TOWNS) cleaned=cleaned.split(k).join(' ');
+  const words=(cleaned.replace(/'/g,'').match(/[a-z0-9]+/g)||[]).filter(w=>w.length>=3&&!BRAIN_STOP.has(w)&&!BRAIN_TOWN_WORDS.includes(w));
   return {town:brainTown(lower),when,free:/\bfree\b/.test(lower),vibes,keywords:[...new Set(words)]};
 }
 function brainWindow(when,now){
