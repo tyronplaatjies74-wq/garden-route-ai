@@ -37,6 +37,9 @@ UNDATED_TTL_DAYS = 30
 
 ID_FIELDS = ("title", "name", "date", "date_text", "when", "time",
              "start_time", "town", "venue", "location")
+# CHANGED: recurring events (weekly/monthly markets) get an id that does NOT
+# include the date, so the id stays the same every week.
+RECURRING_ID_FIELDS = ("title", "name", "town", "recurrence")
 LOOSE_FIELDS = ("title", "name", "town", "date", "date_text", "when")
 
 def now():
@@ -82,7 +85,9 @@ def write_json(path, obj):
             os.remove(tmp)
 
 def make_id(item):
-    key = "|".join(str(item.get(k, "")).strip().lower() for k in ID_FIELDS)
+    # CHANGED: use the date-free field list for recurring events
+    fields = RECURRING_ID_FIELDS if item.get("recurrence") else ID_FIELDS
+    key = "|".join(str(item.get(k, "")).strip().lower() for k in fields)
     return hashlib.sha1(key.encode("utf-8")).hexdigest()[:12]
 
 def loose_key(item):
@@ -156,6 +161,16 @@ def _parse_span(raw):
     return out
 
 def date_range(item):
+    # CHANGED: use start_date / end_date from the scrapers when present, so a
+    # multi-day event is not pruned before it has finished.
+    sd, ed = item.get("start_date"), item.get("end_date")
+    if sd:
+        try:
+            a = date.fromisoformat(str(sd)[:10])
+            b = date.fromisoformat(str(ed or sd)[:10])
+            return a, max(a, b)
+        except ValueError:
+            pass
     for k in ("date", "date_text", "when"):
         raw = item.get(k)
         if not raw:
