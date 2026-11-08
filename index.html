@@ -165,6 +165,16 @@ async function loadEvents(){
   renderEvents(); renderSaved();
 }
 loadEvents();
+let TOWNS={};
+async function loadTowns(){
+  try{
+    const r=await fetch('data/towns.json',{cache:'no-store'});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    if(d&&typeof d==='object') TOWNS=d;
+  }catch(e){ /* fall back to Wikipedia */ }
+}
+loadTowns();
 function detectTown(t){
   t=t.toLowerCase();
   if(t.includes('knysna')) return 'Knysna';
@@ -182,6 +192,15 @@ async function ask(){
   const lower=text.toLowerCase(); const town=detectTown(text)||'Knysna';
   if(lower.includes('about')){
     const wikiTitle=WIKI_MAP[town.toLowerCase()]||town;
+    const t=TOWNS[town];
+    if(t&&t.text){
+      const paras=(Array.isArray(t.text)?t.text:[t.text]).filter(Boolean).map(x=>`<p>${esc(x)}</p>`).join('');
+      const hl=Array.isArray(t.highlights)&&t.highlights.length?`<h4 style="margin-top:12px">Don't miss</h4><ul style="padding-left:18px;font-size:14px;line-height:1.7;color:#333">${t.highlights.map(h=>`<li>${esc(h)}</li>`).join('')}</ul>`:'';
+      const best=t.best_time?`<p style="margin-top:10px"><b>Best time to visit:</b> ${esc(t.best_time)}</p>`:'';
+      const tip=t.tip?`<p><b>Local tip:</b> ${esc(t.tip)}</p>`:'';
+      add(`<div class="ai-card"><h3>About ${esc(town)}</h3><div class="wiki-box"><h4>${esc(t.title||town)}</h4>${paras}${hl}${best}${tip}<p><a href="https://en.wikipedia.org/wiki/${wikiTitle}" target="_blank" rel="noopener">More on Wikipedia →</a></p></div></div>`);
+      return;
+    }
     const id='c'+Date.now();
     add(`<div class="ai-card" id="${id}"><h3>About ${town}</h3><p>Loading Wikipedia...</p></div>`);
     const card=document.getElementById(id);
