@@ -15,7 +15,53 @@
       "Oysters and seafood at the waterfront"
     ],
     "best_time": "Spring and autumn are mild and quieter. Summer is the busiest, so book restaurants and boat trips ahead.",
-    "tip": "Go to the Heads viewpoint late afternoon, then have dinner on the waterfront."
+    "tip": "Go to the Heads viewpoint late afternoon, then have dinner on the waterfront.",
+    "things": [
+      {
+        "name": "Knysna lagoon cruise",
+        "tags": [
+          "wildlife",
+          "birds",
+          "nature",
+          "kids"
+        ],
+        "note": "Boat trips give you birdlife and a close look at the Heads. The lagoon is also home to the endangered Knysna seahorse."
+      },
+      {
+        "name": "Featherbed Nature Reserve",
+        "tags": [
+          "nature",
+          "hiking",
+          "birds"
+        ],
+        "note": "Reached by ferry across the lagoon, with walks and guided tours and views of the Heads."
+      },
+      {
+        "name": "Forest walks and the Garden of Eden boardwalk",
+        "tags": [
+          "nature",
+          "hiking",
+          "kids",
+          "birds"
+        ],
+        "note": "Short, shaded walks in indigenous forest. Listen for the Knysna turaco, a colourful forest bird."
+      },
+      {
+        "name": "Knysna's forest elephants",
+        "tags": [
+          "wildlife"
+        ],
+        "note": "A very small, elusive group survives in the forest. Sightings are extremely rare, so treat it as a story, not a safari."
+      },
+      {
+        "name": "Noetzie beach",
+        "tags": [
+          "nature",
+          "hiking"
+        ],
+        "note": "A beach below the stone castles, reached on foot. Remember the steep walk back up."
+      }
+    ]
   },
   "Plett": {
     "title": "Plettenberg Bay",
@@ -33,7 +79,61 @@
       "Nature's Valley, a short drive east"
     ],
     "best_time": "Summer is peak beach season and very busy. Winter and spring are quieter and good for whale watching.",
-    "tip": "Hike Robberg in the morning when it is cooler and the light is good, then relax at the beach."
+    "tip": "Hike Robberg in the morning when it is cooler and the light is good, then relax at the beach.",
+    "things": [
+      {
+        "name": "Robberg Nature Reserve",
+        "tags": [
+          "wildlife",
+          "hiking",
+          "nature",
+          "adventure"
+        ],
+        "note": "A rocky peninsula with several hikes and a Cape fur seal colony at the tip."
+      },
+      {
+        "name": "Whale and dolphin boat trips",
+        "tags": [
+          "wildlife",
+          "adventure"
+        ],
+        "note": "Dolphins are seen much of the year, with a chance of whales in winter and spring."
+      },
+      {
+        "name": "Monkeyland",
+        "tags": [
+          "wildlife",
+          "kids"
+        ],
+        "note": "A sanctuary where primates live in forest and are seen on guided walks."
+      },
+      {
+        "name": "Birds of Eden",
+        "tags": [
+          "birds",
+          "wildlife",
+          "kids"
+        ],
+        "note": "A very large free-flight aviary under a dome."
+      },
+      {
+        "name": "Keurbooms River and lagoon",
+        "tags": [
+          "nature",
+          "adventure",
+          "birds"
+        ],
+        "note": "Paddling and river trips with birdlife and forested banks."
+      },
+      {
+        "name": "Nature's Valley",
+        "tags": [
+          "hiking",
+          "nature"
+        ],
+        "note": "Forest and coastline just east of Plett, on the edge of the Tsitsikamma."
+      }
+    ]
   },
   "George": {
     "title": "George",
@@ -51,7 +151,58 @@
       "Victoria Bay and Herold's Bay beaches"
     ],
     "best_time": "Mild year-round. Spring and autumn are good for hiking, and summer for the nearby beaches.",
-    "tip": "Visit the farmers market on Saturday morning, then drive one of the mountain passes."
+    "tip": "Visit the farmers market on Saturday morning, then drive one of the mountain passes.",
+    "things": [
+      {
+        "name": "Outeniqua mountain trails",
+        "tags": [
+          "hiking",
+          "nature"
+        ],
+        "note": "Forest and mountain walks above town."
+      },
+      {
+        "name": "Montagu Pass",
+        "tags": [
+          "history",
+          "nature"
+        ],
+        "note": "A historic mountain pass, popular for scenic drives."
+      },
+      {
+        "name": "Garden Route Botanical Garden",
+        "tags": [
+          "nature",
+          "birds",
+          "kids"
+        ],
+        "note": "Gardens and easy walks close to town."
+      },
+      {
+        "name": "Outeniqua Transport Museum",
+        "tags": [
+          "history",
+          "kids"
+        ],
+        "note": "Railway history, with old locomotives and carriages."
+      },
+      {
+        "name": "Victoria Bay and Herold's Bay",
+        "tags": [
+          "adventure",
+          "nature"
+        ],
+        "note": "Small bays on the coast, with surfing at Victoria Bay."
+      },
+      {
+        "name": "Birdwatching at the Wilderness lakes",
+        "tags": [
+          "birds",
+          "wildlife"
+        ],
+        "note": "A short drive east of George, with lakes and river birdlife."
+      }
+    ]
   },
   "Sedgefield": {
     "title": "Sedgefield",
@@ -61,14 +212,52 @@
       "Sedgefield is best as a slow stop. Give it a morning or an afternoon around the market, the lagoon and a walk on the beach."
     ],
     "highlights": [
-      "Slow Market on Saturdays",
+      "Wild Oats Community Market on Saturdays",
       "Swartvlei lagoon for kayaking and birds",
-      "Long sandy beach",
+      "Myoli Beach",
       "Goukamma Nature Reserve nearby",
       "Local cafés and craft shops"
     ],
     "best_time": "Weekends are the best time for the market. Summer is busiest, and the rest of the year is calm.",
-    "tip": "Plan your visit for a Saturday so you can browse the market and then walk on the lagoon."
+    "tip": "Plan your visit for a Saturday so you can browse the Wild Oats market and then walk on the lagoon or Myoli Beach.",
+    "things": [
+      {
+        "name": "Swartvlei lagoon",
+        "tags": [
+          "birds",
+          "nature",
+          "adventure"
+        ],
+        "note": "Kayaking, paddle boarding and good birdwatching."
+      },
+      {
+        "name": "Goukamma Nature Reserve",
+        "tags": [
+          "hiking",
+          "nature",
+          "birds"
+        ],
+        "note": "Dunes, coastline and walking trails just east of town."
+      },
+      {
+        "name": "Sedgefield beach walks",
+        "tags": [
+          "hiking",
+          "nature",
+          "kids"
+        ],
+        "note": "A long beach for easy walks."
+      },
+      {
+        "name": "Myoli Beach",
+        "tags": [
+          "kids",
+          "nature",
+          "hiking"
+        ],
+        "note": "A long, quiet beach on the sea side of town."
+      }
+    ]
   },
   "Wilderness": {
     "title": "Wilderness",
@@ -85,7 +274,51 @@
       "Paragliding from the hills"
     ],
     "best_time": "Spring and early summer are lovely for walking and kayaking. Summer is busiest on the beach.",
-    "tip": "Do the Map of Africa viewpoint early in the day, then walk along the beach."
+    "tip": "Do the Map of Africa viewpoint early in the day, then walk along the beach.",
+    "things": [
+      {
+        "name": "Map of Africa viewpoint",
+        "tags": [
+          "nature",
+          "hiking"
+        ],
+        "note": "A short walk to a lookout over the bend of the Kaaimans River."
+      },
+      {
+        "name": "Touw River kayaking",
+        "tags": [
+          "adventure",
+          "nature",
+          "birds"
+        ],
+        "note": "Paddle through the river and forest, with birdlife on the banks."
+      },
+      {
+        "name": "Bird hides in the national park",
+        "tags": [
+          "birds",
+          "wildlife",
+          "nature"
+        ],
+        "note": "Lakes and rivers with hides for birdwatching."
+      },
+      {
+        "name": "Paragliding",
+        "tags": [
+          "adventure"
+        ],
+        "note": "Flights from the hills above the village."
+      },
+      {
+        "name": "Wilderness beach walks",
+        "tags": [
+          "hiking",
+          "nature",
+          "kids"
+        ],
+        "note": "A very long beach for walking."
+      }
+    ]
   },
   "Mossel Bay": {
     "title": "Mossel Bay",
@@ -102,6 +335,311 @@
       "Pinnacle Point archaeological area nearby"
     ],
     "best_time": "Summer for the beaches and boat trips. Autumn and spring are quieter and still pleasant.",
-    "tip": "Walk the cliff path below the lighthouse in the late afternoon for the best light."
+    "tip": "Walk the cliff path below the lighthouse in the late afternoon for the best light.",
+    "things": [
+      {
+        "name": "Seal Island boat trips",
+        "tags": [
+          "wildlife",
+          "adventure",
+          "kids"
+        ],
+        "note": "Boat trips out to see the Cape fur seals."
+      },
+      {
+        "name": "Cape St Blaize cliff walk",
+        "tags": [
+          "hiking",
+          "nature",
+          "history"
+        ],
+        "note": "A cliff path below the lighthouse with coastal views and old caves."
+      },
+      {
+        "name": "Dias Museum Complex",
+        "tags": [
+          "history",
+          "kids"
+        ],
+        "note": "Maritime history in the old part of town."
+      },
+      {
+        "name": "Pinnacle Point",
+        "tags": [
+          "history",
+          "nature"
+        ],
+        "note": "An archaeological area nearby, linked to early human history."
+      },
+      {
+        "name": "Santos Beach",
+        "tags": [
+          "kids",
+          "nature"
+        ],
+        "note": "A swimming beach close to the town centre."
+      }
+    ]
+  },
+  "Hartenbos": {
+    "title": "Hartenbos",
+    "text": [
+      "Hartenbos is a relaxed seaside resort right next to Mossel Bay, popular with families for its long, gently sloping beach and calm lagoon.",
+      "It suits a slow holiday. Children can paddle in the lagoon, there are easy walks along the shore, and the river mouth is a good place to look for birds.",
+      "Hartenbos is close enough to Mossel Bay to combine with its museums, seal boat trips and cliff walks, which makes it a quieter base for a few days."
+    ],
+    "highlights": [
+      "Long family-friendly beach",
+      "Calm Hartenbos lagoon",
+      "Birdwatching at the river mouth",
+      "Easy walks along the shore",
+      "Mossel Bay attractions a short drive away"
+    ],
+    "best_time": "Summer is the busiest family season. Autumn and spring are calmer and still pleasant.",
+    "tip": "Visit the lagoon in the morning when it is quiet and the birds are active.",
+    "things": [
+      {
+        "name": "Hartenbos beach",
+        "tags": [
+          "kids",
+          "nature"
+        ],
+        "note": "A long, gently sloping beach that suits families."
+      },
+      {
+        "name": "Hartenbos lagoon",
+        "tags": [
+          "birds",
+          "kids",
+          "nature"
+        ],
+        "note": "Calm water for paddling, with birds around the river mouth."
+      },
+      {
+        "name": "Shoreline walks",
+        "tags": [
+          "hiking",
+          "nature"
+        ],
+        "note": "Easy walks along the coast with sea views."
+      }
+    ]
+  },
+  "Great Brak River": {
+    "title": "Great Brak River",
+    "text": [
+      "Great Brak River is a small riverside village between Mossel Bay and George, built around a lagoon where the river meets the sea. Little Brak River, its neighbour, sits a few kilometres west on its own estuary.",
+      "The lagoons are calm and sheltered, which makes them good for paddling, picnics and birdwatching, and the beaches are quieter than in the bigger resorts. The village also has a small museum about its local history.",
+      "It makes a gentle stop along the coast: a walk by the river, a swim, and lunch before you carry on to George or Mossel Bay."
+    ],
+    "highlights": [
+      "Great Brak River lagoon and beach",
+      "Little Brak River estuary",
+      "Birdwatching on the lagoons",
+      "Paddling and picnics",
+      "Small village museum"
+    ],
+    "best_time": "Summer is best for swimming. The rest of the year is quiet and good for walks.",
+    "tip": "Stop for a lagoon walk and lunch, then carry on to George or Mossel Bay.",
+    "things": [
+      {
+        "name": "Great Brak River lagoon",
+        "tags": [
+          "birds",
+          "kids",
+          "nature"
+        ],
+        "note": "Sheltered water for paddling and birdwatching."
+      },
+      {
+        "name": "Little Brak River estuary",
+        "tags": [
+          "birds",
+          "nature"
+        ],
+        "note": "A quiet estuary just west of the village."
+      },
+      {
+        "name": "Great Brak River Museum",
+        "tags": [
+          "history"
+        ],
+        "note": "A small museum about the village and its history."
+      }
+    ]
+  },
+  "Nature's Valley": {
+    "title": "Nature's Valley",
+    "text": [
+      "Nature's Valley is a tiny, secluded village at the foot of the Groot River Pass, set between the Salt River, the forested Tsitsikamma foothills, the sea and the Groot River lagoon. It lies in the de Vasselot section of the Tsitsikamma National Park, roughly 30 km from Plett.",
+      "There is almost no commercial development, so the attractions are the golden beach, the lagoon and the forest walks. It is also where the five-day Otter Trail finishes.",
+      "The road down the pass is steep and winding, which is one reason the village stays so quiet. Services are very limited, so bring food and supplies with you."
+    ],
+    "highlights": [
+      "Beach and Groot River lagoon",
+      "Forest walks in the de Vasselot section",
+      "The end of the Otter Trail",
+      "Groot River Pass drive",
+      "A quiet, undeveloped village"
+    ],
+    "best_time": "Spring and autumn are mild and quiet. Summer is busier with holiday homes.",
+    "tip": "Bring snacks and supplies, as services are very limited.",
+    "things": [
+      {
+        "name": "Nature's Valley beach and lagoon",
+        "tags": [
+          "nature",
+          "kids",
+          "birds"
+        ],
+        "note": "A golden beach with the Groot River lagoon beside it."
+      },
+      {
+        "name": "de Vasselot forest walks",
+        "tags": [
+          "hiking",
+          "nature",
+          "birds"
+        ],
+        "note": "Forest trails inside the Tsitsikamma National Park."
+      },
+      {
+        "name": "Otter Trail finish",
+        "tags": [
+          "hiking",
+          "adventure"
+        ],
+        "note": "The five-day hiking trail ends here after starting at Storms River Mouth."
+      },
+      {
+        "name": "Groot River Pass",
+        "tags": [
+          "history",
+          "nature"
+        ],
+        "note": "A winding pass built in the 1800s, with big forest trees along the road."
+      }
+    ]
+  },
+  "Storms River": {
+    "title": "Storms River",
+    "text": [
+      "Storms River village is the gateway to the Tsitsikamma National Park and the main Garden Route village in the Eastern Cape. It sits among tall trees and mountains just off the N2, and it is the adventure stop of the route.",
+      "The park is about 5 km from the village and is known for its forested coastline and marine reserve. Storms River Mouth, where the suspension bridges are, is also where the Otter Trail starts. Back in the village you can try canopy tours and other adventure activities.",
+      "Give the park most of a day, and book popular activities ahead in peak season, because the village is small."
+    ],
+    "highlights": [
+      "Tsitsikamma National Park",
+      "Storms River Mouth suspension bridges",
+      "Start of the Otter Trail",
+      "Canopy tours",
+      "Bloukrans Bridge bungee, nearby",
+      "Cycling routes from the village"
+    ],
+    "best_time": "Spring and autumn are comfortable for walking. Summer is busy, so book activities ahead.",
+    "tip": "Go to Storms River Mouth early and give it most of a day.",
+    "things": [
+      {
+        "name": "Storms River Mouth suspension bridges",
+        "tags": [
+          "nature",
+          "kids",
+          "hiking"
+        ],
+        "note": "Walkways over the river mouth in the Tsitsikamma National Park."
+      },
+      {
+        "name": "Otter Trail",
+        "tags": [
+          "hiking",
+          "adventure"
+        ],
+        "note": "A five-day coastal hiking trail that starts at Storms River Mouth."
+      },
+      {
+        "name": "Canopy tours",
+        "tags": [
+          "adventure",
+          "nature",
+          "kids"
+        ],
+        "note": "Slides through the forest canopy near the village."
+      },
+      {
+        "name": "Bloukrans Bridge bungee",
+        "tags": [
+          "adventure"
+        ],
+        "note": "A famous bungee jump, a short drive west of the village."
+      },
+      {
+        "name": "Cycling to Storms River Mouth",
+        "tags": [
+          "adventure",
+          "hiking",
+          "nature"
+        ],
+        "note": "A cycle route from the village through the old pass to a viewpoint over the mouth."
+      }
+    ]
+  },
+  "Oudtshoorn": {
+    "title": "Oudtshoorn",
+    "text": [
+      "Oudtshoorn lies inland in the Klein Karoo, over the Outeniqua Mountains from George. It is best known for its ostrich farms and the Cango Caves, and it adds a very different, drier landscape to a Garden Route trip.",
+      "The drive over the mountains is part of the attraction. The Swartberg Pass and Meiringspoort are well-known scenic routes, and wildlife visits include the ostrich farms and the Cango Wildlife Ranch.",
+      "Many people visit on a day trip from George or Mossel Bay, but staying a night lets you take the passes slowly."
+    ],
+    "highlights": [
+      "Cango Caves",
+      "Ostrich farms",
+      "Cango Wildlife Ranch",
+      "Swartberg Pass scenic drive",
+      "Meiringspoort"
+    ],
+    "best_time": "Spring and autumn are the most comfortable. Summers inland can be very hot.",
+    "tip": "Start early to avoid the heat and give the passes plenty of time.",
+    "things": [
+      {
+        "name": "Cango Caves",
+        "tags": [
+          "nature",
+          "kids",
+          "adventure"
+        ],
+        "note": "Large limestone caves with guided tours."
+      },
+      {
+        "name": "Ostrich farms",
+        "tags": [
+          "wildlife",
+          "kids"
+        ],
+        "note": "Tours of working farms, the area's best-known attraction."
+      },
+      {
+        "name": "Cango Wildlife Ranch",
+        "tags": [
+          "wildlife",
+          "kids"
+        ],
+        "note": "A wildlife park near town."
+      },
+      {
+        "name": "Swartberg Pass",
+        "tags": [
+          "history",
+          "nature"
+        ],
+        "note": "A scenic mountain pass, built in the 1800s."
+      },
+      {
+        "name": "Meiringspoort",
+        "tags": [
+          "nature"
+        ],
+        "note": "A scenic drive through a mountain gorge."
+      }
+    ]
   }
 }
