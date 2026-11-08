@@ -17,7 +17,7 @@
   header h1{font-size:22px;display:flex;align-items:center;gap:10px}
   header h1 span{color:#2f8cf0}
   .menu-btn{font-size:26px;background:none;border:none;color:#fff;cursor:pointer;padding:0 6px}
-  .menu{position:absolute;top:56px;right:12px;background:#141c33;border:1px solid #2a3556;border-radius:16px;padding:8px;width:230px;display:none;z-index:30;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+  .menu{max-height:75vh;overflow-y:auto;position:absolute;top:56px;right:12px;background:#141c33;border:1px solid #2a3556;border-radius:16px;padding:8px;width:230px;display:none;z-index:30;box-shadow:0 10px 30px rgba(0,0,0,.5)}
   .menu.show{display:block}
   .menu button{display:block;width:100%;text-align:left;background:none;border:none;color:#fff;padding:12px;border-radius:10px;font-size:15px;cursor:pointer}
   .menu button:hover{background:#1f2a48}
@@ -63,6 +63,9 @@
     <button onclick="showPanel('savedPanel')">❤️ Saved</button>
     <button onclick="showPanel('emergencyPanel')">🚨 Emergency</button>
     <button onclick="showPanel('weatherPanel')">🌤️ Weather</button>
+    <button onclick="showPanel('seaPanel')">🌊 Sea &amp; Sun</button>
+    <button onclick="showPanel('holidaysPanel')">🎉 Holidays</button>
+    <button onclick="showPanel('ratesPanel')">💱 Rates</button>
     <button onclick="showPanel('budgetPanel')">💰 Budget</button>
     <button onclick="showPanel('highlightsPanel')">⭐ Highlights</button>
   </div>
@@ -72,14 +75,17 @@
   <div class="card">
     <p>Hi! I'm Garden Route AI 🌿</p>
     <p>I build itineraries. Tell me where you want to go and how many days — e.g. '2 days in Knysna'.</p>
-    <p>Tap ⋮ at the top for Events, Restaurants, Saved, Emergency, Weather, Budget &amp; Highlights.</p>
+    <p>Tap ⋮ at the top for Events, Restaurants, Saved, Emergency, Weather, Sea &amp; Sun, Holidays, Rates, Budget &amp; Highlights. You can also just type, e.g. 'surf in Plett' or 'beaches in Knysna'.</p>
   </div>
 
   <div id="eventsPanel" class="panel"><h4>📅 Events</h4><div id="eventsList"></div></div>
   <div id="restaurantsPanel" class="panel"><h4>🍽️ Restaurants</h4><ul><li><b>The Fat Fish</b> - George - Seafood, waterfront</li><li><b>34° South</b> - Knysna Waterfront - Sushi &amp; seafood</li><li><b>Emily Moon</b> - Plett - River view, wood-fired</li><li><b>East Head Café</b> - Knysna Heads - Breakfast with view</li></ul></div>
   <div id="savedPanel" class="panel"><h4>❤️ Saved</h4><div id="savedList"><p>No saved items yet. Tap Save on any event.</p></div></div>
   <div id="emergencyPanel" class="panel"><h4>🚨 Emergency</h4><ul><li>Emergency: <b>10111</b> / Ambulance: <b>10177</b></li><li>George Hospital: <b>044 874 5122</b></li><li>Knysna Hospital: <b>044 302 8400</b></li><li>NSRI Sea Rescue: <b>082 990 5975</b></li></ul></div>
-  <div id="weatherPanel" class="panel"><h4>🌤️ Weather</h4><p>George: 18°C, light rain possible. Knysna: 19°C, partly cloudy. Plett: 20°C, sunny spells. Wind SE 15-25 km/h. Best beach window: 10am - 3pm.</p></div>
+  <div id="weatherPanel" class="panel"><h4>🌤️ Weather</h4><div id="weatherList"><p>Loading live weather...</p></div></div>
+  <div id="seaPanel" class="panel"><h4>🌊 Sea &amp; Sun</h4><div id="seaList"><p>Loading...</p></div></div>
+  <div id="holidaysPanel" class="panel"><h4>🎉 Holidays</h4><div id="holidaysList"><p>Loading...</p></div></div>
+  <div id="ratesPanel" class="panel"><h4>💱 Rates</h4><div id="ratesList"><p>Loading...</p></div></div>
   <div id="budgetPanel" class="panel"><h4>💰 Budget</h4><ul><li>Budget day: R450 - R750</li><li>Mid-range: R900 - R1500</li><li>Splurge: R2000+</li></ul></div>
   <div id="highlightsPanel" class="panel"><h4>⭐ Highlights</h4><ul><li>Knysna Heads Viewpoint</li><li>Robberg Nature Reserve, Plett</li><li>Outeniqua Mountains, George</li><li>Wilderness Beach &amp; Map of Africa</li><li>Sedgefield Lagoon</li></ul></div>
 
@@ -134,7 +140,7 @@ function showPanel(id){
   const el=document.getElementById(id);
   const wasOpen=el.classList.contains('show');
   el.classList.remove('show');
-  if(!wasOpen){ el.classList.add('show'); if(id==='eventsPanel') renderEvents(); el.scrollIntoView({behavior:'smooth'}); }
+  if(!wasOpen){ el.classList.add('show'); if(id==='eventsPanel') renderEvents(); if(PANEL_LOADERS[id]) PANEL_LOADERS[id](); el.scrollIntoView({behavior:'smooth'}); }
 }
 function renderEvents(){
   const note=updatedAt?`<p style="font-size:13px;opacity:.7;margin-bottom:6px">Updated ${esc(String(updatedAt).slice(0,10))}</p>`:'';
@@ -187,10 +193,241 @@ function detectTown(t){
   return null;
 }
 function add(html){ document.getElementById('chat').insertAdjacentHTML('beforeend',html); window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}); }
+const TOWN_COORDS={
+  'George':[-33.963,22.4617],'Knysna':[-34.0363,23.0471],'Plett':[-34.0527,23.3716],
+  'Sedgefield':[-34.0167,22.8],'Wilderness':[-33.993,22.58],'Mossel Bay':[-34.1831,22.146]
+};
+const WMO={0:['☀️','Clear'],1:['🌤️','Mostly clear'],2:['⛅','Partly cloudy'],3:['☁️','Overcast'],45:['🌫️','Fog'],48:['🌫️','Fog'],
+  51:['🌦️','Light drizzle'],53:['🌦️','Drizzle'],55:['🌧️','Heavy drizzle'],56:['🌧️','Freezing drizzle'],57:['🌧️','Freezing drizzle'],
+  61:['🌧️','Light rain'],63:['🌧️','Rain'],65:['🌧️','Heavy rain'],66:['🌧️','Freezing rain'],67:['🌧️','Freezing rain'],
+  80:['🌦️','Showers'],81:['🌦️','Showers'],82:['⛈️','Heavy showers'],95:['⛈️','Thunderstorm'],96:['⛈️','Thunderstorm'],99:['⛈️','Thunderstorm']};
+function wmo(c){ return WMO[c]||(c>=71&&c<=77?['❄️','Snow']:['🌥️','Changeable']); }
+const WX_CACHE={};
+async function fetchWeather(town){
+  const c=WX_CACHE[town]; if(c&&Date.now()-c.t<900000) return c.d;
+  const [la,lo]=TOWN_COORDS[town];
+  const url=`https://api.open-meteo.com/v1/forecast?latitude=${la}&longitude=${lo}&current=temperature_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&timezone=Africa%2FJohannesburg&forecast_days=3`;
+  const r=await fetch(url); if(!r.ok) throw new Error('HTTP '+r.status);
+  const d=await r.json(); WX_CACHE[town]={t:Date.now(),d}; return d;
+}
+function wxLine(town,d){
+  const w=wmo(d.current.weather_code);
+  return `${w[0]} <b>${esc(town)}</b>: ${Math.round(d.current.temperature_2m)}°C, ${w[1]}, wind ${Math.round(d.current.wind_speed_10m)} km/h`;
+}
+function wxDays(d){
+  return d.daily.time.map((t,i)=>{
+    const day=i===0?'Today':new Date(t+'T12:00:00').toLocaleDateString('en-ZA',{weekday:'short'});
+    const w=wmo(d.daily.weather_code[i]);
+    return `<p>${day}: ${w[0]} ${Math.round(d.daily.temperature_2m_min[i])}–${Math.round(d.daily.temperature_2m_max[i])}°C, rain chance ${d.daily.precipitation_probability_max[i]}%</p>`;
+  }).join('');
+}
+async function renderWeatherPanel(){
+  const el=document.getElementById('weatherList');
+  el.innerHTML='<p>Loading live weather...</p>';
+  const names=Object.keys(TOWN_COORDS);
+  try{
+    const res=await Promise.all(names.map(n=>fetchWeather(n)));
+    el.innerHTML=res.map((d,i)=>`<p>${wxLine(names[i],d)}</p>`).join('')+'<p style="opacity:.7;font-size:13px">Live forecast from Open-Meteo.</p>';
+  }catch(e){ el.innerHTML="<p>Couldn't load live weather right now. Please try again in a moment.</p>"; }
+}
+async function weatherChat(town){
+  const id='w'+Date.now();
+  add(`<div class="ai-card" id="${id}"><h3>🌤️ Weather</h3><p>Loading live weather...</p></div>`);
+  const card=document.getElementById(id);
+  try{
+    if(town&&TOWN_COORDS[town]){
+      const d=await fetchWeather(town);
+      card.innerHTML=`<h3>🌤️ Weather in ${esc(town)}</h3><div class="wiki-box"><p>${wxLine(town,d)}</p>${wxDays(d)}<p>🌅 Sunrise ${fmtT(d.daily.sunrise[0])} · 🌇 Sunset ${fmtT(d.daily.sunset[0])}</p><p style="opacity:.7">Live forecast from Open-Meteo.</p></div>`;
+    } else {
+      const names=['George','Knysna','Plett'];
+      const res=await Promise.all(names.map(n=>fetchWeather(n)));
+      card.innerHTML=`<h3>🌤️ Weather</h3><div class="wiki-box">${res.map((d,i)=>`<p>${wxLine(names[i],d)}</p>`).join('')}<p style="opacity:.7">Live forecast from Open-Meteo.</p></div>`;
+    }
+  }catch(e){ card.innerHTML="<h3>🌤️ Weather</h3><p>Couldn't load live weather right now. Please try again in a moment.</p>"; }
+  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+}
+function fmtT(iso){ return iso?String(iso).slice(11,16):'--:--'; }
+const SEA_COORDS={'George':[-34.09,22.45],'Knysna':[-34.12,23.07],'Plett':[-34.1,23.37],'Sedgefield':[-34.08,22.8],'Wilderness':[-34.05,22.58],'Mossel Bay':[-34.22,22.15]};
+const SEA_CACHE={};
+async function fetchSea(town){
+  const c=SEA_CACHE[town]; if(c&&Date.now()-c.t<900000) return c.d;
+  const [la,lo]=SEA_COORDS[town];
+  const r=await fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${la}&longitude=${lo}&current=wave_height,wave_period,sea_surface_temperature&timezone=Africa%2FJohannesburg`);
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  const d=await r.json(); SEA_CACHE[town]={t:Date.now(),d}; return d;
+}
+function seaLine(d){
+  const c=(d&&d.current)||{}; const parts=[];
+  if(c.wave_height!=null) parts.push('waves '+Number(c.wave_height).toFixed(1)+' m'+(c.wave_period!=null?' ('+Math.round(c.wave_period)+' s)':''));
+  if(c.sea_surface_temperature!=null) parts.push('sea '+Math.round(c.sea_surface_temperature)+'°C');
+  return parts.join(', ')||'no sea data for this spot';
+}
+async function seaRows(names){
+  const rows=await Promise.all(names.map(async n=>{
+    const [sea,wx]=await Promise.allSettled([fetchSea(n),fetchWeather(n)]);
+    const seaTxt=sea.status==='fulfilled'?seaLine(sea.value):'sea data not available';
+    const sun=wx.status==='fulfilled'?`🌅 ${fmtT(wx.value.daily.sunrise[0])} · 🌇 ${fmtT(wx.value.daily.sunset[0])}`:'';
+    return `<p>🌊 <b>${esc(n)}</b>: ${seaTxt}${sun?'<br>'+sun:''}</p>`;
+  }));
+  return rows.join('')+'<p style="opacity:.7;font-size:13px">Forecast data from Open-Meteo. Always check lifeguard and flag warnings before swimming.</p>';
+}
+async function renderSeaPanel(){
+  const el=document.getElementById('seaList'); el.innerHTML='<p>Loading...</p>';
+  try{ el.innerHTML=await seaRows(Object.keys(SEA_COORDS)); }catch(e){ el.innerHTML="<p>Couldn't load sea conditions right now. Please try again in a moment.</p>"; }
+}
+
+let HOL_CACHE=null;
+async function fetchHolidays(){
+  if(HOL_CACHE&&Date.now()-HOL_CACHE.t<3600000) return HOL_CACHE.d;
+  const y=new Date().getFullYear();
+  const res=await Promise.allSettled([y,y+1].map(yr=>fetch(`https://date.nager.at/api/v3/PublicHolidays/${yr}/ZA`).then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })));
+  const all=res.filter(x=>x.status==='fulfilled').flatMap(x=>x.value);
+  if(!all.length) throw new Error('no holiday data');
+  const today=new Date().toISOString().slice(0,10);
+  const up=all.filter(h=>h.date>=today).sort((a,b)=>a.date<b.date?-1:1).slice(0,6);
+  HOL_CACHE={t:Date.now(),d:up}; return up;
+}
+function holHtml(list){
+  if(!list.length) return '<p>No upcoming public holidays found.</p>';
+  return list.map(h=>{
+    const dt=new Date(h.date+'T12:00:00'); const wd=dt.getDay();
+    const lw=(wd===1||wd===5)?' · long weekend, book ahead':'';
+    return `<p>🎉 <b>${esc(dt.toLocaleDateString('en-ZA',{weekday:'short',day:'numeric',month:'short'}))}</b>: ${esc(h.localName||h.name)}${lw}</p>`;
+  }).join('')+'<p style="opacity:.7;font-size:13px">South African public holidays from Nager.Date. Busy dates fill up fast on the Garden Route.</p>';
+}
+async function renderHolidaysPanel(){
+  const el=document.getElementById('holidaysList'); el.innerHTML='<p>Loading...</p>';
+  try{ el.innerHTML=holHtml(await fetchHolidays()); }catch(e){ el.innerHTML="<p>Couldn't load holidays right now. Please try again in a moment.</p>"; }
+}
+
+let RATE_CACHE=null;
+async function fetchRates(){
+  if(RATE_CACHE&&Date.now()-RATE_CACHE.t<3600000) return RATE_CACHE.d;
+  const r=await fetch('https://api.frankfurter.dev/v1/latest?base=ZAR&symbols=USD,EUR,GBP');
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  const d=await r.json(); if(!d||!d.rates) throw new Error('bad rates'); RATE_CACHE={t:Date.now(),d}; return d;
+}
+function ratesHtml(d){
+  const r=d.rates; const f=(v,sym)=>sym+Math.round(v);
+  const rng=(a,b)=>`${f(a*r.USD,'$')}–${f(b*r.USD,'$')} · ${f(a*r.EUR,'€')}–${f(b*r.EUR,'€')} · ${f(a*r.GBP,'£')}–${f(b*r.GBP,'£')}`;
+  return `<p>R100 ≈ $${(100*r.USD).toFixed(2)} · €${(100*r.EUR).toFixed(2)} · £${(100*r.GBP).toFixed(2)}</p>`+
+    `<p><b>Budget day</b> R450–R750<br>≈ ${rng(450,750)}</p>`+
+    `<p><b>Mid-range</b> R900–R1500<br>≈ ${rng(900,1500)}</p>`+
+    `<p><b>Splurge</b> R2000+<br>from ≈ ${f(2000*r.USD,'$')} · ${f(2000*r.EUR,'€')} · ${f(2000*r.GBP,'£')}</p>`+
+    `<p style="opacity:.7;font-size:13px">Indicative rates as of ${esc(d.date)} from Frankfurter. Your bank's rate will differ.</p>`;
+}
+async function renderRatesPanel(){
+  const el=document.getElementById('ratesList'); el.innerHTML='<p>Loading...</p>';
+  try{ el.innerHTML=ratesHtml(await fetchRates()); }catch(e){ el.innerHTML="<p>Couldn't load exchange rates right now. Please try again in a moment.</p>"; }
+}
+
+const NEARBY_KINDS={
+  restaurant:{label:'Restaurants',filter:'["amenity"="restaurant"]',named:true},
+  cafe:{label:'Cafés',filter:'["amenity"="cafe"]',named:true},
+  beach:{label:'Beaches',filter:'["natural"="beach"]',named:true},
+  viewpoint:{label:'Viewpoints',filter:'["tourism"="viewpoint"]',named:true},
+  toilets:{label:'Public toilets',filter:'["amenity"="toilets"]',named:false}
+};
+const NEAR_CACHE={};
+function distKm(a,b,c,d){ const R=6371,t=x=>x*Math.PI/180,dl=t(c-a),dn=t(d-b); const h=Math.sin(dl/2)**2+Math.cos(t(a))*Math.cos(t(c))*Math.sin(dn/2)**2; return 2*R*Math.asin(Math.sqrt(h)); }
+async function fetchNearby(town,kind){
+  const key=town+'|'+kind; const c=NEAR_CACHE[key]; if(c&&Date.now()-c.t<1800000) return c.d;
+  const [la,lo]=TOWN_COORDS[town]; const k=NEARBY_KINDS[kind]; const nm=k.named?'["name"]':'';
+  const q=`[out:json][timeout:20];(node${k.filter}${nm}(around:4000,${la},${lo});way${k.filter}${nm}(around:4000,${la},${lo}););out center 25;`;
+  const r=await fetch('https://overpass-api.de/api/interpreter?data='+encodeURIComponent(q));
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  const j=await r.json();
+  const items=(j.elements||[]).map(e=>{
+    const lat=e.lat!=null?e.lat:(e.center&&e.center.lat), lon=e.lon!=null?e.lon:(e.center&&e.center.lon);
+    if(lat==null||lon==null) return null;
+    return {name:(e.tags&&e.tags.name)||k.label.replace(/s$/,''),lat,lon,km:distKm(la,lo,lat,lon)};
+  }).filter(Boolean).sort((a,b)=>a.km-b.km).slice(0,8);
+  NEAR_CACHE[key]={t:Date.now(),d:items}; return items;
+}
+function nearbyHtml(items,label,town){
+  if(!items.length) return `<p>No ${esc(label.toLowerCase())} found near ${esc(town)} on OpenStreetMap.</p>`;
+  return '<ul style="padding-left:18px">'+items.map(i=>`<li><a href="https://www.openstreetmap.org/?mlat=${i.lat}&mlon=${i.lon}#map=18/${i.lat}/${i.lon}" target="_blank" rel="noopener">${esc(i.name)}</a> · ${i.km.toFixed(1)} km from centre</li>`).join('')+'</ul><p style="opacity:.7;font-size:13px">Map data © OpenStreetMap contributors. May be incomplete.</p>';
+}
+async function liveCard(title,fn){
+  const id='x'+Date.now()+Math.floor(Math.random()*1000);
+  add(`<div class="ai-card" id="${id}"><h3>${esc(title)}</h3><p>Loading...</p></div>`);
+  const card=document.getElementById(id);
+  try{ const html=await fn(); card.innerHTML=`<h3>${esc(title)}</h3><div class="wiki-box">${html}</div>`; }
+  catch(e){ card.innerHTML=`<h3>${esc(title)}</h3><p>Couldn't load this right now. Please try again in a moment.</p>`; }
+  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+}
+async function nearbyChat(town,kind){
+  const k=NEARBY_KINDS[kind];
+  await liveCard(`${k.label} near ${town}`,async()=>nearbyHtml(await fetchNearby(town,kind),k.label,town));
+}
+async function seaChat(town){
+  const names=(town&&SEA_COORDS[town])?[town]:['George','Knysna','Plett'];
+  await liveCard(names.length===1?`🌊 Sea & sun in ${town}`:'🌊 Sea & sun',()=>seaRows(names));
+}
+async function holidaysChat(){ await liveCard('🎉 Upcoming holidays',async()=>holHtml(await fetchHolidays())); }
+async function ratesChat(){ await liveCard('💱 Exchange rates',async()=>ratesHtml(await fetchRates())); }
+async function loadTownPhoto(wikiTitle,pid){
+  try{
+    const r=await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${wikiTitle}`);
+    const d=await r.json(); const src=d.thumbnail&&d.thumbnail.source; const el=document.getElementById(pid);
+    if(src&&el&&/^https:\/\/upload\.wikimedia\.org\//.test(src)){
+      el.innerHTML=`<img src="${esc(src)}" alt="${esc(d.title||'')}" loading="lazy" style="max-width:100%;border-radius:12px;display:block;margin-bottom:4px"><p style="font-size:11px;opacity:.7">Photo via <a href="https://en.wikipedia.org/wiki/${wikiTitle}" target="_blank" rel="noopener">Wikipedia</a></p>`;
+    }
+  }catch(e){}
+}
+async function runTopic(id,tn,lower){
+  if(id==='weatherPanel') return weatherChat(tn);
+  if(id==='seaPanel') return seaChat(tn);
+  if(id==='holidaysPanel') return holidaysChat();
+  if(id==='ratesPanel') return ratesChat();
+  if(id==='nearby'){
+    const kind=/beach/.test(lower)?'beach':/viewpoint|lookout/.test(lower)?'viewpoint':/toilet|restroom/.test(lower)?'toilets':'cafe';
+    return nearbyChat(tn&&TOWN_COORDS[tn]?tn:'Knysna',kind);
+  }
+  add(topicCard(id,tn));
+  if(id==='restaurantsPanel'&&tn&&TOWN_COORDS[tn]) await nearbyChat(tn,'restaurant');
+}
+const PANEL_LOADERS={weatherPanel:renderWeatherPanel,seaPanel:renderSeaPanel,holidaysPanel:renderHolidaysPanel,ratesPanel:renderRatesPanel};
+const TOPICS=[
+  {re:/\b(weather|forecast|temperature)\b/, id:'weatherPanel'},
+  {re:/\b(sea|waves?|surf|surfing|swell|ocean|swim|swimming|tides?|sunrise|sunset)\b/, id:'seaPanel'},
+  {re:/\b(holidays?|long weekend)\b/, id:'holidaysPanel'},
+  {re:/\b(rates?|exchange|dollars?|euros?|pounds?|currency|usd|eur|gbp|convert)\b/, id:'ratesPanel'},
+  {re:/\b(restaurants?|eat|food|dinner|lunch|breakfast)\b/, id:'restaurantsPanel'},
+  {re:/\b(emergency|hospital|police|ambulance)\b/, id:'emergencyPanel'},
+  {re:/\b(budget|cost|costs|prices?|cheap)\b/, id:'budgetPanel'},
+  {re:/\b(highlights?)\b/, id:'highlightsPanel'},
+  {re:/\bsaved\b/, id:'savedPanel'},
+  {re:/\b(beach|beaches|viewpoints?|lookouts?|toilets?|restrooms?|cafes?|coffee)\b/, id:'nearby'}
+];
+function topicCard(id,town){
+  const el=document.getElementById(id);
+  const title=el.querySelector('h4').textContent;
+  let body='';
+  if(id==='weatherPanel'){
+    const parts=(el.querySelector('p').textContent.match(/[^.]+\.?/g)||[]).map(x=>x.trim()).filter(Boolean);
+    const isTown=x=>/^(George|Knysna|Plett)\b/.test(x);
+    let keep=parts;
+    if(town&&parts.some(x=>x.toLowerCase().startsWith(town.toLowerCase()))){
+      keep=parts.filter(x=>!isTown(x)||x.toLowerCase().startsWith(town.toLowerCase()));
+    }
+    body=keep.map(x=>`<p>${esc(x)}</p>`).join('');
+  } else if(id==='restaurantsPanel'){
+    const items=[...el.querySelectorAll('li')];
+    let pick=items;
+    if(town){ const m=items.filter(li=>li.textContent.toLowerCase().includes(town.toLowerCase())); if(m.length) pick=m; }
+    body='<ul style="padding-left:18px">'+pick.map(li=>`<li>${li.innerHTML}</li>`).join('')+'</ul>';
+  } else {
+    const c=el.cloneNode(true); c.querySelectorAll('h4').forEach(h=>h.remove());
+    body=c.innerHTML;
+  }
+  return `<div class="ai-card"><h3>${esc(title)}</h3><div class="wiki-box">${body}</div></div>`;
+}
 async function ask(){
   const input=document.getElementById('q'); const text=input.value.trim(); if(!text) return;
   add(`<div class="user-msg">${esc(text)}</div>`); input.value='';
   const lower=text.toLowerCase(); const town=detectTown(text)||'Knysna';
+  if(!/\babout\b/.test(lower)){ for(const t of TOPICS){ if(t.re.test(lower)){ await runTopic(t.id,detectTown(text),lower); return; } } }
   if(lower.includes('about')){
     const wikiTitle=WIKI_MAP[town.toLowerCase()]||town;
     const t=TOWNS[town];
@@ -199,7 +436,8 @@ async function ask(){
       const hl=Array.isArray(t.highlights)&&t.highlights.length?`<h4>Don't miss</h4><ul style="padding-left:18px">${t.highlights.map(h=>`<li>${esc(h)}</li>`).join('')}</ul>`:'';
       const best=t.best_time?`<p><b>Best time to visit:</b> ${esc(t.best_time)}</p>`:'';
       const tip=t.tip?`<p><b>Local tip:</b> ${esc(t.tip)}</p>`:'';
-      add(`<div class="ai-card"><h3>About ${esc(town)}</h3><div class="wiki-box">${paras}${hl}${best}${tip}<p><a href="https://en.wikipedia.org/wiki/${wikiTitle}" target="_blank" rel="noopener">More on Wikipedia →</a></p></div></div>`);
+      const pid='p'+Date.now(); add(`<div class="ai-card"><h3>About ${esc(town)}</h3><div class="wiki-box"><div id="${pid}"></div>${paras}${hl}${best}${tip}<p><a href="https://en.wikipedia.org/wiki/${wikiTitle}" target="_blank" rel="noopener">More on Wikipedia →</a></p></div></div>`);
+      loadTownPhoto(wikiTitle,pid);
       return;
     }
     const id='c'+Date.now();
