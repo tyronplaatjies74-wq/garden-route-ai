@@ -410,15 +410,30 @@ const NEARBY_KINDS={
   viewpoint:{label:'Viewpoints',filter:'["tourism"="viewpoint"]',named:true},
   toilets:{label:'Public toilets',filter:'["amenity"="toilets"]',named:false}
 };
+const OVERPASS_URLS=['https://overpass-api.de/api/interpreter','https://overpass.private.coffee/api/interpreter','https://maps.mail.ru/osm/tools/overpass/api/interpreter'];
+async function overpass(q){
+  let lastErr;
+  for(const url of OVERPASS_URLS){
+    const ctl=new AbortController(); const timer=setTimeout(()=>ctl.abort(),12000);
+    try{
+      const r=await fetch(url,{method:'POST',body:'data='+encodeURIComponent(q),signal:ctl.signal});
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const j=await r.json();
+      if(!j||!Array.isArray(j.elements)) throw new Error('bad response');
+      if(j.remark&&/runtime error|timed out/i.test(j.remark)&&!j.elements.length) throw new Error('server timed out');
+      return j;
+    }catch(e){ lastErr=e; }
+    finally{ clearTimeout(timer); }
+  }
+  throw lastErr||new Error('all map servers failed');
+}
 const NEAR_CACHE={};
 function distKm(a,b,c,d){ const R=6371,t=x=>x*Math.PI/180,dl=t(c-a),dn=t(d-b); const h=Math.sin(dl/2)**2+Math.cos(t(a))*Math.cos(t(c))*Math.sin(dn/2)**2; return 2*R*Math.asin(Math.sqrt(h)); }
 async function fetchNearby(town,kind){
   const key=town+'|'+kind; const c=NEAR_CACHE[key]; if(c&&Date.now()-c.t<1800000) return c.d;
   const [la,lo]=TOWN_COORDS[town]; const k=NEARBY_KINDS[kind]; const nm=k.named?'["name"]':'';
   const q=`[out:json][timeout:20];(node${k.filter}${nm}(around:4000,${la},${lo});way${k.filter}${nm}(around:4000,${la},${lo}););out center 25;`;
-  const r=await fetch('https://overpass-api.de/api/interpreter?data='+encodeURIComponent(q));
-  if(!r.ok) throw new Error('HTTP '+r.status);
-  const j=await r.json();
+  const j=await overpass(q);
   const items=(j.elements||[]).map(e=>{
     const lat=e.lat!=null?e.lat:(e.center&&e.center.lat), lon=e.lon!=null?e.lon:(e.center&&e.center.lon);
     if(lat==null||lon==null) return null;
@@ -440,7 +455,14 @@ async function liveCard(title,fn){
 }
 async function nearbyChat(town,kind){
   const k=NEARBY_KINDS[kind];
-  await liveCard(`${k.label} near ${town}`,async()=>nearbyHtml(await fetchNearby(town,kind),k.label,town));
+  await liveCard(`${k.label} near ${town}`,async()=>{
+    try{ return nearbyHtml(await fetchNearby(town,kind),k.label,town); }
+    catch(e){
+      const [la,lo]=TOWN_COORDS[town];
+      const q=encodeURIComponent(k.label.toLowerCase()+' near '+town);
+      return `<p>The free map service is busy right now.</p><p><a href="https://www.google.com/maps/search/${q}/@${la},${lo},13z" target="_blank" rel="noopener">Search ${esc(k.label.toLowerCase())} near ${esc(town)} on Google Maps →</a></p>`;
+    }
+  });
 }
 async function seaChat(town){
   const names=(town&&SEA_COORDS[town])?[town]:['George','Knysna','Plett'];
