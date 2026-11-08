@@ -8,7 +8,7 @@ const BRAIN_TOWNS=[['plettenberg','Plett'],['plett','Plett'],['knysna','Knysna']
 function brainTown(text){ const t=String(text||'').toLowerCase(); for(const [k,v] of BRAIN_TOWNS) if(t.includes(k)) return v; return null; }
 const BRAIN_TAGS={
   foodie:/\b(market|markets|food|wine|braai|farm|farmers|oyster|oysters|tasting|brunch)\b/,
-  music:/\b(music|concert|dj|jazz|band|gig|choir)\b/,
+  music:/jazz|music|concert|\b(dj|band|gig|choir)\b/,
   family:/\b(kids|children|family|easter|school)\b/,
   adventure:/\b(hike|hiking|trail|surf|surfing|adventure|run|running|bike|biking|cycle|cycling|marathon|kayak)\b/,
   culture:/\b(art|arts|gallery|theatre|theater|book|books|poetry|museum|heritage)\b/,
@@ -92,7 +92,8 @@ function brainSearch(events,q,now){
     const title=String(e.title||e.name).toLowerCase();
     const rest=((e.description||e.desc||'')+' '+(e.category||'')+' '+(e.town||'')).toLowerCase();
     let rel=0;
-    for(const k of q.keywords){ const re=new RegExp('\\b'+k+'\\b'); if(re.test(title)) rel+=15; else if(re.test(rest)) rel+=5; }
+    const hitK=(txt,k)=>k.length>=4?txt.includes(k):new RegExp('\\b'+k+'\\b').test(txt);
+    for(const k of q.keywords){ if(hitK(title,k)) rel+=15; else if(hitK(rest,k)) rel+=5; }
     for(const v of q.vibes) if(vibes.includes(v)) rel+=30;
     if((q.keywords.length||q.vibes.length)&&rel===0) continue;
     if(q.free&&vibes.includes('free')) rel+=10;
