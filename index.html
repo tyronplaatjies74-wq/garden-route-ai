@@ -471,7 +471,7 @@ const BRAIN_TOWNS=[['plettenberg','Plett'],['plett','Plett'],['knysna','Knysna']
 function brainTown(text){ const t=String(text||'').toLowerCase(); for(const [k,v] of BRAIN_TOWNS) if(t.includes(k)) return v; return null; }
 const BRAIN_TAGS={
   foodie:/\b(market|markets|food|wine|braai|farm|farmers|oyster|oysters|tasting|brunch)\b/,
-  music:/\b(music|concert|dj|jazz|band|gig|choir)\b/,
+  music:/jazz|music|concert|\b(dj|band|gig|choir)\b/,
   family:/\b(kids|children|family|easter|school)\b/,
   adventure:/\b(hike|hiking|trail|surf|surfing|adventure|run|running|bike|biking|cycle|cycling|marathon|kayak)\b/,
   culture:/\b(art|arts|gallery|theatre|theater|book|books|poetry|museum|heritage)\b/,
@@ -555,7 +555,8 @@ function brainSearch(events,q,now){
     const title=String(e.title||e.name).toLowerCase();
     const rest=((e.description||e.desc||'')+' '+(e.category||'')+' '+(e.town||'')).toLowerCase();
     let rel=0;
-    for(const k of q.keywords){ const re=new RegExp('\\b'+k+'\\b'); if(re.test(title)) rel+=15; else if(re.test(rest)) rel+=5; }
+    const hitK=(txt,k)=>k.length>=4?txt.includes(k):new RegExp('\\b'+k+'\\b').test(txt);
+    for(const k of q.keywords){ if(hitK(title,k)) rel+=15; else if(hitK(rest,k)) rel+=5; }
     for(const v of q.vibes) if(vibes.includes(v)) rel+=30;
     if((q.keywords.length||q.vibes.length)&&rel===0) continue;
     if(q.free&&vibes.includes('free')) rel+=10;
@@ -589,15 +590,33 @@ function brainWhy(item,q){
 function isEventQuery(lower){ return /\b(events?|what'?s on|whats on|happening|things to do|festivals?|concerts?|jazz|music|markets?|kids|this weekend)\b/.test(lower); }
 function smartEventsHtml(text){
   const q=brainParse(text);
-  const r=brainSearch(EVENTS,q,new Date());
-  const place=q.town?' in '+q.town:'';
-  const whenTxt={weekend:' this weekend',today:' today',week:' in the next 7 days'}[q.when]||'';
-  const card=it=>eventCard({...it.e,desc:brainWhy(it,q)});
+  const now=new Date();
+  let qq=q, note='';
+  let r=brainSearch(EVENTS,q,now);
+  if(!r.main.length&&!r.undated.length){
+    const interest=q.keywords.length||q.vibes.length;
+    const tries=[];
+    if(q.when) tries.push([{when:null},'Nothing on that day, but here are other dates:']);
+    if(q.town&&interest){
+      tries.push([{when:null,town:null},"I couldn't find that in "+q.town+'. Here is what I found in other towns:']);
+      tries.push([{when:null,keywords:[],vibes:[]},'No match for that interest in '+q.town+'. Here is what is on in '+q.town+':']);
+    }
+    let cur=q;
+    for(const [mod,msg] of tries){
+      cur={...q,...mod};
+      const r2=brainSearch(EVENTS,cur,now);
+      if(r2.main.length||r2.undated.length){ r=r2; qq=cur; note=msg; break; }
+    }
+  }
+  const place=qq.town?' in '+qq.town:'';
+  const whenTxt={weekend:' this weekend',today:' today',week:' in the next 7 days'}[qq.when]||'';
+  const card=it=>eventCard({...it.e,desc:brainWhy(it,qq)});
   let html='<div class="ai-card">';
   if(!r.main.length&&!r.undated.length){
     html+=`<h3>No matching events${esc(place)}${esc(whenTxt)}</h3><p>Try 'events in Knysna', or a different day or interest.</p>`;
   } else {
-    if(r.main.length) html+=`<h3>${r.totalMain} event${r.totalMain===1?'':'s'}${esc(place)}${esc(whenTxt)}</h3>`+r.main.map(card).join('');
+    if(note) html+=`<p><b>${esc(note)}</b></p>`;
+    if(r.main.length) html+=`<h3>${r.totalMain} event${r.totalMain===1?'':'s'}${note?'':esc(place)+esc(whenTxt)}</h3>`+r.main.map(card).join('');
     else html+=`<h3>Nothing confirmed${esc(place)}${esc(whenTxt)}</h3>`;
     if(r.totalMain>r.main.length) html+=`<p style="opacity:.7;font-size:13px">Showing ${r.main.length} of ${r.totalMain}. Add a town or interest to narrow it down.</p>`;
     if(r.undated.length) html+=`<p style="margin-top:10px"><b>Dates not listed, check the link:</b></p>`+r.undated.map(card).join('');
