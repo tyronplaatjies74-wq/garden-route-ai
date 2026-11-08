@@ -2,880 +2,161 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Garden Route AI | Live Guide</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Get Featured - Garden Route AI</title>
 <style>
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{
-    background:
-      radial-gradient(ellipse at 20% 12%,rgba(70,100,130,.45) 0%,transparent 45%),
-      radial-gradient(ellipse at 85% 70%,rgba(60,50,80,.35) 0%,transparent 50%),
-      linear-gradient(180deg,#3a4a60 0%,#1d2b3a 35%,#18232e 70%,#1c2430 100%);
-    background-attachment:fixed;
-    color:#fff;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh;padding-bottom:130px}
-  header{background:#000;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;position:sticky;top:0;z-index:20;border-bottom:1px solid #222}
-  header h1{font-size:22px;display:flex;align-items:center;gap:10px}
-  header h1 span{color:#2f8cf0}
-  .menu-btn{font-size:26px;background:none;border:none;color:#fff;cursor:pointer;padding:0 6px}
-  .menu{max-height:75vh;overflow-y:auto;position:absolute;top:56px;right:12px;background:#141c33;border:1px solid #2a3556;border-radius:16px;padding:8px;width:230px;display:none;z-index:30;box-shadow:0 10px 30px rgba(0,0,0,.5)}
-  .menu.show{display:block}
-  .menu button{display:block;width:100%;text-align:left;background:none;border:none;color:#fff;padding:12px;border-radius:10px;font-size:15px;cursor:pointer}
-  .menu button:hover{background:#1f2a48}
-  .wrap{padding:16px}
-  .card{background:rgba(20,28,52,.94);border:1px solid rgba(255,255,255,.06);border-radius:22px;padding:16px 18px;margin:12px 0;max-width:88%;line-height:1.5}
-  .card p{font-size:15px;color:#e6eef1;margin-bottom:12px}
-  .card p:last-child{margin-bottom:0}
-  .ai-card{background:rgba(20,28,52,.94);border:1px solid rgba(255,255,255,.06);border-radius:24px;padding:20px;margin:12px 0}
-  .ai-card h3{font-size:18px;margin-bottom:10px}
-  .ai-card p{line-height:1.6;color:#d6def0;font-size:16px;margin-bottom:8px}
-  .ai-card a{color:#7db8ff}
-  .event{background:#1a2442;border:1px solid #2a3556;border-radius:16px;padding:14px;margin:12px 0}
-  .event h4{color:#facc15;font-size:17px;line-height:1.35;margin-bottom:6px}
-  .event .meta{font-size:14px;opacity:.9;margin-bottom:6px}
-  .event a{color:#7db8ff;text-decoration:none;font-size:14px}
-  .save-btn{background:#243055;color:#fff;border:1px solid #3a4770;padding:7px 14px;border-radius:999px;margin-top:10px;cursor:pointer;font-size:14px}
-  .save-btn.saved{background:#ff6b00;border-color:#ff6b00}
-  .panel{background:rgba(20,28,52,.94);border-radius:20px;padding:16px;margin:10px 0;display:none}
-  .panel.show{display:block}
-  .panel h4{margin-bottom:8px}
-  .panel p,.panel li{font-size:15px;line-height:1.6;color:#d6def0}
-  .panel ul{padding-left:18px}
-  .user-msg{background:#ff6b00;color:#fff;padding:12px 16px;border-radius:20px 20px 4px 20px;max-width:85%;margin:12px 0 12px auto;font-weight:600;width:fit-content}
-  .wiki-box{margin-top:2px}
-  .ai-card .wiki-box h4{color:#fff;font-size:15px;margin:10px 0 6px}
-  .ai-card .wiki-box p{color:#d6def0;font-size:13px;line-height:1.55;margin-bottom:8px}
-  .ai-card .wiki-box li{color:#d6def0;font-size:13px;line-height:1.6}
-  .ai-card .wiki-box a{color:#7db8ff}
-  .composer{position:fixed;bottom:0;left:0;right:0;padding:24px 14px 18px;display:flex;gap:10px;background:linear-gradient(180deg,rgba(24,35,46,0) 0%,#18232e 38%)}
-  .composer input{flex:1;background:#141c33;border:1px solid rgba(255,255,255,.06);color:#fff;padding:16px 20px;border-radius:999px;font-size:16px;outline:none}
-  .composer input::placeholder{color:#7f8ba8}
-  .composer button{background:#f26a0f;color:#fff;border:none;padding:0 26px;border-radius:999px;font-weight:700;font-size:16px;cursor:pointer}
+  :root { --bg:#0b1120; --card:rgba(30,41,59,0.55); --border:rgba(148,163,184,0.18); --orange:#f97316; --text:#f8fafc; --muted:#94a3b8; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:system-ui,-apple-system,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; display:flex; flex-direction:column; align-items:center; padding:20px 16px 32px; }
+  .wrap { width:100%; max-width:500px; }
+  h1 { font-size:26px; margin:10px 0 6px; letter-spacing:-0.02em; }
+  p.sub { color:var(--muted); font-size:14px; margin-bottom:16px; }
+  .demo { background:rgba(15,23,42,0.7); border:1px solid var(--border); border-radius:22px; padding:16px; margin-bottom:16px; font-size:14px; line-height:1.55; }
+  .demo b { color:#fbbf24; }
+  .price { background:var(--card); border:1px solid rgba(249,115,22,0.4); border-radius:22px; padding:16px; text-align:center; margin-bottom:16px; }
+  .price h2 { font-size:28px; }
+  .price p { color:var(--muted); font-size:13px; margin-top:4px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:22px; padding:16px; }
+  label { font-weight:700; font-size:13px; display:block; margin-top:4px; }
+  input, select, textarea { width:100%; padding:12px 14px; margin:8px 0 14px; border-radius:12px; border:1px solid var(--border); background:rgba(15,23,42,0.6); color:white; outline:none; font-size:15px; font-family:inherit; }
+  input:focus, select:focus, textarea:focus { border-color:rgba(249,115,22,0.5); }
+  .consent { display:flex; gap:10px; align-items:flex-start; font-weight:400; font-size:13px; color:var(--muted); margin:4px 0 14px; line-height:1.5; }
+  .consent input { width:auto; margin:3px 0 0; flex:none; }
+  button { background:linear-gradient(135deg,#f97316,#ea580c); color:white; padding:14px; width:100%; border:none; border-radius:999px; font-size:15px; font-weight:700; cursor:pointer; box-shadow:0 4px 18px rgba(249,115,22,0.35); }
+  button.secondary { background:transparent; border:1px solid var(--border); box-shadow:none; margin-top:10px; }
+  .note { text-align:center; font-size:12px; color:var(--muted); margin-top:10px; }
+  .success { display:none; background:rgba(34,197,94,0.15); border:1px solid rgba(34,197,94,0.4); padding:16px; border-radius:16px; text-align:center; margin-top:16px; }
+  .success pre { background:rgba(0,0,0,0.3); padding:12px; border-radius:12px; text-align:left; white-space:pre-wrap; font-size:13px; margin:12px 0; color:#e2e8f0; }
+  a.back { color:#94a3b8; font-size:13px; text-decoration:none; display:block; text-align:center; margin-top:16px; }
 </style>
 </head>
 <body>
+<div class="wrap">
+  <a href="index.html" style="text-decoration:none; color:#f97316; font-weight:700;">← Garden Route AI</a>
+  <h1>Get Featured on Garden Route AI</h1>
+  <p class="sub">Tourists ask our AI where to eat and what to do. Featured businesses are shown first.</p>
 
-<header>
-  <h1>🌿 Garden Route AI <span>✔</span></h1>
-  <button class="menu-btn" onclick="toggleMenu(event)">⋮</button>
-  <div class="menu" id="menu">
-    <button onclick="showPanel('eventsPanel')">📅 Events</button>
-    <button onclick="showPanel('restaurantsPanel')">🍽️ Restaurants</button>
-    <button onclick="showPanel('savedPanel')">❤️ Saved</button>
-    <button onclick="showPanel('emergencyPanel')">🚨 Emergency</button>
-    <button onclick="showPanel('weatherPanel')">🌤️ Weather</button>
-    <button onclick="showPanel('seaPanel')">🌊 Sea &amp; Sun</button>
-    <button onclick="showPanel('holidaysPanel')">🎉 Holidays</button>
-    <button onclick="showPanel('ratesPanel')">💱 Rates</button>
-    <button onclick="showPanel('budgetPanel')">💰 Budget</button>
-    <button onclick="showPanel('highlightsPanel')">⭐ Highlights</button>
-    <button onclick="location.href='join.html'">🏪 Get Featured</button>
+  <div class="demo">
+    <b>🤖 Example of what tourists see (not a real business):</b><br><br>
+    <i>Tourist: "Where to eat in Knysna with kids, halaal?"</i><br><br>
+    <b>AI:</b> "⭐ Example Seafood Shack - Seafood, Halaal, family friendly. 💡 Go at 5pm for sunset. Book on WhatsApp."<br><br>
+    <span style="color:#94a3b8">Featured listings are shown first, with your tip, hours and a WhatsApp booking link. They are marked ⭐ Featured, so tourists know it is a paid placement. Free listings are shown after them, with name, town and cuisine only.</span>
   </div>
-</header>
 
-<div class="wrap" id="main">
+  <div class="price">
+    <h2>R50 / month</h2>
+    <p>Cancel anytime. No contract.<br>Be shown first, marked ⭐ Featured.</p>
+  </div>
+
   <div class="card">
-    <p>Hi! I'm Garden Route AI 🌿</p>
-    <p>I build itineraries. Tell me where you want to go and how many days — e.g. '2 days in Knysna'.</p>
-    <p>Tap ⋮ at the top for Events, Restaurants, Saved, Emergency, Weather, Sea &amp; Sun, Holidays, Rates, Budget &amp; Highlights. You can also just type, e.g. 'surf in Plett' or 'beaches in Knysna'.</p>
+  <form id="joinForm">
+    <label>1. Business Name</label>
+    <input name="name" required placeholder="e.g. Knysna Seafood Shack">
+    <label>2. Town</label>
+    <select name="town" required>
+      <option>George</option>
+      <option>Knysna</option>
+      <option>Plettenberg Bay</option>
+      <option>Mossel Bay</option>
+      <option>Sedgefield</option>
+      <option>Wilderness</option>
+      <option>Hartenbos</option>
+      <option>Great Brak River</option>
+      <option>Nature's Valley</option>
+      <option>Storms River</option>
+      <option>Oudtshoorn</option>
+    </select>
+    <label>3. What are you?</label>
+    <select name="type"><option>Restaurant</option><option>Guesthouse / BnB</option><option>Activity</option><option>Shop</option><option>Other</option></select>
+    <label>4. Price</label>
+    <select name="price"><option value="R">R - Under R200</option><option value="RR">RR - R200-R500</option><option value="RRR">RRR - R500+</option></select>
+    <label>5. Best for?</label>
+    <select name="best_for"><option>Family</option><option>Couples</option><option>Friends</option><option>Solo</option></select>
+    <label>6. Vibe?</label>
+    <select name="vibe"><option>Family</option><option>Romantic</option><option>Quiet</option><option>Party</option><option>Adventure</option></select>
+    <label>7. Food / Speciality / Diet</label>
+    <input name="food" placeholder="Seafood, Halaal, Vegan, etc - or N/A">
+    <label>8. Kid-friendly? Wheelchair? Parking? Sea view?</label>
+    <input name="facilities" placeholder="e.g. Yes, Yes, Yes, No">
+    <label>9. Opening Hours</label>
+    <input name="hours" placeholder="e.g. 11:00 - 21:00, closed Mon">
+    <label>10. WhatsApp for Bookings</label>
+    <input name="whatsapp" required placeholder="082...">
+    <label>Your Local Tip (This is what sells you)</label>
+    <textarea name="tip" placeholder="e.g. Come at 5pm for sunset, ask for corner table"></textarea>
+    <label>Your Email</label>
+    <input name="email" type="email" required placeholder="you@business.co.za">
+
+    <label class="consent">
+      <input type="checkbox" name="consent" required>
+      <span>I agree that Garden Route AI may keep these details to list my business and to contact me on WhatsApp or email about my listing. I can ask for them to be removed at any time.</span>
+    </label>
+
+    <button type="submit">Submit → Get R50 Payment Link</button>
+    <p class="note">After you submit, we will WhatsApp you the R50 payment link to activate you within 24 hours.</p>
+  </form>
   </div>
 
-  <div id="eventsPanel" class="panel"><h4>📅 Events</h4><div id="eventsList"></div></div>
-  <div id="restaurantsPanel" class="panel"><h4>🍽️ Restaurants</h4><div id="restaurantsList"><p>Loading...</p></div></div>
-  <div id="savedPanel" class="panel"><h4>❤️ Saved</h4><div id="savedList"><p>No saved items yet. Tap Save on any event.</p></div></div>
-  <div id="emergencyPanel" class="panel"><h4>🚨 Emergency</h4><ul><li>Emergency: <b>10111</b> / Ambulance: <b>10177</b></li><li>George Hospital: <b>044 874 5122</b></li><li>Knysna Hospital: <b>044 302 8400</b></li><li>NSRI Sea Rescue: <b>082 990 5975</b></li></ul></div>
-  <div id="weatherPanel" class="panel"><h4>🌤️ Weather</h4><div id="weatherList"><p>Loading live weather...</p></div></div>
-  <div id="seaPanel" class="panel"><h4>🌊 Sea &amp; Sun</h4><div id="seaList"><p>Loading...</p></div></div>
-  <div id="holidaysPanel" class="panel"><h4>🎉 Holidays</h4><div id="holidaysList"><p>Loading...</p></div></div>
-  <div id="ratesPanel" class="panel"><h4>💱 Rates</h4><div id="ratesList"><p>Loading...</p></div></div>
-  <div id="budgetPanel" class="panel"><h4>💰 Budget</h4><ul><li>Budget day: R450 - R750</li><li>Mid-range: R900 - R1500</li><li>Splurge: R2000+</li></ul></div>
-  <div id="highlightsPanel" class="panel"><h4>⭐ Highlights</h4><ul><li>Knysna Heads Viewpoint</li><li>Robberg Nature Reserve, Plett</li><li>Outeniqua Mountains, George</li><li>Wilderness Beach &amp; Map of Africa</li><li>Sedgefield Lagoon</li></ul></div>
+  <div id="successBox" class="success">
+    <b>✅ Done! Thanks!</b><br>
+    <span id="successText">We got your details.</span>
+    <pre id="copyText"></pre>
+    <button type="button" id="copyBtn">📋 Copy Details</button>
+    <button type="button" class="secondary" id="waBtn">💬 Open WhatsApp to Send</button>
+    <button type="button" class="secondary" id="emailBtn">📧 Send by Email Instead</button>
+    <p class="note">On phone, tap WhatsApp. On tablet/computer without WhatsApp, tap Copy or Email.</p>
+  </div>
 
-  <div id="chat"></div>
-</div>
-
-<div class="composer">
-  <input id="q" placeholder="Ask for an itinerary... e.g. 2 days in Knysna" onkeydown="if(event.key==='Enter')ask()">
-  <button onclick="ask()">Ask</button>
+  <a class="back" href="index.html">← Back to Garden Route AI</a>
 </div>
 
 <script>
-const WIKI_MAP = {
-  "george":"George,_Western_Cape",
-  "knysna":"Knysna",
-  "plett":"Plettenberg_Bay",
-  "plettenberg bay":"Plettenberg_Bay",
-  "sedgefield":"Sedgefield,_South_Africa",
-  "wilderness":"Wilderness,_South_Africa",
-  "mossel bay":"Mossel_Bay",
-  "oudtshoorn":"Oudtshoorn",
-  "garden route":"Garden_Route",
-  "hartenbos":"Hartenbos",
-  "great brak river":"Great_Brak_River",
-  "nature's valley":"Nature%27s_Valley",
-  "storms river":"Stormsrivier"
-};
-let EVENTS = [
-  {id:"f1", title:"Leisure Isle Festival – 21st Anniversary", town:"Knysna", date:"See link", desc:"Family festival on Leisure Isle."},
-  {id:"f2", title:"ForestJAZZ in November", town:"Knysna", date:"See link", desc:"Jazz in the Knysna forest."},
-  {id:"f3", title:"Knysna Heads Sunset Cruise", town:"Knysna", date:"Daily", desc:"Lagoon cruise to the Heads."},
-  {id:"f4", title:"Outeniqua Farmers Market", town:"George", date:"Sat 8am", desc:"Local food & crafts."},
-  {id:"f5", title:"Robberg Hike & Beach Day", town:"Plett", date:"Daily", desc:"Seal colony, dolphins."},
-  {id:"f6", title:"Wilderness Map of Africa Viewpoint", town:"Wilderness", date:"Daily", desc:"Viewpoint over Kaaimans River."},
-  {id:"f7", title:"Sedgefield Slow Market", town:"Sedgefield", date:"Sat", desc:"Slow Town market, lagoon side."}
-];
-let updatedAt='';
-let saved=[];
-try{ saved=JSON.parse(localStorage.getItem('gr_saved_v2')||'[]'); if(!Array.isArray(saved)) saved=[]; }catch(e){ saved=[]; }
-function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
-function safeUrl(u){ return /^https?:\/\//i.test(u||'')?u:''; }
-function isSaved(id){ return saved.some(x=>x.id===id); }
-function sameTown(e,town){ return String(detectTown(e.town||'')||e.town||'').toLowerCase()===town.toLowerCase(); }
-function eventCard(e){
-  const url=safeUrl(e.link);
-  const link=url?`<a href="${esc(url)}" target="_blank" rel="noopener">View details →</a><br>`:'';
-  const desc=e.desc?`<p style="color:#d6def0;font-size:14px">${esc(e.desc)}</p>`:'';
-  const s=isSaved(e.id);
-  return `<div class="event"><h4>${esc(e.title)}</h4><div class="meta">📍 ${esc(e.town||'Garden Route')} • 📅 ${esc(e.date||'See link')}</div>${desc}${link}<button class="save-btn ${s?'saved':''}" data-id="${esc(e.id)}" onclick="toggleSave(this)">${s?'❤️ Saved':'🤍 Save'}</button></div>`;
-}
-function toggleMenu(e){ e.stopPropagation(); document.getElementById('menu').classList.toggle('show'); }
-document.addEventListener('click',()=>{ document.getElementById('menu').classList.remove('show'); });
-function showPanel(id){
-  document.getElementById('menu').classList.remove('show');
-  document.querySelectorAll('.panel').forEach(p=>{ if(p.id!==id) p.classList.remove('show'); });
-  const el=document.getElementById(id);
-  const wasOpen=el.classList.contains('show');
-  el.classList.remove('show');
-  if(!wasOpen){ el.classList.add('show'); if(id==='eventsPanel') renderEvents(); if(PANEL_LOADERS[id]) PANEL_LOADERS[id](); el.scrollIntoView({behavior:'smooth'}); }
-}
-function renderEvents(){
-  const note=updatedAt?`<p style="font-size:13px;opacity:.7;margin-bottom:6px">Updated ${esc(String(updatedAt).slice(0,10))}</p>`:'';
-  document.getElementById('eventsList').innerHTML = note + (EVENTS.length?EVENTS.map(eventCard).join(''):'<p>No events right now.</p>');
-}
-function toggleSave(btn){
-  const id=btn.dataset.id;
-  const ev=EVENTS.find(e=>e.id===id);
-  if(isSaved(id)){ saved=saved.filter(x=>x.id!==id); }
-  else if(ev){ saved.push({id:ev.id,title:ev.title,town:ev.town||'',link:ev.link||''}); }
-  try{ localStorage.setItem('gr_saved_v2',JSON.stringify(saved)); }catch(e){}
-  const now=isSaved(id);
-  document.querySelectorAll('.save-btn').forEach(b=>{ if(b.dataset.id===id){ b.textContent=now?'❤️ Saved':'🤍 Save'; b.classList.toggle('saved',now); } });
-  renderSaved();
-}
-function renderSaved(){
-  const el=document.getElementById('savedList');
-  if(!saved.length){ el.innerHTML='<p>No saved items yet. Tap Save on any event.</p>'; return; }
-  el.innerHTML=saved.map(x=>{ const u=safeUrl(x.link); return `<div class="event"><h4>${esc(x.title)}</h4><div class="meta">📍 ${esc(x.town)}</div>${u?`<a href="${esc(u)}" target="_blank" rel="noopener">View details →</a>`:''}</div>`; }).join('');
-}
-async function loadEvents(){
-  try{
-    const r=await fetch('data/events.json',{cache:'no-store'});
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const d=await r.json();
-    const list=(Array.isArray(d.events)?d.events:[]).filter(e=>e&&e.title&&e.id&&/^[\w-]+$/.test(String(e.id)));
-    if(list.length){ EVENTS=list; updatedAt=d.last_updated||''; }
-  }catch(e){ /* keep built-in fallback list */ }
-  renderEvents(); renderSaved();
-}
-loadEvents();
-let TOWNS={};
-async function loadTowns(){
-  try{
-    const r=await fetch('data/towns.json',{cache:'no-store'});
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const d=await r.json();
-    if(d&&typeof d==='object') TOWNS=d;
-  }catch(e){ /* fall back to Wikipedia */ }
-}
-loadTowns();
-loadRestaurants();
-function editDist(a,b){
-  const m=a.length,n=b.length; const d=[];
-  for(let i=0;i<=m;i++){ d[i]=[i]; }
-  for(let j=1;j<=n;j++) d[0][j]=j;
-  for(let i=1;i<=m;i++) for(let j=1;j<=n;j++){
-    d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
-    if(i>1&&j>1&&a[i-1]===b[j-2]&&a[i-2]===b[j-1]) d[i][j]=Math.min(d[i][j],d[i-2][j-2]+1);
-  }
-  return d[m][n];
-}
-const FUZZY_TOWNS={knysna:'Knysna',plettenberg:'Plett',george:'George',sedgefield:'Sedgefield',wilderness:'Wilderness',mossel:'Mossel Bay',mosselbay:'Mossel Bay',hartenbos:'Hartenbos',oudtshoorn:'Oudtshoorn',tsitsikamma:'Storms River',stormsriver:'Storms River',naturesvalley:"Nature's Valley",greatbrak:'Great Brak River'};
-function fuzzyTown(t){
-  const words=t.match(/[a-z]+/g)||[]; const cand=[...words];
-  for(let i=0;i<words.length-1;i++) cand.push(words[i]+words[i+1]);
-  for(const w of cand){
-    if(w.length<6) continue;
-    for(const k in FUZZY_TOWNS){
-      const lim=k.length>=8?2:1;
-      if(Math.abs(w.length-k.length)<=lim&&editDist(w,k)<=lim) return FUZZY_TOWNS[k];
-    }
-  }
-  return null;
-}
-function detectTown(t){
-  t=t.toLowerCase().replace(/’/g,"'");
-  if(t.includes('knysna')) return 'Knysna';
-  if(t.includes('plett')) return 'Plett';
-  if(t.includes('george')) return 'George';
-  if(t.includes('sedgefield')) return 'Sedgefield';
-  if(t.includes('wilderness')) return 'Wilderness';
-  if(t.includes('mossel')) return 'Mossel Bay';
-  if(t.includes('hartenbos')) return 'Hartenbos';
-  if(t.includes('brak')) return 'Great Brak River';
-  if(t.includes("nature's valley")||t.includes('natures valley')) return "Nature's Valley";
-  if(t.includes('storms river')||t.includes('stormsrivier')||t.includes('tsitsikamma')) return 'Storms River';
-  if(t.includes('oudtshoorn')) return 'Oudtshoorn';
-  const c=t.replace(/[^a-z]/g,'');
-  if(c.includes('stormsriver')) return 'Storms River';
-  if(c.includes('naturesvalley')||c.includes('naturevalley')) return "Nature's Valley";
-  if(c.includes('greatbrak')||c.includes('littlebrak')) return 'Great Brak River';
-  const f=fuzzyTown(t); if(f) return f;
-  return null;
-}
-function add(html){ document.getElementById('chat').insertAdjacentHTML('beforeend',html); window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}); }
-const TOWN_COORDS={
-  'George':[-33.963,22.4617],'Knysna':[-34.0363,23.0471],'Plett':[-34.0527,23.3716],
-  'Sedgefield':[-34.0167,22.8],'Wilderness':[-33.993,22.58],'Mossel Bay':[-34.1831,22.146],
-  'Hartenbos':[-34.1167,22.1167],'Great Brak River':[-34.0333,22.2167],"Nature's Valley":[-33.9806,23.5592],'Storms River':[-33.9667,23.8833],'Oudtshoorn':[-33.5906,22.2052]
-};
-const WMO={0:['☀️','Clear'],1:['🌤️','Mostly clear'],2:['⛅','Partly cloudy'],3:['☁️','Overcast'],45:['🌫️','Fog'],48:['🌫️','Fog'],
-  51:['🌦️','Light drizzle'],53:['🌦️','Drizzle'],55:['🌧️','Heavy drizzle'],56:['🌧️','Freezing drizzle'],57:['🌧️','Freezing drizzle'],
-  61:['🌧️','Light rain'],63:['🌧️','Rain'],65:['🌧️','Heavy rain'],66:['🌧️','Freezing rain'],67:['🌧️','Freezing rain'],
-  80:['🌦️','Showers'],81:['🌦️','Showers'],82:['⛈️','Heavy showers'],95:['⛈️','Thunderstorm'],96:['⛈️','Thunderstorm'],99:['⛈️','Thunderstorm']};
-function wmo(c){ return WMO[c]||(c>=71&&c<=77?['❄️','Snow']:['🌥️','Changeable']); }
-const WX_CACHE={};
-async function fetchWeather(town){
-  const c=WX_CACHE[town]; if(c&&Date.now()-c.t<900000) return c.d;
-  const [la,lo]=TOWN_COORDS[town];
-  const url=`https://api.open-meteo.com/v1/forecast?latitude=${la}&longitude=${lo}&current=temperature_2m,weather_code,wind_speed_10m&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,sunrise,sunset&timezone=Africa%2FJohannesburg&forecast_days=3`;
-  const r=await fetch(url); if(!r.ok) throw new Error('HTTP '+r.status);
-  const d=await r.json(); WX_CACHE[town]={t:Date.now(),d}; return d;
-}
-function wxLine(town,d){
-  const w=wmo(d.current.weather_code);
-  return `${w[0]} <b>${esc(town)}</b>: ${Math.round(d.current.temperature_2m)}°C, ${w[1]}, wind ${Math.round(d.current.wind_speed_10m)} km/h`;
-}
-function wxDays(d){
-  return d.daily.time.map((t,i)=>{
-    const day=i===0?'Today':new Date(t+'T12:00:00').toLocaleDateString('en-ZA',{weekday:'short'});
-    const w=wmo(d.daily.weather_code[i]);
-    return `<p>${day}: ${w[0]} ${Math.round(d.daily.temperature_2m_min[i])}–${Math.round(d.daily.temperature_2m_max[i])}°C, rain chance ${d.daily.precipitation_probability_max[i]}%</p>`;
-  }).join('');
-}
-async function renderWeatherPanel(){
-  const el=document.getElementById('weatherList');
-  el.innerHTML='<p>Loading live weather...</p>';
-  const names=Object.keys(TOWN_COORDS);
-  try{
-    const res=await Promise.all(names.map(n=>fetchWeather(n)));
-    el.innerHTML=res.map((d,i)=>`<p>${wxLine(names[i],d)}</p>`).join('')+'<p style="opacity:.7;font-size:13px">Live forecast from Open-Meteo.</p>';
-  }catch(e){ el.innerHTML="<p>Couldn't load live weather right now. Please try again in a moment.</p>"; }
-}
-async function weatherChat(town){
-  const id='w'+Date.now();
-  add(`<div class="ai-card" id="${id}"><h3>🌤️ Weather</h3><p>Loading live weather...</p></div>`);
-  const card=document.getElementById(id);
-  try{
-    if(town&&TOWN_COORDS[town]){
-      const d=await fetchWeather(town);
-      card.innerHTML=`<h3>🌤️ Weather in ${esc(town)}</h3><div class="wiki-box"><p>${wxLine(town,d)}</p>${wxDays(d)}<p>🌅 Sunrise ${fmtT(d.daily.sunrise[0])} · 🌇 Sunset ${fmtT(d.daily.sunset[0])}</p><p style="opacity:.7">Live forecast from Open-Meteo.</p></div>`;
+  // WhatsApp number: 27 + number, no + or spaces
+  const MY_NUMBER = "27657006689";
+  // TODO: put your real email here. While it is still the placeholder, the email button is hidden.
+  const MY_EMAIL = "you@example.co.za";
+  const EMAIL_SET = !!MY_EMAIL && !/@example\.|^you@/i.test(MY_EMAIL);
+  let lastMsg = "";
+
+  if (!EMAIL_SET) document.getElementById('emailBtn').style.display = 'none';
+
+  document.getElementById('joinForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(e.target).entries());
+    lastMsg = `NEW FEATURED SIGNUP:\nName: ${data.name}\nTown: ${data.town}\nType: ${data.type}\nPrice: ${data.price}\nBest for: ${data.best_for}\nVibe: ${data.vibe}\nFood: ${data.food}\nFacilities: ${data.facilities}\nHours: ${data.hours}\nWhatsApp: ${data.whatsapp}\nTip: ${data.tip}\nEmail: ${data.email}\nAgreed to be listed and contacted: Yes`;
+
+    document.getElementById('joinForm').style.display = 'none';
+    document.getElementById('copyText').textContent = lastMsg;
+    document.getElementById('successBox').style.display = 'block';
+
+    // If on phone, try WhatsApp automatically
+    const isPhone = /Android|iPhone|iPad|Mobile/i.test(navigator.userAgent);
+    if (isPhone) {
+      window.open(`https://api.whatsapp.com/send?phone=${MY_NUMBER}&text=${encodeURIComponent(lastMsg)}`, '_blank');
+      document.getElementById('successText').textContent = "WhatsApp should have opened. If not, tap below:";
     } else {
-      const names=['George','Knysna','Plett'];
-      const res=await Promise.all(names.map(n=>fetchWeather(n)));
-      card.innerHTML=`<h3>🌤️ Weather</h3><div class="wiki-box">${res.map((d,i)=>`<p>${wxLine(names[i],d)}</p>`).join('')}<p style="opacity:.7">Live forecast from Open-Meteo.</p></div>`;
-    }
-  }catch(e){ card.innerHTML="<h3>🌤️ Weather</h3><p>Couldn't load live weather right now. Please try again in a moment.</p>"; }
-  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
-}
-function fmtT(iso){ return iso?String(iso).slice(11,16):'--:--'; }
-const SEA_COORDS={'George':[-34.09,22.45],'Knysna':[-34.12,23.07],'Plett':[-34.1,23.37],'Sedgefield':[-34.08,22.8],'Wilderness':[-34.05,22.58],'Mossel Bay':[-34.22,22.15],'Hartenbos':[-34.17,22.11],'Great Brak River':[-34.08,22.22],"Nature's Valley":[-34.04,23.56],'Storms River':[-34.08,23.9]};
-const SEA_CACHE={};
-async function fetchSea(town){
-  const c=SEA_CACHE[town]; if(c&&Date.now()-c.t<900000) return c.d;
-  const [la,lo]=SEA_COORDS[town];
-  const r=await fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${la}&longitude=${lo}&current=wave_height,wave_period,sea_surface_temperature&timezone=Africa%2FJohannesburg`);
-  if(!r.ok) throw new Error('HTTP '+r.status);
-  const d=await r.json(); SEA_CACHE[town]={t:Date.now(),d}; return d;
-}
-function seaLine(d){
-  const c=(d&&d.current)||{}; const parts=[];
-  if(c.wave_height!=null) parts.push('waves '+Number(c.wave_height).toFixed(1)+' m'+(c.wave_period!=null?' ('+Math.round(c.wave_period)+' s)':''));
-  if(c.sea_surface_temperature!=null) parts.push('sea '+Math.round(c.sea_surface_temperature)+'°C');
-  return parts.join(', ')||'no sea data for this spot';
-}
-async function seaRows(names){
-  const rows=await Promise.all(names.map(async n=>{
-    const [sea,wx]=await Promise.allSettled([fetchSea(n),fetchWeather(n)]);
-    const seaTxt=sea.status==='fulfilled'?seaLine(sea.value):'sea data not available';
-    const sun=wx.status==='fulfilled'?`🌅 ${fmtT(wx.value.daily.sunrise[0])} · 🌇 ${fmtT(wx.value.daily.sunset[0])}`:'';
-    return `<p>🌊 <b>${esc(n)}</b>: ${seaTxt}${sun?'<br>'+sun:''}</p>`;
-  }));
-  return rows.join('')+'<p style="opacity:.7;font-size:13px">Forecast data from Open-Meteo. Always check lifeguard and flag warnings before swimming.</p>';
-}
-async function renderSeaPanel(){
-  const el=document.getElementById('seaList'); el.innerHTML='<p>Loading...</p>';
-  try{ el.innerHTML=await seaRows(Object.keys(SEA_COORDS)); }catch(e){ el.innerHTML="<p>Couldn't load sea conditions right now. Please try again in a moment.</p>"; }
-}
-
-let HOL_CACHE=null;
-async function fetchAllHolidays(){
-  if(HOL_CACHE&&Date.now()-HOL_CACHE.t<3600000) return HOL_CACHE.d;
-  const y=new Date().getFullYear();
-  const res=await Promise.allSettled([y,y+1].map(yr=>fetch(`https://date.nager.at/api/v3/PublicHolidays/${yr}/ZA`).then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })));
-  const all=res.filter(x=>x.status==='fulfilled').flatMap(x=>x.value).sort((a,b)=>a.date<b.date?-1:1);
-  if(!all.length) throw new Error('no holiday data');
-  HOL_CACHE={t:Date.now(),d:all}; return all;
-}
-async function fetchHolidays(){
-  const today=new Date().toISOString().slice(0,10);
-  return (await fetchAllHolidays()).filter(h=>h.date>=today).slice(0,6);
-}
-const MONTHS=['january','february','march','april','may','june','july','august','september','october','november','december'];
-function parseMD(q){
-  const mon='(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)';
-  let m=q.match(new RegExp('\\b(\\d{1,2})(?:st|nd|rd|th)?\\s+(?:of\\s+)?'+mon+'\\b'));
-  let d,mo;
-  if(m){ d=+m[1]; mo=m[2]; }
-  else { m=q.match(new RegExp('\\b'+mon+'\\s+(\\d{1,2})(?:st|nd|rd|th)?\\b')); if(!m) return null; mo=m[1]; d=+m[2]; }
-  const mi=MONTHS.findIndex(n=>n.startsWith(mo.slice(0,3)));
-  if(mi<0||d<1||d>31) return null;
-  return {m:mi+1,d};
-}
-const HOL_WORDS=['heritage','freedom','workers','youth','women','reconciliation','human rights','new year','christmas','boxing','good friday','family day','easter'];
-function holLine(h,today){
-  const dt=new Date(h.date+'T12:00:00');
-  const when=dt.toLocaleDateString('en-ZA',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-  return `<p>🎉 <b>${esc(h.localName||h.name)}</b>: ${esc(when)}${h.date<today?' (already passed)':''}</p>`;
-}
-async function holidaysChat(lower){
-  await liveCard('🎉 Holidays',async()=>{
-    const all=await fetchAllHolidays();
-    const today=new Date().toISOString().slice(0,10);
-    const q=lower||'';
-    const md=parseMD(q);
-    if(md){
-      const key=String(md.m).padStart(2,'0')+'-'+String(md.d).padStart(2,'0');
-      const hits=all.filter(h=>h.date.slice(5)===key);
-      const label=md.d+' '+MONTHS[md.m-1].replace(/^./,c=>c.toUpperCase());
-      if(!hits.length) return `<p>${esc(label)} is not a public holiday in South Africa.</p>`;
-      const next=hits.find(h=>h.date>=today)||hits[hits.length-1];
-      return `<p>${esc(label)} is a public holiday.</p>`+holLine(next,today);
-    }
-    const word=HOL_WORDS.find(w=>q.includes(w));
-    if(word){
-      const hits=all.filter(h=>((h.localName||'')+' '+(h.name||'')).toLowerCase().includes(word));
-      if(hits.length){
-        const next=hits.find(h=>h.date>=today)||hits[hits.length-1];
-        return holLine(next,today)+'<p style="opacity:.7;font-size:13px">South African public holidays from Nager.Date.</p>';
-      }
-    }
-    return holHtml(all.filter(h=>h.date>=today).slice(0,6));
-  });
-}
-function holHtml(list){
-  if(!list.length) return '<p>No upcoming public holidays found.</p>';
-  return list.map(h=>{
-    const dt=new Date(h.date+'T12:00:00'); const wd=dt.getDay();
-    const lw=(wd===1||wd===5)?' · long weekend, book ahead':'';
-    return `<p>🎉 <b>${esc(dt.toLocaleDateString('en-ZA',{weekday:'short',day:'numeric',month:'short'}))}</b>: ${esc(h.localName||h.name)}${lw}</p>`;
-  }).join('')+'<p style="opacity:.7;font-size:13px">South African public holidays from Nager.Date. Busy dates fill up fast on the Garden Route.</p>';
-}
-async function renderHolidaysPanel(){
-  const el=document.getElementById('holidaysList'); el.innerHTML='<p>Loading...</p>';
-  try{ el.innerHTML=holHtml(await fetchHolidays()); }catch(e){ el.innerHTML="<p>Couldn't load holidays right now. Please try again in a moment.</p>"; }
-}
-
-let RATE_CACHE=null;
-async function fetchRates(){
-  if(RATE_CACHE&&Date.now()-RATE_CACHE.t<3600000) return RATE_CACHE.d;
-  const r=await fetch('https://api.frankfurter.dev/v1/latest?base=ZAR&symbols=USD,EUR,GBP');
-  if(!r.ok) throw new Error('HTTP '+r.status);
-  const d=await r.json(); if(!d||!d.rates) throw new Error('bad rates'); RATE_CACHE={t:Date.now(),d}; return d;
-}
-function ratesHtml(d){
-  const r=d.rates; const f=(v,sym)=>sym+Math.round(v);
-  const rng=(a,b)=>`${f(a*r.USD,'$')}–${f(b*r.USD,'$')} · ${f(a*r.EUR,'€')}–${f(b*r.EUR,'€')} · ${f(a*r.GBP,'£')}–${f(b*r.GBP,'£')}`;
-  return `<p>R100 ≈ $${(100*r.USD).toFixed(2)} · €${(100*r.EUR).toFixed(2)} · £${(100*r.GBP).toFixed(2)}</p>`+
-    `<p><b>Budget day</b> R450–R750<br>≈ ${rng(450,750)}</p>`+
-    `<p><b>Mid-range</b> R900–R1500<br>≈ ${rng(900,1500)}</p>`+
-    `<p><b>Splurge</b> R2000+<br>from ≈ ${f(2000*r.USD,'$')} · ${f(2000*r.EUR,'€')} · ${f(2000*r.GBP,'£')}</p>`+
-    `<p style="opacity:.7;font-size:13px">Indicative rates as of ${esc(d.date)} from Frankfurter. Your bank's rate will differ.</p>`;
-}
-async function renderRatesPanel(){
-  const el=document.getElementById('ratesList'); el.innerHTML='<p>Loading...</p>';
-  try{ el.innerHTML=ratesHtml(await fetchRates()); }catch(e){ el.innerHTML="<p>Couldn't load exchange rates right now. Please try again in a moment.</p>"; }
-}
-
-const NEARBY_KINDS={
-  restaurant:{label:'Restaurants',filter:'["amenity"="restaurant"]',named:true},
-  cafe:{label:'Cafés',filter:'["amenity"="cafe"]',named:true},
-  beach:{label:'Beaches',filter:'["natural"="beach"]',named:true},
-  viewpoint:{label:'Viewpoints',filter:'["tourism"="viewpoint"]',named:true},
-  toilets:{label:'Public toilets',filter:'["amenity"="toilets"]',named:false}
-};
-const OVERPASS_URLS=['https://overpass-api.de/api/interpreter','https://overpass.private.coffee/api/interpreter','https://maps.mail.ru/osm/tools/overpass/api/interpreter'];
-async function overpass(q){
-  const errs=[];
-  for(const url of OVERPASS_URLS){
-    const host=url.replace(/^https:\/\//,'').split('/')[0];
-    const ctl=new AbortController(); const timer=setTimeout(()=>ctl.abort(),12000);
-    try{
-      const r=await fetch(url,{method:'POST',body:'data='+encodeURIComponent(q),signal:ctl.signal});
-      if(!r.ok) throw new Error('HTTP '+r.status);
-      const j=await r.json();
-      if(!j||!Array.isArray(j.elements)) throw new Error('bad response');
-      if(j.remark&&/runtime error|timed out/i.test(j.remark)&&!j.elements.length) throw new Error('server timed out');
-      return j;
-    }catch(e){ errs.push(host+': '+(e&&e.name==='AbortError'?'no answer in 12s':(e&&e.message)||'failed')); }
-    finally{ clearTimeout(timer); }
-  }
-  const err=new Error('all Overpass servers failed'); err.details=errs.join(' | '); throw err;
-}
-const NOMINATIM_TERMS={restaurant:'restaurant',cafe:'cafe',beach:'beach',viewpoint:'viewpoint',toilets:'public toilets'};
-async function nominatimSearch(town,kind,la,lo){
-  const d=0.06;
-  const url='https://nominatim.openstreetmap.org/search?format=jsonv2&limit=12&bounded=1&viewbox='+(lo-d)+','+(la+d)+','+(lo+d)+','+(la-d)+'&q='+encodeURIComponent(NOMINATIM_TERMS[kind]||kind);
-  const ctl=new AbortController(); const timer=setTimeout(()=>ctl.abort(),12000);
-  try{
-    const r=await fetch(url,{signal:ctl.signal});
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const j=await r.json();
-    if(!Array.isArray(j)) throw new Error('bad response');
-    const seen=new Set(); const out=[];
-    for(const p of j){
-      const name=(p.name||String(p.display_name||'').split(',')[0]||'').trim();
-      const lat=parseFloat(p.lat), lon=parseFloat(p.lon);
-      if(!name||isNaN(lat)||isNaN(lon)||seen.has(name.toLowerCase())) continue;
-      seen.add(name.toLowerCase()); out.push({name,lat,lon,km:distKm(la,lo,lat,lon)});
-    }
-    return out.sort((a,b)=>a.km-b.km).slice(0,8);
-  } finally { clearTimeout(timer); }
-}
-const NEAR_CACHE={};
-function distKm(a,b,c,d){ const R=6371,t=x=>x*Math.PI/180,dl=t(c-a),dn=t(d-b); const h=Math.sin(dl/2)**2+Math.cos(t(a))*Math.cos(t(c))*Math.sin(dn/2)**2; return 2*R*Math.asin(Math.sqrt(h)); }
-async function fetchNearby(town,kind){
-  const key=town+'|'+kind; const c=NEAR_CACHE[key]; if(c&&Date.now()-c.t<1800000) return c.d;
-  const [la,lo]=TOWN_COORDS[town]; const k=NEARBY_KINDS[kind]; const nm=k.named?'["name"]':'';
-  const q=`[out:json][timeout:20];(node${k.filter}${nm}(around:4000,${la},${lo});way${k.filter}${nm}(around:4000,${la},${lo}););out center 25;`;
-  let items;
-  try{
-    const j=await overpass(q);
-    items=(j.elements||[]).map(e=>{
-      const lat=e.lat!=null?e.lat:(e.center&&e.center.lat), lon=e.lon!=null?e.lon:(e.center&&e.center.lon);
-      if(lat==null||lon==null) return null;
-      return {name:(e.tags&&e.tags.name)||k.label.replace(/s$/,''),lat,lon,km:distKm(la,lo,lat,lon)};
-    }).filter(Boolean).sort((a,b)=>a.km-b.km).slice(0,8);
-  }catch(e1){
-    try{ items=await nominatimSearch(town,kind,la,lo); }
-    catch(e2){
-      const err=new Error('nearby search failed');
-      err.details=(e1.details||e1.message)+' | nominatim: '+(e2&&e2.name==='AbortError'?'no answer in 12s':(e2&&e2.message)||'failed');
-      throw err;
-    }
-  }
-  NEAR_CACHE[key]={t:Date.now(),d:items}; return items;
-}
-
-function nearbyHtml(items,label,town){
-  if(!items.length) return `<p>No ${esc(label.toLowerCase())} found near ${esc(town)} on OpenStreetMap.</p>`;
-  return '<ul style="padding-left:18px">'+items.map(i=>`<li><a href="https://www.openstreetmap.org/?mlat=${i.lat}&mlon=${i.lon}#map=18/${i.lat}/${i.lon}" target="_blank" rel="noopener">${esc(i.name)}</a> · ${i.km.toFixed(1)} km from centre</li>`).join('')+'</ul><p style="opacity:.7;font-size:13px">Map data © OpenStreetMap contributors. May be incomplete.</p>';
-}
-async function liveCard(title,fn){
-  const id='x'+Date.now()+Math.floor(Math.random()*1000);
-  add(`<div class="ai-card" id="${id}"><h3>${esc(title)}</h3><p>Loading...</p></div>`);
-  const card=document.getElementById(id);
-  try{ const html=await fn(); card.innerHTML=`<h3>${esc(title)}</h3><div class="wiki-box">${html}</div>`; }
-  catch(e){ card.innerHTML=`<h3>${esc(title)}</h3><p>Couldn't load this right now. Please try again in a moment.</p>`; }
-  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
-}
-async function nearbyChat(town,kind){
-  const k=NEARBY_KINDS[kind];
-  await liveCard(`${k.label} near ${town}`,async()=>{
-    try{ return nearbyHtml(await fetchNearby(town,kind),k.label,town); }
-    catch(e){
-      const [la,lo]=TOWN_COORDS[town];
-      const q=encodeURIComponent(k.label.toLowerCase()+' near '+town);
-      const why=e&&(e.details||e.message)?`<p style="opacity:.6;font-size:12px">Details: ${esc(e.details||e.message)}</p>`:'';
-      return `<p>The free map service is busy right now.</p>${why}<p><a href="https://www.google.com/maps/search/${q}/@${la},${lo},13z" target="_blank" rel="noopener">Search ${esc(k.label.toLowerCase())} near ${esc(town)} on Google Maps →</a></p>`;
+      document.getElementById('successText').textContent = EMAIL_SET
+        ? "No WhatsApp on this device? Send your details one of these ways:"
+        : "No WhatsApp on this device? Tap Copy, then paste it to us on WhatsApp:";
     }
   });
-}
-async function seaChat(town){
-  const names=(town&&SEA_COORDS[town])?[town]:['George','Knysna','Plett'];
-  await liveCard(names.length===1?`🌊 Sea & sun in ${town}`:'🌊 Sea & sun',()=>seaRows(names));
-}
-async function ratesChat(){ await liveCard('💱 Exchange rates',async()=>ratesHtml(await fetchRates())); }
-async function loadTownPhoto(wikiTitle,pid){
-  try{
-    const r=await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${wikiTitle}`);
-    const d=await r.json(); const src=d.thumbnail&&d.thumbnail.source; const el=document.getElementById(pid);
-    if(src&&el&&/^https:\/\/upload\.wikimedia\.org\//.test(src)){
-      el.innerHTML=`<img src="${esc(src)}" alt="${esc(d.title||'')}" loading="lazy" style="max-width:100%;border-radius:12px;display:block;margin-bottom:4px"><p style="font-size:11px;opacity:.7">Photo via <a href="https://en.wikipedia.org/wiki/${wikiTitle}" target="_blank" rel="noopener">Wikipedia</a></p>`;
-    }
-  }catch(e){}
-}
-async function runTopic(id,tn,lower){
-  if(id==='weatherPanel') return weatherChat(tn);
-  if(id==='seaPanel') return seaChat(tn);
-  if(id==='holidaysPanel') return holidaysChat(lower);
-  if(id==='ratesPanel') return ratesChat();
-  if(id==='nearby'){
-    const kind=/beach/.test(lower)?'beach':/viewpoint|lookout/.test(lower)?'viewpoint':/toilet|restroom/.test(lower)?'toilets':'cafe';
-    return nearbyChat(tn&&TOWN_COORDS[tn]?tn:'Knysna',kind);
-  }
-  if(id==='restaurantsPanel'){ add(restaurantsHtml(lower,tn)); if(tn&&TOWN_COORDS[tn]) await nearbyChat(tn,'restaurant'); return; }
-  add(topicCard(id,tn));
-}
-const PANEL_LOADERS={restaurantsPanel:renderRestaurantsPanel,weatherPanel:renderWeatherPanel,seaPanel:renderSeaPanel,holidaysPanel:renderHolidaysPanel,ratesPanel:renderRatesPanel};
-const TOPICS=[
-  {re:/\b(weather|forecast|temperature)\b/, id:'weatherPanel'},
-  {re:/\b(sea|waves?|surf|surfing|swell|ocean|swim|swimming|tides?|sunrise|sunset)\b/, id:'seaPanel'},
-  {re:/\b(holidays?|long weekend|heritage|freedom day|workers'? day|youth day|women'?s day|reconciliation|human rights day|new year'?s?|christmas|boxing day|good friday|family day|easter)\b|\b\d{1,2}(?:st|nd|rd|th)?\s+(?:of\s+)?(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\b|\b(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\s+\d{1,2}(?:st|nd|rd|th)?\b/, id:'holidaysPanel'},
-  {re:/\b(rates?|exchange|dollars?|euros?|pounds?|currency|usd|eur|gbp|convert)\b/, id:'ratesPanel'},
-  {re:/\b(restaurants?|eat|food|dinner|lunch|breakfast|brunch|hungry|takeaways?|sushi|pizza|burgers?|seafood|steaks?|vegan|vegetarian|halaal|halal|curry|pasta)\b/, id:'restaurantsPanel'},
-  {re:/\b(emergency|hospital|police|ambulance)\b/, id:'emergencyPanel'},
-  {re:/\b(budget|cost|costs|prices?|cheap)\b/, id:'budgetPanel'},
-  {re:/\b(highlights?)\b/, id:'highlightsPanel'},
-  {re:/\bsaved\b/, id:'savedPanel'},
-  {re:/\b(beach|beaches|viewpoints?|lookouts?|toilets?|restrooms?|cafes?|coffee)\b/, id:'nearby'}
-];
-function topicCard(id,town){
-  const el=document.getElementById(id);
-  const title=el.querySelector('h4').textContent;
-  let body='';
-  if(id==='weatherPanel'){
-    const parts=(el.querySelector('p').textContent.match(/[^.]+\.?/g)||[]).map(x=>x.trim()).filter(Boolean);
-    const isTown=x=>/^(George|Knysna|Plett)\b/.test(x);
-    let keep=parts;
-    if(town&&parts.some(x=>x.toLowerCase().startsWith(town.toLowerCase()))){
-      keep=parts.filter(x=>!isTown(x)||x.toLowerCase().startsWith(town.toLowerCase()));
-    }
-    body=keep.map(x=>`<p>${esc(x)}</p>`).join('');
-  } else if(id==='restaurantsPanel'){
-    const items=[...el.querySelectorAll('li')];
-    let pick=items;
-    if(town){ const m=items.filter(li=>li.textContent.toLowerCase().includes(town.toLowerCase())); if(m.length) pick=m; }
-    body='<ul style="padding-left:18px">'+pick.map(li=>`<li>${li.innerHTML}</li>`).join('')+'</ul>';
-  } else {
-    const c=el.cloneNode(true); c.querySelectorAll('h4').forEach(h=>h.remove());
-    body=c.innerHTML;
-  }
-  return `<div class="ai-card"><h3>${esc(title)}</h3><div class="wiki-box">${body}</div></div>`;
-}
-// ===== BRAIN (shared search logic) =====
-const BRAIN_TOWNS=[['plettenberg','Plett'],['plett','Plett'],['knysna','Knysna'],['george','George'],['sedgefield','Sedgefield'],['wilderness','Wilderness'],['mossel','Mossel Bay'],['hartenbos','Hartenbos'],['great brak','Great Brak River'],['little brak','Great Brak River'],['brak river','Great Brak River'],["nature's valley","Nature's Valley"],['natures valley',"Nature's Valley"],['storms river','Storms River'],['stormsrivier','Storms River'],['tsitsikamma','Storms River'],['oudtshoorn','Oudtshoorn']];
-function brainTown(text){ const t=String(text||'').toLowerCase(); for(const [k,v] of BRAIN_TOWNS) if(t.includes(k)) return v; return null; }
-const BRAIN_TAGS={
-  foodie:/\b(market|markets|food|wine|braai|farm|farmers|oyster|oysters|tasting|brunch)\b/,
-  music:/jazz|music|concert|\b(dj|band|gig|choir)\b/,
-  family:/\b(kids|children|family|easter|school)\b/,
-  adventure:/\b(hike|hiking|trail|surf|surfing|adventure|run|running|bike|biking|cycle|cycling|marathon|kayak)\b/,
-  culture:/\b(art|arts|gallery|theatre|theater|book|books|poetry|museum|heritage)\b/,
-  romantic:/\b(romantic|sunset|couple|couples)\b/,
-  free:/\bfree\b/
-};
-const BRAIN_QUERY=[
-  [/\b(jazz|music|concert|concerts|band|gig)\b/,'music'],
-  [/\b(market|markets|food|foodie|wine|braai|oysters?)\b/,'foodie'],
-  [/\b(kids|children|family)\b/,'family'],
-  [/\b(hike|hiking|trail|surf|surfing|adventure|run|running|bike|cycling|marathon|kayak)\b/,'adventure'],
-  [/\b(art|arts|gallery|theatre|theater|poetry|museum|culture)\b/,'culture'],
-  [/\b(romantic|sunset|couples?|date night)\b/,'romantic']
-];
-const BRAIN_STOP=new Set(['what','whats','the','and','for','are','any','some','there','this','that','with','show','find','tell','list','all','near','events','event','things','thing','happening','going','upcoming','weekend','today','tonight','week','next','free','can','you','have','got','does','about','where','when','how','anything','something','nice','good','best','plan']);
-const BRAIN_TOWN_WORDS=['knysna','plett','plettenberg','bay','george','sedgefield','wilderness','mossel'];
-const MON=['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
 
-function brainTags(e){
-  const text=((e.title||e.name||'')+' '+(e.description||e.desc||'')+' '+(e.category||'')+' '+(e.date||'')).toLowerCase();
-  return Object.keys(BRAIN_TAGS).filter(k=>BRAIN_TAGS[k].test(text));
-}
-function brainParse(text){
-  const lower=String(text||'').toLowerCase().replace(/’/g,"'");
-  let when=null;
-  if(/\bweekend\b/.test(lower)) when='weekend';
-  else if(/\b(today|tonight)\b/.test(lower)) when='today';
-  else if(/\b(this|next) week\b|\bnext 7 days\b/.test(lower)) when='week';
-  const vibes=[]; for(const [re,v] of BRAIN_QUERY) if(re.test(lower)&&!vibes.includes(v)) vibes.push(v);
-  let cleaned=lower; for(const [k] of BRAIN_TOWNS) cleaned=cleaned.split(k).join(' ');
-  const words=(cleaned.replace(/'/g,'').match(/[a-z0-9]+/g)||[]).filter(w=>w.length>=3&&!BRAIN_STOP.has(w)&&!BRAIN_TOWN_WORDS.includes(w));
-  return {town:brainTown(lower),when,free:/\bfree\b/.test(lower),vibes,keywords:[...new Set(words)]};
-}
-function brainWindow(when,now){
-  const d0=new Date(now.getFullYear(),now.getMonth(),now.getDate());
-  const end=d=>new Date(d.getFullYear(),d.getMonth(),d.getDate(),23,59,59,999);
-  const add=(d,n)=>{ const x=new Date(d); x.setDate(x.getDate()+n); return x; };
-  if(when==='today') return [[d0,end(d0)]];
-  if(when==='week') return [[d0,end(add(d0,7))]];
-  if(when==='weekend'){
-    const dow=d0.getDay();
-    if(dow===6) return [[d0,end(add(d0,1))]];
-    const sat=add(d0,(6-dow+7)%7);
-    const next=[sat,end(add(sat,1))];
-    return dow===0?[[d0,end(d0)],next]:[next];
-  }
-  return null;
-}
-function brainDates(e,now){
-  if(e.start_date){
-    const a=new Date(e.start_date+'T00:00:00'), b=new Date((e.end_date||e.start_date)+'T23:59:59');
-    if(!isNaN(a)&&!isNaN(b)) return {a,b};
-  }
-  const s=String(e.date||'').toLowerCase().replace(/(\d)(st|nd|rd|th)\b/g,'$1');
-  if(!s||/see link/.test(s)) return null;
-  if(/\bdaily\b|\bevery day\b/.test(s)) return {always:true};
-  const eod=d=>new Date(d.getFullYear(),d.getMonth(),d.getDate(),23,59,59);
-  let m=s.match(/(\d{4})-(\d{2})-(\d{2})/);
-  if(m){ const d=new Date(+m[1],+m[2]-1,+m[3]); return {a:d,b:eod(d)}; }
-  const mon=w=>MON.indexOf(w.slice(0,3));
-  const cut=new Date(now.getFullYear(),now.getMonth(),now.getDate()-60);
-  const mk=(d,mi,y)=>{ let dt=new Date(y||now.getFullYear(),mi,d); if(!y&&dt<cut) dt=new Date(now.getFullYear()+1,mi,d); return dt; };
-  m=s.match(/(\d{1,2})\s*(?:-|–|—|to)\s*(\d{1,2})\s+([a-z]{3,9})\.?,?\s*(\d{4})?/);
-  if(m&&mon(m[3])>=0){ const y=m[4]?+m[4]:null; return {a:mk(+m[1],mon(m[3]),y),b:eod(mk(+m[2],mon(m[3]),y))}; }
-  const found=[]; const re=/(\d{1,2})\s+([a-z]{3,9})\.?,?\s*(\d{4})?/g; let x;
-  while((x=re.exec(s))){ const mi=mon(x[2]); if(mi>=0) found.push(mk(+x[1],mi,x[3]?+x[3]:null)); }
-  if(found.length){ found.sort((p,q)=>p-q); return {a:found[0],b:eod(found[found.length-1])}; }
-  if(/\b(sat|saturday|sun|sunday)\b/.test(s)) return {wk:true};
-  return null;
-}
-function brainSearch(events,q,now){
-  now=now||new Date();
-  const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
-  const win=brainWindow(q.when,now);
-  const main=[],undated=[];
-  for(const e of events){
-    if(!e||!(e.title||e.name)) continue;
-    if(q.town&&brainTown(e.town)!==q.town) continue;
-    const dr=brainDates(e,now);
-    if(dr&&dr.b&&dr.b<today) continue;
-    const vibes=brainTags(e);
-    const title=String(e.title||e.name).toLowerCase();
-    const rest=((e.description||e.desc||'')+' '+(e.category||'')+' '+(e.town||'')).toLowerCase();
-    let rel=0;
-    const hitK=(txt,k)=>k.length>=4?txt.includes(k):new RegExp('\\b'+k+'\\b').test(txt);
-    for(const k of q.keywords){ if(hitK(title,k)) rel+=15; else if(hitK(rest,k)) rel+=5; }
-    for(const v of q.vibes) if(vibes.includes(v)) rel+=30;
-    if((q.keywords.length||q.vibes.length)&&rel===0) continue;
-    if(q.free&&vibes.includes('free')) rel+=10;
-    const item={e,rel,vibes,dr};
-    if(win){
-      if(!dr){ undated.push(item); continue; }
-      let inWin;
-      if(dr.always) inWin=true; else if(dr.wk) inWin=q.when==='weekend'; else inWin=win.some(w=>dr.a<=w[1]&&dr.b>=w[0]);
-      if(!inWin) continue;
+  document.getElementById('copyBtn').onclick = function() {
+    const btn = this;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(lastMsg).then(function(){ btn.textContent = "✅ Copied! Now paste it to us on WhatsApp"; }, function(){ btn.textContent = "Press and hold the text above to copy it"; });
+    } else {
+      btn.textContent = "Press and hold the text above to copy it";
     }
-    main.push(item);
-  }
-  const t=x=>(x.dr&&x.dr.a)?x.dr.a.getTime():9e15;
-  const by=(x,y)=>(y.rel-x.rel)||(t(x)-t(y));
-  main.sort(by); undated.sort(by);
-  if(q.free){ const f=main.filter(i=>i.vibes.includes('free')); if(f.length){ main.length=0; main.push(...f); } }
-  return {main:main.slice(0,8),undated:undated.slice(0,4),totalMain:main.length,totalUndated:undated.length};
-}
-function brainWhy(item,q){
-  const parts=[];
-  const hit=q.vibes.filter(v=>item.vibes.includes(v));
-  if(hit.length) parts.push(hit.join(' / '));
-  if(item.e.town) parts.push(item.e.town);
-  if(item.dr&&item.dr.a) parts.push(item.dr.a.toLocaleDateString('en-ZA',{weekday:'short',day:'numeric',month:'short'}));
-  else if(item.dr&&item.dr.always) parts.push('daily');
-  else if(item.dr&&item.dr.wk) parts.push('weekends');
-  return parts.join(' · ');
-}
-// ===== END BRAIN =====
-
-function isEventQuery(lower){ return /\b(events?|what'?s on|whats on|happening|things to do|festivals?|concerts?|jazz|music|markets?|kids|this weekend)\b/.test(lower); }
-function smartEventsHtml(text){
-  const q=brainParse(text);
-  const now=new Date();
-  let qq=q, note='';
-  let r=brainSearch(EVENTS,q,now);
-  if(!r.main.length&&!r.undated.length){
-    const interest=q.keywords.length||q.vibes.length;
-    const tries=[];
-    if(q.when) tries.push([{when:null},'Nothing on that day, but here are other dates:']);
-    if(q.town&&interest){
-      tries.push([{when:null,town:null},"I couldn't find that in "+q.town+'. Here is what I found in other towns:']);
-      tries.push([{when:null,keywords:[],vibes:[]},'No match for that interest in '+q.town+'. Here is what is on in '+q.town+':']);
-    }
-    let cur=q;
-    for(const [mod,msg] of tries){
-      cur={...q,...mod};
-      const r2=brainSearch(EVENTS,cur,now);
-      if(r2.main.length||r2.undated.length){ r=r2; qq=cur; note=msg; break; }
-    }
-  }
-  const place=qq.town?' in '+qq.town:'';
-  const whenTxt={weekend:' this weekend',today:' today',week:' in the next 7 days'}[qq.when]||'';
-  const card=it=>eventCard({...it.e,desc:brainWhy(it,qq)});
-  let html='<div class="ai-card">';
-  if(!r.main.length&&!r.undated.length){
-    html+=`<h3>No matching events${esc(place)}${esc(whenTxt)}</h3>`+(qq.town&&!['Knysna','George','Plett','Sedgefield'].includes(qq.town)?`<p>I don't have an events feed for ${esc(qq.town)} yet.</p>`:'')+`<p>Try 'events in Knysna', or a different day or interest.</p>`;
-  } else {
-    if(note) html+=`<p><b>${esc(note)}</b></p>`;
-    if(r.main.length) html+=`<h3>${r.totalMain} event${r.totalMain===1?'':'s'}${note?'':esc(place)+esc(whenTxt)}</h3>`+r.main.map(card).join('');
-    else html+=`<h3>Nothing confirmed${esc(place)}${esc(whenTxt)}</h3>`;
-    if(r.totalMain>r.main.length) html+=`<p style="opacity:.7;font-size:13px">Showing ${r.main.length} of ${r.totalMain}. Add a town or interest to narrow it down.</p>`;
-    if(r.undated.length) html+=`<p style="margin-top:10px"><b>Dates not listed, check the link:</b></p>`+r.undated.map(card).join('');
-  }
-  if(q.free) html+='<p style="opacity:.7;font-size:13px">Prices are not in my data, so check each link to see what is free.</p>';
-  return html+'</div>';
-}
-const INTERESTS=[
-  [/\b(wild ?life|animals?|safari|monkeys?|seals?|whales?|dolphins?|elephants?)\b/,'wildlife','Wildlife'],
-  [/\b(birds?|birding|birdwatching|bird watching)\b/,'birds','Birdwatching'],
-  [/\b(hik(?:e|es|ing)|walks?|walking|trails?)\b/,'hiking','Hikes and walks'],
-  [/\b(kids|children|family)\b/,'kids','Family fun'],
-  [/\b(history|historic|museums?|heritage)\b/,'history','History'],
-  [/\b(adventure|kayak(?:ing)?|paragliding|zip ?line)\b/,'adventure','Adventure'],
-  [/\b(nature|forest|lagoon|lakes?)\b/,'nature','Nature']
-];
-function interestIn(lower){ for(const [re,tag,label] of INTERESTS) if(re.test(lower)) return {tag,label}; return null; }
-function thingsFor(tag,town){
-  const out=[];
-  for(const [t,d] of Object.entries(TOWNS)){
-    if(town&&t!==town) continue;
-    for(const x of (d.things||[])) if((x.tags||[]).includes(tag)) out.push({town:t,name:x.name,note:x.note});
-  }
-  return out;
-}
-function thingsHtml(it,town){
-  let list=thingsFor(it.tag,town), note='';
-  if(!list.length&&town){ list=thingsFor(it.tag,null); if(list.length) note="I don't have "+it.label.toLowerCase()+' listed for '+town+' yet. Here are some in other towns:'; }
-  if(!list.length) return '';
-  const here=town&&!note;
-  const items=list.slice(0,6).map(x=>`<li><b>${esc(x.name)}</b>${here?'':' ('+esc(x.town)+')'}: ${esc(x.note)}</li>`).join('');
-  return `<div class="ai-card"><h3>${esc(it.label+(here?' in '+town:''))}</h3>${note?`<p><b>${esc(note)}</b></p>`:''}<div class="wiki-box"><ul style="padding-left:18px">${items}</ul>`+
-    (it.tag==='wildlife'?'<p style="opacity:.7;font-size:13px">Wildlife sightings can never be guaranteed.</p>':'')+
-    `<p style="opacity:.7;font-size:13px">Want dates? Try 'events in ${esc(town||'Knysna')}'.</p></div></div>`;
-}
-function askWhichTown(){
-  return `<div class="ai-card"><p>Which town do you mean? I can tell you about Knysna, Plett, George, Sedgefield, Wilderness, Mossel Bay, Hartenbos, Great Brak River, Nature's Valley, Storms River and Oudtshoorn.</p><p>Try 'Tell me about Plett'.</p></div>`;
-}
-let RESTAURANTS=[
-  {id:'fat-fish',name:'The Fat Fish',town:'George',cuisine:'Seafood, waterfront'},
-  {id:'34-south',name:'34° South',town:'Knysna',cuisine:'Sushi & seafood, Knysna Waterfront'},
-  {id:'emily-moon',name:'Emily Moon',town:'Plett',cuisine:'Wood-fired, river view'},
-  {id:'east-head-cafe',name:'East Head Café',town:'Knysna',cuisine:'Breakfast with a view, Knysna Heads'}
-];
-async function loadRestaurants(){
-  try{
-    const r=await fetch('data/restaurants.json',{cache:'no-store'});
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const d=await r.json();
-    const list=(Array.isArray(d.restaurants)?d.restaurants:[]).filter(x=>x&&x.name);
-    if(list.length) RESTAURANTS=list;
-  }catch(e){ /* keep built-in list */ }
-}
-function isFeatured(r){
-  const today=new Date().toISOString().slice(0,10);
-  return !!r.featured&&(!r.featured_until||String(r.featured_until)>=today);
-}
-function waLink(n){
-  let d=String(n||'').replace(/\D/g,''); if(!d) return '';
-  if(d.startsWith('0')) d='27'+d.slice(1);
-  return 'https://wa.me/'+d;
-}
-function restCard(r){
-  const f=isFeatured(r);
-  const bits=[r.cuisine,r.price,r.best_for].filter(Boolean).map(esc).join(' · ');
-  let h=`<div class="event"><h4>${f?'⭐ ':''}${esc(r.name)}</h4><div class="meta">📍 ${esc(r.town||'')}${bits?' • '+bits:''}</div>`;
-  if(f){
-    if(r.note) h+=`<p style="color:#d6def0;font-size:14px">${esc(r.note)}</p>`;
-    if(r.tip) h+=`<p style="color:#facc15;font-size:14px">💡 ${esc(r.tip)}</p>`;
-    if(r.hours) h+=`<p style="font-size:13px;opacity:.8">🕒 ${esc(r.hours)}</p>`;
-    const w=waLink(r.whatsapp);
-    if(w) h+=`<a href="${esc(w)}" target="_blank" rel="noopener">Book on WhatsApp →</a>`;
-  }
-  return h+'</div>';
-}
-const REST_STOP=new Set(['restaurant','restaurants','eat','eating','food','dinner','lunch','breakfast','place','places','where','best','good','recommend','near','cafe','cafes','coffee','spot','spots','nice','tonight','today','friendly']);
-function restNorm(t){ return String(t||'').toLowerCase().replace(/halal\b/g,'halaal').replace(/\b(kid|kids|children)\b/g,'family'); }
-function restaurantsInner(lower,tn){
-  const q=brainParse(lower||'');
-  const kws=[...new Set(q.keywords.map(restNorm))].filter(k=>k&&!REST_STOP.has(k));
-  const pool=RESTAURANTS.filter(r=>r&&r.name&&(!tn||brainTown(r.town)===tn));
-  if(!pool.length) return {html:`<p>I don't have restaurants listed for ${esc(tn||'that area')} yet.</p>`,anyF:false};
-  let scored=pool.map(r=>{
-    const t=restNorm([r.name,r.cuisine,r.note,r.tip,r.food,r.facilities,r.best_for,r.vibe,r.type].join(' '));
-    let rel=0; for(const k of kws) if(t.includes(k)) rel+=10;
-    return {r,rel,f:isFeatured(r)?1:0};
-  });
-  let note='';
-  if(kws.length){
-    const m=scored.filter(x=>x.rel>0);
-    if(m.length) scored=m; else note=`<p><b>No exact match for that, so here is everything listed${tn?' in '+esc(tn):''}:</b></p>`;
-  }
-  scored.sort((a,b)=>(b.f-a.f)||(b.rel-a.rel));
-  const shown=scored.slice(0,8);
-  return {html:note+shown.map(x=>restCard(x.r)).join(''),anyF:shown.some(x=>x.f)};
-}
-function restaurantsHtml(lower,tn){
-  const o=restaurantsInner(lower,tn);
-  return `<div class="ai-card"><h3>🍽️ Restaurants${tn?' in '+esc(tn):''}</h3>${o.html}`+
-    (o.anyF?'<p style="opacity:.7;font-size:13px">⭐ Featured listings are paid placements.</p>':'')+
-    '<p style="opacity:.7;font-size:13px"><a href="join.html">Own a business? Get featured →</a></p></div>';
-}
-async function renderRestaurantsPanel(){
-  const el=document.getElementById('restaurantsList');
-  const o=restaurantsInner('',null);
-  el.innerHTML=o.html+(o.anyF?'<p style="opacity:.7;font-size:13px">⭐ Featured listings are paid placements.</p>':'')+'<p style="opacity:.7;font-size:13px"><a href="join.html">Own a business? Get featured →</a></p>';
-}
-function smallTalk(lower){
-  const tips="<p>Try:</p><p>• '3 days in Plett'<br>• 'Tell me about George'<br>• 'Weather in Knysna'<br>• 'Beaches in Plett'<br>• 'Events in Sedgefield'<br>• 'Holidays' or 'Rates'</p>";
-  if(/^\s*(hi|hello|hey|howzit|hallo|yo|good (morning|afternoon|evening))\b/.test(lower))
-    return `<div class="ai-card"><h3>Hi there! 👋</h3><p>I'm Garden Route AI. I can plan a trip, tell you about a town, and check weather, sea conditions, events and more.</p>${tips}</div>`;
-  if(/\b(thanks|thank you|cheers|dankie)\b/.test(lower))
-    return `<div class="ai-card"><p>You're welcome! Ask me anything else about the Garden Route. 🌿</p></div>`;
-  if(/\b(help|what can you do|how does this work)\b/.test(lower))
-    return `<div class="ai-card"><h3>What I can do</h3>${tips}</div>`;
-  return `<div class="ai-card"><p>I'm not sure about that one yet. I can plan trips, describe towns, and check weather, sea, events, restaurants, holidays and rates.</p>${tips}</div>`;
-}
-async function ask(){
-  const input=document.getElementById('q'); const text=input.value.trim(); if(!text) return;
-  add(`<div class="user-msg">${esc(text)}</div>`); input.value='';
-  const lower=text.toLowerCase(); const town=detectTown(text)||'Knysna';
-  if(/\b(get featured|list my business|add my business|advertise)\b/.test(lower)){ add('<div class="ai-card"><h3>🏪 Get Featured</h3><p>Own a restaurant, guesthouse or activity on the Garden Route? Tell us about your business.</p><p><a href="join.html">Open the Get Featured form →</a></p></div>'); return; }
-  if(!/\babout\b/.test(lower)){ for(const t of TOPICS){ if(t.re.test(lower)){ await runTopic(t.id,detectTown(text),lower); return; } } }
-  if(lower.includes('about')){
-    if(!detectTown(text)){ add(askWhichTown()); return; }
-    const wikiTitle=WIKI_MAP[town.toLowerCase()]||town;
-    const t=TOWNS[town];
-    if(t&&t.text){
-      const paras=(Array.isArray(t.text)?t.text:[t.text]).filter(Boolean).map(x=>`<p>${esc(x)}</p>`).join('');
-      const hl=Array.isArray(t.highlights)&&t.highlights.length?`<h4>Don't miss</h4><ul style="padding-left:18px">${t.highlights.map(h=>`<li>${esc(h)}</li>`).join('')}</ul>`:'';
-      const best=t.best_time?`<p><b>Best time to visit:</b> ${esc(t.best_time)}</p>`:'';
-      const tip=t.tip?`<p><b>Local tip:</b> ${esc(t.tip)}</p>`:'';
-      const pid='p'+Date.now(); add(`<div class="ai-card"><h3>About ${esc(town)}</h3><div class="wiki-box"><div id="${pid}"></div>${paras}${hl}${best}${tip}<p><a href="https://en.wikipedia.org/wiki/${wikiTitle}" target="_blank" rel="noopener">More on Wikipedia →</a></p></div></div>`);
-      loadTownPhoto(wikiTitle,pid);
-      return;
-    }
-    const id='c'+Date.now();
-    add(`<div class="ai-card" id="${id}"><h3>About ${town}</h3><p>Loading Wikipedia...</p></div>`);
-    const card=document.getElementById(id);
-    try{
-      const r=await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${wikiTitle}`);
-      const d=await r.json();
-      if(d.type==='disambiguation'||(d.extract||'').toLowerCase().includes('may refer to')){
-        card.innerHTML=`<h3>About ${town}</h3><div class="wiki-box"><h4>${town}, Garden Route</h4><p>${town} is a beautiful town on South Africa's Garden Route, famous for its lagoon, forests and outdoor activities.</p><p><a href="https://en.wikipedia.org/wiki/${wikiTitle}" target="_blank">Read more →</a></p></div>`;
-      } else {
-        card.innerHTML=`<h3>About ${town}</h3><div class="wiki-box"><h4>${esc(d.title||town)}</h4><p>${esc(d.extract||'No summary.')}</p><p><a href="${d.content_urls?.desktop?.page||'https://en.wikipedia.org/wiki/'+wikiTitle}" target="_blank">Read more →</a></p></div>`;
-      }
-    }catch(e){ card.innerHTML=`<h3>About ${town}</h3><p>${town} is on the Garden Route - lagoon, forest, beaches and great restaurants.</p>`; }
-    window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}); return;
-  }
-  if(!/\b(events?|what'?s on|whats on|happening|this weekend|itinerary|days?)\b/.test(lower)){ const it=interestIn(lower.replace(/wild life/g,'wildlife')); if(it){ const h=thingsHtml(it,detectTown(text)); if(h){ add(h); return; } } }
-  if(isEventQuery(lower)){ add(smartEventsHtml(text)); return; }
-  const wantsPlan=detectTown(text)||/\b(\d+\s*days?|itinerary|plan|trip|visit|weekend)\b/.test(lower);
-  if(!wantsPlan){ add(smallTalk(lower)); return; }
-  const m=text.match(/(\d+)\s*day/); const days=m?parseInt(m[1]):2;
-  let html=`<div class="ai-card"><h3>${days}-day itinerary in ${town}</h3>`;
-  if(town==='Knysna') html+=`<p><b>Day 1:</b> Knysna Heads → Waterfront lunch → Lagoon cruise.</p><p><b>Day 2:</b> Featherbed → Leisure Isle → Forest / market.</p>`;
-  else if(town==='George') html+=`<p><b>Day 1:</b> Outeniqua trails → Botanical Garden → Farmers Market.</p><p><b>Day 2:</b> Wilderness beach → Map of Africa.</p>`;
-  else if(town==='Plett') html+=`<p><b>Day 1:</b> Robberg hike → Central Beach.</p><p><b>Day 2:</b> Monkeyland / Birds of Eden → Lagoon cruise.</p>`;
-  else html+=`<p><b>Day 1:</b> Town centre, lagoon / beach, market.</p><p><b>Day 2:</b> Nature reserve + sunset viewpoint.</p>`;
-  if(days>2) html+=`<p><b>Day 3:</b> Day trip to nearby town.</p>`;
-  html+=`</div>`; add(html);
-}
+  };
+  document.getElementById('waBtn').onclick = function() {
+    window.open(`https://api.whatsapp.com/send?phone=${MY_NUMBER}&text=${encodeURIComponent(lastMsg)}`, '_blank');
+  };
+  document.getElementById('emailBtn').onclick = function() {
+    window.location.href = `mailto:${MY_EMAIL}?subject=${encodeURIComponent("New Featured Signup")}&body=${encodeURIComponent(lastMsg)}`;
+  };
+  // TODO: add your Yoco payment link here later
+  // window.location.href = "PASTE_YOCO_LINK_HERE";
 </script>
 </body>
 </html>
