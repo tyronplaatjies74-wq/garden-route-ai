@@ -277,15 +277,59 @@ async function renderSeaPanel(){
 }
 
 let HOL_CACHE=null;
-async function fetchHolidays(){
+async function fetchAllHolidays(){
   if(HOL_CACHE&&Date.now()-HOL_CACHE.t<3600000) return HOL_CACHE.d;
   const y=new Date().getFullYear();
   const res=await Promise.allSettled([y,y+1].map(yr=>fetch(`https://date.nager.at/api/v3/PublicHolidays/${yr}/ZA`).then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })));
-  const all=res.filter(x=>x.status==='fulfilled').flatMap(x=>x.value);
+  const all=res.filter(x=>x.status==='fulfilled').flatMap(x=>x.value).sort((a,b)=>a.date<b.date?-1:1);
   if(!all.length) throw new Error('no holiday data');
+  HOL_CACHE={t:Date.now(),d:all}; return all;
+}
+async function fetchHolidays(){
   const today=new Date().toISOString().slice(0,10);
-  const up=all.filter(h=>h.date>=today).sort((a,b)=>a.date<b.date?-1:1).slice(0,6);
-  HOL_CACHE={t:Date.now(),d:up}; return up;
+  return (await fetchAllHolidays()).filter(h=>h.date>=today).slice(0,6);
+}
+const MONTHS=['january','february','march','april','may','june','july','august','september','october','november','december'];
+function parseMD(q){
+  const mon='(jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)';
+  let m=q.match(new RegExp('\\b(\\d{1,2})(?:st|nd|rd|th)?\\s+(?:of\\s+)?'+mon+'\\b'));
+  let d,mo;
+  if(m){ d=+m[1]; mo=m[2]; }
+  else { m=q.match(new RegExp('\\b'+mon+'\\s+(\\d{1,2})(?:st|nd|rd|th)?\\b')); if(!m) return null; mo=m[1]; d=+m[2]; }
+  const mi=MONTHS.findIndex(n=>n.startsWith(mo.slice(0,3)));
+  if(mi<0||d<1||d>31) return null;
+  return {m:mi+1,d};
+}
+const HOL_WORDS=['heritage','freedom','workers','youth','women','reconciliation','human rights','new year','christmas','boxing','good friday','family day','easter'];
+function holLine(h,today){
+  const dt=new Date(h.date+'T12:00:00');
+  const when=dt.toLocaleDateString('en-ZA',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  return `<p>🎉 <b>${esc(h.localName||h.name)}</b>: ${esc(when)}${h.date<today?' (already passed)':''}</p>`;
+}
+async function holidaysChat(lower){
+  await liveCard('🎉 Holidays',async()=>{
+    const all=await fetchAllHolidays();
+    const today=new Date().toISOString().slice(0,10);
+    const q=lower||'';
+    const md=parseMD(q);
+    if(md){
+      const key=String(md.m).padStart(2,'0')+'-'+String(md.d).padStart(2,'0');
+      const hits=all.filter(h=>h.date.slice(5)===key);
+      const label=md.d+' '+MONTHS[md.m-1].replace(/^./,c=>c.toUpperCase());
+      if(!hits.length) return `<p>${esc(label)} is not a public holiday in South Africa.</p>`;
+      const next=hits.find(h=>h.date>=today)||hits[hits.length-1];
+      return `<p>${esc(label)} is a public holiday.</p>`+holLine(next,today);
+    }
+    const word=HOL_WORDS.find(w=>q.includes(w));
+    if(word){
+      const hits=all.filter(h=>((h.localName||'')+' '+(h.name||'')).toLowerCase().includes(word));
+      if(hits.length){
+        const next=hits.find(h=>h.date>=today)||hits[hits.length-1];
+        return holLine(next,today)+'<p style="opacity:.7;font-size:13px">South African public holidays from Nager.Date.</p>';
+      }
+    }
+    return holHtml(all.filter(h=>h.date>=today).slice(0,6));
+  });
 }
 function holHtml(list){
   if(!list.length) return '<p>No upcoming public holidays found.</p>';
@@ -364,7 +408,6 @@ async function seaChat(town){
   const names=(town&&SEA_COORDS[town])?[town]:['George','Knysna','Plett'];
   await liveCard(names.length===1?`🌊 Sea & sun in ${town}`:'🌊 Sea & sun',()=>seaRows(names));
 }
-async function holidaysChat(){ await liveCard('🎉 Upcoming holidays',async()=>holHtml(await fetchHolidays())); }
 async function ratesChat(){ await liveCard('💱 Exchange rates',async()=>ratesHtml(await fetchRates())); }
 async function loadTownPhoto(wikiTitle,pid){
   try{
@@ -378,7 +421,7 @@ async function loadTownPhoto(wikiTitle,pid){
 async function runTopic(id,tn,lower){
   if(id==='weatherPanel') return weatherChat(tn);
   if(id==='seaPanel') return seaChat(tn);
-  if(id==='holidaysPanel') return holidaysChat();
+  if(id==='holidaysPanel') return holidaysChat(lower);
   if(id==='ratesPanel') return ratesChat();
   if(id==='nearby'){
     const kind=/beach/.test(lower)?'beach':/viewpoint|lookout/.test(lower)?'viewpoint':/toilet|restroom/.test(lower)?'toilets':'cafe';
@@ -391,7 +434,7 @@ const PANEL_LOADERS={weatherPanel:renderWeatherPanel,seaPanel:renderSeaPanel,hol
 const TOPICS=[
   {re:/\b(weather|forecast|temperature)\b/, id:'weatherPanel'},
   {re:/\b(sea|waves?|surf|surfing|swell|ocean|swim|swimming|tides?|sunrise|sunset)\b/, id:'seaPanel'},
-  {re:/\b(holidays?|long weekend)\b/, id:'holidaysPanel'},
+  {re:/\b(holidays?|long weekend|heritage|freedom day|workers'? day|youth day|women'?s day|reconciliation|human rights day|new year'?s?|christmas|boxing day|good friday|family day|easter)\b|\b\d{1,2}(?:st|nd|rd|th)?\s+(?:of\s+)?(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\b|\b(?:jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|june?|july?|aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?)\s+\d{1,2}(?:st|nd|rd|th)?\b/, id:'holidaysPanel'},
   {re:/\b(rates?|exchange|dollars?|euros?|pounds?|currency|usd|eur|gbp|convert)\b/, id:'ratesPanel'},
   {re:/\b(restaurants?|eat|food|dinner|lunch|breakfast)\b/, id:'restaurantsPanel'},
   {re:/\b(emergency|hospital|police|ambulance)\b/, id:'emergencyPanel'},
@@ -422,6 +465,16 @@ function topicCard(id,town){
     body=c.innerHTML;
   }
   return `<div class="ai-card"><h3>${esc(title)}</h3><div class="wiki-box">${body}</div></div>`;
+}
+function smallTalk(lower){
+  const tips="<p>Try:</p><p>• '3 days in Plett'<br>• 'Tell me about George'<br>• 'Weather in Knysna'<br>• 'Beaches in Plett'<br>• 'Events in Sedgefield'<br>• 'Holidays' or 'Rates'</p>";
+  if(/^\s*(hi|hello|hey|howzit|hallo|yo|good (morning|afternoon|evening))\b/.test(lower))
+    return `<div class="ai-card"><h3>Hi there! 👋</h3><p>I'm Garden Route AI. I can plan a trip, tell you about a town, and check weather, sea conditions, events and more.</p>${tips}</div>`;
+  if(/\b(thanks|thank you|cheers|dankie)\b/.test(lower))
+    return `<div class="ai-card"><p>You're welcome! Ask me anything else about the Garden Route. 🌿</p></div>`;
+  if(/\b(help|what can you do|how does this work)\b/.test(lower))
+    return `<div class="ai-card"><h3>What I can do</h3>${tips}</div>`;
+  return `<div class="ai-card"><p>I'm not sure about that one yet. I can plan trips, describe towns, and check weather, sea, events, restaurants, holidays and rates.</p>${tips}</div>`;
 }
 async function ask(){
   const input=document.getElementById('q'); const text=input.value.trim(); if(!text) return;
@@ -459,6 +512,8 @@ async function ask(){
     const shown=list.length?list:EVENTS;
     add(`<div class="ai-card"><h3>Here's what I found (${shown.length}):</h3>${shown.map(eventCard).join('')}</div>`); return;
   }
+  const wantsPlan=detectTown(text)||/\b(\d+\s*days?|itinerary|plan|trip|visit|weekend)\b/.test(lower);
+  if(!wantsPlan){ add(smallTalk(lower)); return; }
   const m=text.match(/(\d+)\s*day/); const days=m?parseInt(m[1]):2;
   let html=`<div class="ai-card"><h3>${days}-day itinerary in ${town}</h3>`;
   if(town==='Knysna') html+=`<p><b>Day 1:</b> Knysna Heads → Waterfront lunch → Lagoon cruise.</p><p><b>Day 2:</b> Featherbed → Leisure Isle → Forest / market.</p>`;
