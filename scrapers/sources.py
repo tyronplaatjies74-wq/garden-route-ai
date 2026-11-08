@@ -1,6 +1,7 @@
 import requests, re, json, os, time, copy, tempfile
 from bs4 import BeautifulSoup
 from scrapers.common import normalise_town, make_id, clean_date
+from scrapers.dates import parse_event_dates, apply_dates   # CHANGED: new date parser
 from datetime import datetime, timedelta
 
 HEADERS = {"User-Agent": "Mozilla/5.0 GardenRouteAI-Bot/1.0"}
@@ -50,8 +51,10 @@ def _save_cache(events):
         pass
 
 # ---------------------------------------------------------------------------
-# DATE PARSING - THIS IS THE FIX
+# DATE PARSING
 # clean_date() in common.py only understands ISO. This understands humans.
+# (parse_human_date is kept for compatibility; add_event now uses
+# parse_event_dates from scrapers/dates.py, which also returns end dates.)
 # ---------------------------------------------------------------------------
 _MONTHS = {
     "jan": 1, "january": 1, "feb": 2, "february": 2, "mar": 3, "march": 3,
@@ -69,10 +72,8 @@ def parse_human_date(raw, now=None):
     """'14-16 November 2026' -> '2026-11-14', '14 Nov' -> '2026-11-14', 'Every Saturday' -> next Saturday ISO."""
     if not raw:
         return None
-    # 1. Try ISO first (via common.py)
     iso = clean_date(raw)
     if iso:
-        # clean_date returns full ISO datetime, keep only date part for consistency
         return iso[:10]
 
     s = str(raw).strip()
@@ -80,35 +81,25 @@ def parse_human_date(raw, now=None):
     now = now or datetime.now()
     year = now.year
 
-    # 2. Recurring: "Every Saturday 07:30-12:00" / "Every Friday from 17:00"
     m = re.search(r"every\s+(monday|tuesday|wednesday|thursday|friday|saturday|sunday|mon|tue|tues|wed|thu|thur|thurs|fri|sat|sun)\b", low)
     if m:
         target = _WEEKDAYS[m.group(1)]
         delta = (target - now.weekday()) % 7
-        # If today is that weekday but time passed, still show today - frontend filters today as valid
         return (now + timedelta(days=delta)).date().isoformat()
 
-    # 3. Nth weekday: "3rd Saturday", "2nd and last Saturday", "last Saturday"
     m = re.search(r"(1st|2nd|3rd|4th|last)\s+(monday|tuesday|wednesday|thursday|friday|saturday|sunday)", low)
     if m:
-        # For simplicity, return the next occurrence of that weekday.
-        # Markets repeat monthly, frontend showing next one is correct for "This Weekend".
         target = _WEEKDAYS[m.group(2)]
         delta = (target - now.weekday()) % 7
         if delta == 0:
             delta = 7
-        # If it's "2nd Saturday" and we are past 2nd this month, next month is more accurate,
-        # but next-weekday is good enough for weekend filter and never returns placeholder.
         return (now + timedelta(days=delta)).date().isoformat()
 
-    # 4. Explicit date: "14-16 November 2026" / "14 Nov" / "14 November" / "Nov 14, 2026"
-    # Try Day Month Year first
     m = re.search(r"(\d{1,2})(?:\s*-\s*\d{1,2})?\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec|january|february|march|april|june|july|august|september|october|november|december)\b\s*(\d{4})?", low)
     if m:
         day = int(m.group(1))
         month = _MONTHS[m.group(2)]
         y = int(m.group(3)) if m.group(3) else year
-        # If no year and date already passed this year, assume next year
         try:
             d = datetime(y, month, day)
             if not m.group(3) and d < now.replace(hour=0, minute=0, second=0, microsecond=0):
@@ -117,7 +108,6 @@ def parse_human_date(raw, now=None):
         except ValueError:
             pass
 
-    # Month Day Year: "November 14, 2026" / "Nov 14"
     m = re.search(r"(jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec|january|february|march|april|june|july|august|september|october|november|december)\s+(\d{1,2})(?:\s*-\s*\d{1,2})?,?\s*(\d{4})?", low)
     if m:
         month = _MONTHS[m.group(1)]
@@ -131,7 +121,6 @@ def parse_human_date(raw, now=None):
         except ValueError:
             pass
 
-    # 5. Numeric: "14/11/2026" / "2026-11-14" / "14-11-2026"
     m = re.search(r"(\d{4})-(\d{1,2})-(\d{1,2})", s)
     if m:
         try:
@@ -151,25 +140,22 @@ def find_date_in_text(text):
     """Look for any date pattern in a chunk of card text."""
     if not text:
         return ""
-    # Prefer explicit Date: label first
     m = DATE_RE.search(text)
     if m:
         return m.group(1).strip()
-    # Then any Day Month pattern
     m = re.search(r"\d{1,2}(?:\s*-\s*\d{1,2})?\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec|January|February|March|April|June|July|August|September|October|November|December)\b[^\n|]{0,12}", text, re.I)
     if m:
         return m.group(0).strip()
     m = re.search(r"(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Sept|Oct|Nov|Dec|January|February|March|April|June|July|August|September|October|November|December)\s+\d{1,2}[^\n|]{0,12}", text, re.I)
     if m:
         return m.group(0).strip()
-    # Then recurring
     m = re.search(r"Every\s+(?:Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday)\b[^\n|]{0,20}", text, re.I)
     if m:
         return m.group(0).strip()
     return ""
 
 # ---------------------------------------------------------------------------
-# Junk filter - unchanged
+# Junk filter
 # ---------------------------------------------------------------------------
 BAD_EXACT = {
     "menu", "login", "log in", "sign in", "subscribe", "advertisement", "advertisements",
@@ -177,7 +163,9 @@ BAD_EXACT = {
 }
 BAD_PHRASES = re.compile(
     r"\b(cookie (policy|settings|notice|consent|preferences)|privacy (policy|notice)|"
-    r"terms (and|&) conditions|subscribe to|sign up for|newsletter sign ?up|accept (all )?cookies)\b",
+    r"terms (and|&) conditions|subscribe to|sign up for|newsletter sign ?up|accept (all )?cookies|"
+    # CHANGED: page banners that were being scraped as events
+    r"support (local )?journalism|follow us on|advertise with us|become a member|donate (now|today))\b",
     re.I,
 )
 
@@ -209,41 +197,33 @@ def add_event(events, title, town, date, link, source=""):
         return
     town = normalise_town(town)
 
-    # FIX: parse human dates to ISO, keep raw as fallback only if unparsable
-    iso_date = parse_human_date(date) if date else None
+    # CHANGED: parse_event_dates returns start, end and recurrence
+    info = parse_event_dates(date) if date else None
+    iso_date = info["start"] if info else None
     if iso_date:
         date_val = iso_date
         has_date = True
     else:
         date_val = clean(date) or PLACEHOLDER_DATE
         has_date = date_val != PLACEHOLDER_DATE
-        # If we have a non-ISO string that we couldn't parse, still treat as dateless
-        # for dedupe-upgrade purposes, so a later ISO version can upgrade it
-        if has_date and len(date_val) > 10 and not re.match(r"^\d{4}-\d{2}-\d{2}", date_val):
-            # Keep raw for display but mark as not reliably dated - upgrade allowed
-            # We keep has_date True so markets don't get dropped, but dedupe will upgrade
-            pass
 
     key = (title.lower(), town.lower())
     existing = events.by_key.get(key)
     if existing is not None:
         old_has_date = existing["date"] != PLACEHOLDER_DATE
-        # If old is ISO and new is not, keep old
         old_is_iso = bool(re.match(r"^\d{4}-\d{2}-\d{2}", existing["date"]))
         new_is_iso = bool(re.match(r"^\d{4}-\d{2}-\d{2}", date_val))
         if not has_date:
             return
         if not old_has_date:
-            existing["date"] = date_val
-            existing["id"] = make_id(title, date_val, town)
+            apply_dates(existing, title, town, date_val, info, make_id)   # CHANGED
             if source:
                 existing["source"] = source
             return
         if old_is_iso and not new_is_iso:
             return  # don't downgrade ISO to raw string
         if not old_is_iso and new_is_iso:
-            existing["date"] = date_val  # upgrade raw -> ISO
-            existing["id"] = make_id(title, date_val, town)
+            apply_dates(existing, title, town, date_val, info, make_id)   # CHANGED
             if source:
                 existing["source"] = source
             return
@@ -261,6 +241,7 @@ def add_event(events, title, town, date, link, source=""):
         "link": link,
         "source": source or town.lower()
     }
+    apply_dates(rec, title, town, date_val, info, make_id)   # CHANGED
     events.by_key[key] = rec
     events.append(rec)
 
@@ -294,7 +275,6 @@ def scrape_all():
         for a in soup.find_all("a", href=True):
             href = a["href"]
             if "/event" in href:
-                # FIX: try to find date in parent / nearby text, not just ""
                 parent = a.find_parent(["article", "div", "li"])
                 ctx = parent.get_text(" ", strip=True) if parent else a.get_text(" ", strip=True)
                 d = find_date_in_text(ctx)
@@ -308,7 +288,6 @@ def scrape_all():
             a = card.find("a", href=True)
             if not h or not a: continue
             link = a["href"] if a["href"].startswith("http") else "https://toodoo.co.za" + a["href"]
-            # FIX: read date from card text / time / datetime attr
             d = ""
             time_el = card.find("time")
             if time_el and time_el.get("datetime"):
