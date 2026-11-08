@@ -29,3 +29,187 @@
   .ai-card h3{font-size:18px;margin-bottom:10px}
   .ai-card p{line-height:1.6;color:#d6def0;font-size:16px;margin-bottom:8px}
   .ai-card a{color:#7db8ff}
+  .event{background:#1a2442;border:1px solid #2a3556;border-radius:16px;padding:14px;margin:12px 0}
+  .event h4{color:#facc15;font-size:17px;line-height:1.35;margin-bottom:6px}
+  .event .meta{font-size:14px;opacity:.9;margin-bottom:6px}
+  .event a{color:#7db8ff;text-decoration:none;font-size:14px}
+  .save-btn{background:#243055;color:#fff;border:1px solid #3a4770;padding:7px 14px;border-radius:999px;margin-top:10px;cursor:pointer;font-size:14px}
+  .save-btn.saved{background:#ff6b00;border-color:#ff6b00}
+  .panel{background:rgba(20,28,52,.94);border-radius:20px;padding:16px;margin:10px 0;display:none}
+  .panel.show{display:block}
+  .panel h4{margin-bottom:8px}
+  .panel p,.panel li{font-size:15px;line-height:1.6;color:#d6def0}
+  .panel ul{padding-left:18px}
+  .user-msg{background:#ff6b00;color:#fff;padding:12px 16px;border-radius:20px 20px 4px 20px;max-width:85%;margin:12px 0 12px auto;font-weight:600;width:fit-content}
+  .wiki-box{background:#fff;color:#111;border-radius:14px;padding:14px;margin-top:10px}
+  .wiki-box h4{color:#111;margin-bottom:6px}
+  .wiki-box p{color:#333;font-size:14px;line-height:1.6}
+  .wiki-box a{color:#2563eb}
+  .composer{position:fixed;bottom:0;left:0;right:0;padding:12px 14px 18px;display:flex;gap:10px}
+  .composer input{flex:1;background:rgba(20,28,52,.92);border:1px solid rgba(255,255,255,.06);color:#fff;padding:16px 20px;border-radius:999px;font-size:16px;outline:none}
+  .composer input::placeholder{color:#7f8ba8}
+  .composer button{background:#f26a0f;color:#fff;border:none;padding:0 26px;border-radius:999px;font-weight:700;font-size:16px;cursor:pointer}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🌿 Garden Route AI <span>✔</span></h1>
+  <button class="menu-btn" onclick="toggleMenu(event)">⋮</button>
+  <div class="menu" id="menu">
+    <button onclick="showPanel('eventsPanel')">📅 Events</button>
+    <button onclick="showPanel('restaurantsPanel')">🍽️ Restaurants</button>
+    <button onclick="showPanel('savedPanel')">❤️ Saved</button>
+    <button onclick="showPanel('emergencyPanel')">🚨 Emergency</button>
+    <button onclick="showPanel('weatherPanel')">🌤️ Weather</button>
+    <button onclick="showPanel('budgetPanel')">💰 Budget</button>
+    <button onclick="showPanel('highlightsPanel')">⭐ Highlights</button>
+  </div>
+</header>
+
+<div class="wrap" id="main">
+  <div class="card">
+    <p>Hi! I'm Garden Route AI 🌿</p>
+    <p>I build itineraries. Tell me where you want to go and how many days — e.g. '2 days in Knysna'.</p>
+    <p>Tap ⋮ at the top for Events, Restaurants, Saved, Emergency, Weather, Budget &amp; Highlights.</p>
+  </div>
+
+  <div id="eventsPanel" class="panel"><h4>📅 Events</h4><div id="eventsList"></div></div>
+  <div id="restaurantsPanel" class="panel"><h4>🍽️ Restaurants</h4><ul><li><b>The Fat Fish</b> - George - Seafood, waterfront</li><li><b>34° South</b> - Knysna Waterfront - Sushi &amp; seafood</li><li><b>Emily Moon</b> - Plett - River view, wood-fired</li><li><b>East Head Café</b> - Knysna Heads - Breakfast with view</li></ul></div>
+  <div id="savedPanel" class="panel"><h4>❤️ Saved</h4><div id="savedList"><p>No saved items yet. Tap Save on any event.</p></div></div>
+  <div id="emergencyPanel" class="panel"><h4>🚨 Emergency</h4><ul><li>Emergency: <b>10111</b> / Ambulance: <b>10177</b></li><li>George Hospital: <b>044 874 5122</b></li><li>Knysna Hospital: <b>044 302 8400</b></li><li>NSRI Sea Rescue: <b>082 990 5975</b></li></ul></div>
+  <div id="weatherPanel" class="panel"><h4>🌤️ Weather</h4><p>George: 18°C, light rain possible. Knysna: 19°C, partly cloudy. Plett: 20°C, sunny spells. Wind SE 15-25 km/h. Best beach window: 10am - 3pm.</p></div>
+  <div id="budgetPanel" class="panel"><h4>💰 Budget</h4><ul><li>Budget day: R450 - R750</li><li>Mid-range: R900 - R1500</li><li>Splurge: R2000+</li></ul></div>
+  <div id="highlightsPanel" class="panel"><h4>⭐ Highlights</h4><ul><li>Knysna Heads Viewpoint</li><li>Robberg Nature Reserve, Plett</li><li>Outeniqua Mountains, George</li><li>Wilderness Beach &amp; Map of Africa</li><li>Sedgefield Lagoon</li></ul></div>
+
+  <div id="chat"></div>
+</div>
+
+<div class="composer">
+  <input id="q" placeholder="Ask for an itinerary... e.g. 2 days in Knysna" onkeydown="if(event.key==='Enter')ask()">
+  <button onclick="ask()">Ask</button>
+</div>
+
+<script>
+const WIKI_MAP = {
+  "george":"George,_Western_Cape",
+  "knysna":"Knysna",
+  "plett":"Plettenberg_Bay",
+  "plettenberg bay":"Plettenberg_Bay",
+  "sedgefield":"Sedgefield,_South_Africa",
+  "wilderness":"Wilderness,_South_Africa",
+  "mossel bay":"Mossel_Bay",
+  "oudtshoorn":"Oudtshoorn",
+  "garden route":"Garden_Route"
+};
+let EVENTS = [
+  {id:"f1", title:"Leisure Isle Festival – 21st Anniversary", town:"Knysna", date:"See link", desc:"Family festival on Leisure Isle."},
+  {id:"f2", title:"ForestJAZZ in November", town:"Knysna", date:"See link", desc:"Jazz in the Knysna forest."},
+  {id:"f3", title:"Knysna Heads Sunset Cruise", town:"Knysna", date:"Daily", desc:"Lagoon cruise to the Heads."},
+  {id:"f4", title:"Outeniqua Farmers Market", town:"George", date:"Sat 8am", desc:"Local food & crafts."},
+  {id:"f5", title:"Robberg Hike & Beach Day", town:"Plett", date:"Daily", desc:"Seal colony, dolphins."},
+  {id:"f6", title:"Wilderness Map of Africa Viewpoint", town:"Wilderness", date:"Daily", desc:"Viewpoint over Kaaimans River."},
+  {id:"f7", title:"Sedgefield Slow Market", town:"Sedgefield", date:"Sat", desc:"Slow Town market, lagoon side."}
+];
+let updatedAt='';
+let saved=[];
+try{ saved=JSON.parse(localStorage.getItem('gr_saved_v2')||'[]'); if(!Array.isArray(saved)) saved=[]; }catch(e){ saved=[]; }
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function safeUrl(u){ return /^https?:\/\//i.test(u||'')?u:''; }
+function isSaved(id){ return saved.some(x=>x.id===id); }
+function sameTown(e,town){ return String(detectTown(e.town||'')||e.town||'').toLowerCase()===town.toLowerCase(); }
+function eventCard(e){
+  const url=safeUrl(e.link);
+  const link=url?`<a href="${esc(url)}" target="_blank" rel="noopener">View details →</a><br>`:'';
+  const desc=e.desc?`<p style="color:#d6def0;font-size:14px">${esc(e.desc)}</p>`:'';
+  const s=isSaved(e.id);
+  return `<div class="event"><h4>${esc(e.title)}</h4><div class="meta">📍 ${esc(e.town||'Garden Route')} • 📅 ${esc(e.date||'See link')}</div>${desc}${link}<button class="save-btn ${s?'saved':''}" data-id="${esc(e.id)}" onclick="toggleSave(this)">${s?'❤️ Saved':'🤍 Save'}</button></div>`;
+}
+function toggleMenu(e){ e.stopPropagation(); document.getElementById('menu').classList.toggle('show'); }
+document.addEventListener('click',()=>{ document.getElementById('menu').classList.remove('show'); });
+function showPanel(id){
+  document.getElementById('menu').classList.remove('show');
+  document.querySelectorAll('.panel').forEach(p=>{ if(p.id!==id) p.classList.remove('show'); });
+  const el=document.getElementById(id);
+  const wasOpen=el.classList.contains('show');
+  el.classList.remove('show');
+  if(!wasOpen){ el.classList.add('show'); if(id==='eventsPanel') renderEvents(); el.scrollIntoView({behavior:'smooth'}); }
+}
+function renderEvents(){
+  const note=updatedAt?`<p style="font-size:13px;opacity:.7;margin-bottom:6px">Updated ${esc(String(updatedAt).slice(0,10))}</p>`:'';
+  document.getElementById('eventsList').innerHTML = note + (EVENTS.length?EVENTS.map(eventCard).join(''):'<p>No events right now.</p>');
+}
+function toggleSave(btn){
+  const id=btn.dataset.id;
+  const ev=EVENTS.find(e=>e.id===id);
+  if(isSaved(id)){ saved=saved.filter(x=>x.id!==id); }
+  else if(ev){ saved.push({id:ev.id,title:ev.title,town:ev.town||'',link:ev.link||''}); }
+  try{ localStorage.setItem('gr_saved_v2',JSON.stringify(saved)); }catch(e){}
+  const now=isSaved(id);
+  document.querySelectorAll('.save-btn').forEach(b=>{ if(b.dataset.id===id){ b.textContent=now?'❤️ Saved':'🤍 Save'; b.classList.toggle('saved',now); } });
+  renderSaved();
+}
+function renderSaved(){
+  const el=document.getElementById('savedList');
+  if(!saved.length){ el.innerHTML='<p>No saved items yet. Tap Save on any event.</p>'; return; }
+  el.innerHTML=saved.map(x=>{ const u=safeUrl(x.link); return `<div class="event"><h4>${esc(x.title)}</h4><div class="meta">📍 ${esc(x.town)}</div>${u?`<a href="${esc(u)}" target="_blank" rel="noopener">View details →</a>`:''}</div>`; }).join('');
+}
+async function loadEvents(){
+  try{
+    const r=await fetch('data/events.json',{cache:'no-store'});
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    const list=(Array.isArray(d.events)?d.events:[]).filter(e=>e&&e.title&&e.id&&/^[\w-]+$/.test(String(e.id)));
+    if(list.length){ EVENTS=list; updatedAt=d.last_updated||''; }
+  }catch(e){ /* keep built-in fallback list */ }
+  renderEvents(); renderSaved();
+}
+loadEvents();
+function detectTown(t){
+  t=t.toLowerCase();
+  if(t.includes('knysna')) return 'Knysna';
+  if(t.includes('plett')) return 'Plett';
+  if(t.includes('george')) return 'George';
+  if(t.includes('sedgefield')) return 'Sedgefield';
+  if(t.includes('wilderness')) return 'Wilderness';
+  if(t.includes('mossel')) return 'Mossel Bay';
+  return null;
+}
+function add(html){ document.getElementById('chat').insertAdjacentHTML('beforeend',html); window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}); }
+async function ask(){
+  const input=document.getElementById('q'); const text=input.value.trim(); if(!text) return;
+  add(`<div class="user-msg">${esc(text)}</div>`); input.value='';
+  const lower=text.toLowerCase(); const town=detectTown(text)||'Knysna';
+  if(lower.includes('about')){
+    const wikiTitle=WIKI_MAP[town.toLowerCase()]||town;
+    const id='c'+Date.now();
+    add(`<div class="ai-card" id="${id}"><h3>About ${town}</h3><p>Loading Wikipedia...</p></div>`);
+    const card=document.getElementById(id);
+    try{
+      const r=await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${wikiTitle}`);
+      const d=await r.json();
+      if(d.type==='disambiguation'||(d.extract||'').toLowerCase().includes('may refer to')){
+        card.innerHTML=`<h3>About ${town}</h3><div class="wiki-box"><h4>${town}, Garden Route</h4><p>${town} is a beautiful town on South Africa's Garden Route, famous for its lagoon, forests and outdoor activities.</p><p><a href="https://en.wikipedia.org/wiki/${wikiTitle}" target="_blank">Read more →</a></p></div>`;
+      } else {
+        card.innerHTML=`<h3>About ${town}</h3><div class="wiki-box"><h4>${esc(d.title||town)}</h4><p>${esc(d.extract||'No summary.')}</p><p><a href="${d.content_urls?.desktop?.page||'https://en.wikipedia.org/wiki/'+wikiTitle}" target="_blank">Read more →</a></p></div>`;
+      }
+    }catch(e){ card.innerHTML=`<h3>About ${town}</h3><p>${town} is on the Garden Route - lagoon, forest, beaches and great restaurants.</p>`; }
+    window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'}); return;
+  }
+  if(lower.includes('event')){
+    const list=EVENTS.filter(e=>sameTown(e,town));
+    const shown=list.length?list:EVENTS;
+    add(`<div class="ai-card"><h3>Here's what I found (${shown.length}):</h3>${shown.map(eventCard).join('')}</div>`); return;
+  }
+  const m=text.match(/(\d+)\s*day/); const days=m?parseInt(m[1]):2;
+  let html=`<div class="ai-card"><h3>${days}-day itinerary in ${town}</h3>`;
+  if(town==='Knysna') html+=`<p><b>Day 1:</b> Knysna Heads → Waterfront lunch → Lagoon cruise.</p><p><b>Day 2:</b> Featherbed → Leisure Isle → Forest / market.</p>`;
+  else if(town==='George') html+=`<p><b>Day 1:</b> Outeniqua trails → Botanical Garden → Farmers Market.</p><p><b>Day 2:</b> Wilderness beach → Map of Africa.</p>`;
+  else if(town==='Plett') html+=`<p><b>Day 1:</b> Robberg hike → Central Beach.</p><p><b>Day 2:</b> Monkeyland / Birds of Eden → Lagoon cruise.</p>`;
+  else html+=`<p><b>Day 1:</b> Town centre, lagoon / beach, market.</p><p><b>Day 2:</b> Nature reserve + sunset viewpoint.</p>`;
+  if(days>2) html+=`<p><b>Day 3:</b> Day trip to nearby town.</p>`;
+  html+=`</div>`; add(html);
+}
+</script>
+</body>
+</html>
