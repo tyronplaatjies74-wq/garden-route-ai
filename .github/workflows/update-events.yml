@@ -11,16 +11,28 @@ permissions:
 jobs:
   scrape:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: pip install requests beautifulsoup4
-      - run: python build.py
-      - run: |
+
+      - name: Install packages
+        run: pip install requests beautifulsoup4
+
+      - name: Run the events pipeline
+        run: python pipeline/build.py
+
+      - name: Show the result (check this in the log)
+        run: cat data/meta.json || echo "meta.json was not created"
+
+      - name: Save the new data
+        run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add data/events.json data/restaurants.json
+          git add data/events.json data/meta.json
           git commit -m "Auto-update events" || echo "No changes"
+          git pull --rebase
           git push
