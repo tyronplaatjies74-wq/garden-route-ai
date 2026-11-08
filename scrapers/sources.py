@@ -261,6 +261,37 @@ DATE_RE = re.compile(
     re.I,
 )
 
+# George Herald "Eyes on arts": each event is a heading like
+#   "6 November | Life Community Services celebrates 25 years"
+# followed by description paragraphs. We read ONLY those headings, so dates
+# mentioned inside the descriptions (e.g. "Arrival is at 17:30") are ignored.
+_ARTS_HEAD = re.compile(r"^\s*(\d{1,2}[^|]{0,40}?)\s*\|\s*(.+?)\s*$")
+
+def parse_eyes_on_arts(sub):
+    """Return [(title, date_text, context_text)] from an Eyes on arts article."""
+    out = []
+    for bq in sub.find_all("blockquote"):
+        m = _ARTS_HEAD.match(clean(bq.get_text(" ", strip=True)))
+        if not m:
+            continue
+        date_text, title = m.group(1).strip(), m.group(2).strip(" .")
+        if not parse_event_dates(date_text):
+            continue
+        ctx = []
+        for sib in bq.find_next_siblings():
+            if sib.name == "blockquote":
+                break
+            ctx.append(sib.get_text(" ", strip=True))
+            if len(" ".join(ctx)) > 600:
+                break
+        out.append((title, date_text, clean(" ".join(ctx))))
+    if not out:  # fallback if the page is not built with blockquotes
+        for line in sub.get_text("\n").splitlines():
+            m = _ARTS_HEAD.match(line.strip())
+            if m and parse_event_dates(m.group(1)):
+                out.append((m.group(2).strip(" ."), m.group(1).strip(), ""))
+    return out
+
 def scrape_all():
     global _FETCH_FAILED
     cached = _load_cache()
@@ -335,10 +366,11 @@ def scrape_all():
                 link = a["href"] if a["href"].startswith("http") else "https://georgeherald.com" + a["href"]
                 sub = fetch(link)
                 if not sub: continue
-                text = sub.get_text()
-                for m in re.finditer(r"(\d{1,2}(?:-\d{1,2})?\s*(?:October|November|December|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[^\n|]{0,5}\|?\s*)([A-Z][^\n]{5,90})", text):
-                    title = m.group(2).strip().split(" at ")[0].split(" - ")[0]
-                    add_event(events, title, guess_town(text[m.start():m.start()+500]), m.group(1).strip(), link, source="georgeherald")
+                for title, date_text, ctx in parse_eyes_on_arts(sub):
+                    town = guess_town(title + " " + ctx)
+                    if town == "Garden Route":
+                        town = "George"   # the column covers George and surrounds
+                    add_event(events, title, town, date_text, link, source="georgeherald")
                 break
 
     result = list(events)
