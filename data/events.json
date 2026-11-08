@@ -1,14 +1,27 @@
 {
-  "last_updated": "2026-11-08T13:19:09+00:00",
+  "last_updated": "2026-11-08T14:11:41+00:00",
   "events": [
     {
-      "id": "91a1679a58ad",
-      "title": "Support local journalism",
-      "town": "George",
-      "date": "2026-11-05",
+      "id": "912c15f7b902",
+      "title": "Life Community Services celebrates 25 yearsLife Community Services invites the public to it",
+      "town": "Garden Route",
+      "date": "2026-11-06",
       "link": "https://georgeherald.com/Entertainment/Article/eyes-on-arts-upcoming-entertainment-highlights-in-george-and-surrounds-202611050156",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "start_date": "2026-11-06",
+      "end_date": "2026-11-06",
+      "scraped_at": "2026-11-08T14:10:57+00:00"
+    },
+    {
+      "id": "c6c9db036767",
+      "title": "Arrival is",
+      "town": "George",
+      "date": "2026-11-06",
+      "link": "https://georgeherald.com/Entertainment/Article/eyes-on-arts-upcoming-entertainment-highlights-in-george-and-surrounds-202611050156",
+      "source": "events_george",
+      "start_date": "2026-11-06",
+      "end_date": "2026-11-06",
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "1d8d18429e5f",
@@ -17,25 +30,33 @@
       "date": "2026-11-08",
       "link": "https://www.toodoo.co.za/showground-sundays-george/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "start_date": "2026-11-08",
+      "end_date": "2026-11-08",
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
-      "id": "48a11c8d13d2",
+      "id": "f7d31bb95220",
       "title": "Sunday Market at the Botanical Garden",
       "town": "George",
       "date": "2026-11-08",
       "link": "https://ontheroute.co.za/garden-route-market-guide/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "start_date": "2026-11-08",
+      "end_date": "2026-11-08",
+      "recurrence": "weekly:sunday",
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
-      "id": "785443fe966a",
+      "id": "d3d7868c610c",
       "title": "Wednesday Market at Old Nick",
       "town": "Plettenberg Bay",
       "date": "2026-11-11",
       "link": "https://ontheroute.co.za/garden-route-market-guide/",
       "source": "events_plett",
-      "scraped_at": "2026-11-08T13:19:09+00:00"
+      "start_date": "2026-11-11",
+      "end_date": "2026-11-11",
+      "recurrence": "weekly:wednesday",
+      "scraped_at": "2026-11-08T14:11:40+00:00"
     },
     {
       "id": "68664e6f52f3",
@@ -44,16 +65,21 @@
       "date": "2026-11-13",
       "link": "https://www.toodoo.co.za/candy-crush/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "start_date": "2026-11-13",
+      "end_date": "2026-11-13",
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
-      "id": "a734dfff14c5",
+      "id": "36cef37cf6a3",
       "title": "Friday Market Knysna",
       "town": "Knysna",
       "date": "2026-11-13",
       "link": "https://ontheroute.co.za/garden-route-market-guide/",
       "source": "events_knysna",
-      "scraped_at": "2026-11-08T13:18:56+00:00"
+      "start_date": "2026-11-13",
+      "end_date": "2026-11-13",
+      "recurrence": "weekly:friday",
+      "scraped_at": "2026-11-08T14:11:26+00:00"
     },
     {
       "id": "3bd5e883ddcf",
@@ -62,7 +88,9 @@
       "date": "2026-11-13",
       "link": "https://www.toodoo.co.za/mermaid-ball-2026/",
       "source": "events_plett",
-      "scraped_at": "2026-11-08T13:19:09+00:00"
+      "start_date": "2026-11-13",
+      "end_date": "2026-11-13",
+      "scraped_at": "2026-11-08T14:11:40+00:00"
     },
     {
       "id": "541e06bf3041",
@@ -71,25 +99,33 @@
       "date": "2026-11-14",
       "link": "https://www.toodoo.co.za/demi-lee-moore-die-bush-lapa-george/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "start_date": "2026-11-14",
+      "end_date": "2026-11-14",
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
-      "id": "54247c7addec",
+      "id": "bed67229c9c0",
       "title": "George Botanical Gardens Parkrun",
       "town": "George",
       "date": "2026-11-14",
       "link": "https://www.toodoo.co.za/george-botanical-gardens-parkrun/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "start_date": "2026-11-14",
+      "end_date": "2026-11-14",
+      "recurrence": "weekly:saturday",
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
-      "id": "d88bde2e5359",
+      "id": "d37340c54c45",
       "title": "Outeniqua Family Market",
       "town": "George",
       "date": "2026-11-14",
       "link": "https://ontheroute.co.za/garden-route-market-guide/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "start_date": "2026-11-14",
+      "end_date": "2026-11-14",
+      "recurrence": "weekly:saturday",
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "16d750f11d11",
@@ -98,7 +134,9 @@
       "date": "2026-11-14",
       "link": "https://georgeherald.com/Entertainment/Article/eyes-on-arts-upcoming-entertainment-highlights-in-george-and-surrounds-202611050156",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "start_date": "2026-11-14",
+      "end_date": "2026-11-14",
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "477bdca11b22",
@@ -107,52 +145,69 @@
       "date": "2026-11-14",
       "link": "https://www.toodoo.co.za/sedgefield-sunset-family-festive-fun/",
       "source": "events_sedgefield",
-      "scraped_at": "2026-11-08T13:18:42+00:00"
+      "start_date": "2026-11-14",
+      "end_date": "2026-11-14",
+      "scraped_at": "2026-11-08T14:11:13+00:00"
     },
     {
-      "id": "dc727a7f6376",
+      "id": "46bd89155c8f",
       "title": "Wild Oats Community Farmers’ Market",
       "town": "Sedgefield",
       "date": "2026-11-14",
       "link": "https://www.toodoo.co.za/wild-oats-community-farmers-market/",
       "source": "events_sedgefield",
-      "scraped_at": "2026-11-08T13:18:42+00:00"
+      "start_date": "2026-11-14",
+      "end_date": "2026-11-14",
+      "recurrence": "weekly:saturday",
+      "scraped_at": "2026-11-08T14:11:13+00:00"
     },
     {
-      "id": "9397d78da8ae",
+      "id": "dcbd9109a67d",
       "title": "Experience the Sedgefield Mosaic Market",
       "town": "Sedgefield",
       "date": "2026-11-14",
       "link": "https://www.toodoo.co.za/the-sedgefield-mosaic-market/",
       "source": "events_sedgefield",
-      "scraped_at": "2026-11-08T13:18:42+00:00"
+      "start_date": "2026-11-14",
+      "end_date": "2026-11-14",
+      "recurrence": "weekly:saturday",
+      "scraped_at": "2026-11-08T14:11:13+00:00"
     },
     {
-      "id": "6d8cdab5f951",
+      "id": "026b93525c0b",
       "title": "Wild Oats Community Farmers Market",
       "town": "Sedgefield",
       "date": "2026-11-14",
       "link": "https://ontheroute.co.za/garden-route-market-guide/",
       "source": "events_sedgefield",
-      "scraped_at": "2026-11-08T13:18:42+00:00"
+      "start_date": "2026-11-14",
+      "end_date": "2026-11-14",
+      "recurrence": "weekly:saturday",
+      "scraped_at": "2026-11-08T14:11:13+00:00"
     },
     {
-      "id": "53dc885df846",
+      "id": "ea19da60e8f3",
       "title": "Mosaic Village Market",
       "town": "Sedgefield",
       "date": "2026-11-14",
       "link": "https://ontheroute.co.za/garden-route-market-guide/",
       "source": "events_sedgefield",
-      "scraped_at": "2026-11-08T13:18:42+00:00"
+      "start_date": "2026-11-14",
+      "end_date": "2026-11-14",
+      "recurrence": "weekly:saturday",
+      "scraped_at": "2026-11-08T14:11:13+00:00"
     },
     {
-      "id": "70b8ea6953b4",
+      "id": "9fb761adcac7",
       "title": "Scarab Village Craft Market",
       "town": "Sedgefield",
       "date": "2026-11-14",
       "link": "https://ontheroute.co.za/garden-route-market-guide/",
       "source": "events_sedgefield",
-      "scraped_at": "2026-11-08T13:18:42+00:00"
+      "start_date": "2026-11-14",
+      "end_date": "2026-11-14",
+      "recurrence": "weekly:saturday",
+      "scraped_at": "2026-11-08T14:11:13+00:00"
     },
     {
       "id": "8a14c604553b",
@@ -161,7 +216,9 @@
       "date": "2026-11-14",
       "link": "https://www.toodoo.co.za/knysna-waterfront-half-marathon/",
       "source": "events_knysna",
-      "scraped_at": "2026-11-08T13:18:56+00:00"
+      "start_date": "2026-11-14",
+      "end_date": "2026-11-14",
+      "scraped_at": "2026-11-08T14:11:26+00:00"
     },
     {
       "id": "d53065a674b3",
@@ -170,7 +227,9 @@
       "date": "2026-11-16",
       "link": "https://www.toodoo.co.za/danre-strydom-catherine-foxcroft-duo-recital-knysna/",
       "source": "events_knysna",
-      "scraped_at": "2026-11-08T13:18:56+00:00"
+      "start_date": "2026-11-16",
+      "end_date": "2026-11-16",
+      "scraped_at": "2026-11-08T14:11:26+00:00"
     },
     {
       "id": "35c44b923f4d",
@@ -179,7 +238,9 @@
       "date": "2026-11-19",
       "link": "https://www.toodoo.co.za/ancient-history-of-robberg-coastal-corridor-protected-environment/",
       "source": "events_knysna",
-      "scraped_at": "2026-11-08T13:18:56+00:00"
+      "start_date": "2026-11-19",
+      "end_date": "2026-11-19",
+      "scraped_at": "2026-11-08T14:11:26+00:00"
     },
     {
       "id": "71a22238a57c",
@@ -188,7 +249,9 @@
       "date": "2026-11-20",
       "link": "https://www.toodoo.co.za/nianell-live-in-sedgefield/",
       "source": "events_sedgefield",
-      "scraped_at": "2026-11-08T13:18:42+00:00"
+      "start_date": "2026-11-20",
+      "end_date": "2026-11-20",
+      "scraped_at": "2026-11-08T14:11:13+00:00"
     },
     {
       "id": "05c66b529ce2",
@@ -197,7 +260,9 @@
       "date": "2026-11-20",
       "link": "https://www.toodoo.co.za/spoilt-knysna-gift-fair-2026/",
       "source": "events_knysna",
-      "scraped_at": "2026-11-08T13:18:56+00:00"
+      "start_date": "2026-11-20",
+      "end_date": "2026-11-20",
+      "scraped_at": "2026-11-08T14:11:26+00:00"
     },
     {
       "id": "4054b4876400",
@@ -206,7 +271,9 @@
       "date": "2026-11-20",
       "link": "https://www.toodoo.co.za/rocksteadys-ultimate-80s-experience/",
       "source": "events_plett",
-      "scraped_at": "2026-11-08T13:19:09+00:00"
+      "start_date": "2026-11-20",
+      "end_date": "2026-11-20",
+      "scraped_at": "2026-11-08T14:11:40+00:00"
     },
     {
       "id": "52cb5da2079e",
@@ -215,7 +282,9 @@
       "date": "2026-11-21",
       "link": "https://www.toodoo.co.za/guns-n-roses-jol/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "start_date": "2026-11-21",
+      "end_date": "2026-11-21",
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "820ffaf7f9ca",
@@ -224,7 +293,9 @@
       "date": "2026-11-21",
       "link": "https://www.toodoo.co.za/helen-ogrady-drama-academy-year-end-production-2026/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "start_date": "2026-11-21",
+      "end_date": "2026-11-21",
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "3f0381a33c1d",
@@ -233,7 +304,9 @@
       "date": "2026-11-21",
       "link": "https://www.toodoo.co.za/one-night-only-jazz-experience-george/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "start_date": "2026-11-21",
+      "end_date": "2026-11-21",
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "07c3aa2dbaeb",
@@ -242,7 +315,9 @@
       "date": "2026-11-21",
       "link": "https://georgeherald.com/Entertainment/Article/eyes-on-arts-upcoming-entertainment-highlights-in-george-and-surrounds-202611050156",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "start_date": "2026-11-21",
+      "end_date": "2026-11-21",
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "178a525e28ea",
@@ -251,7 +326,9 @@
       "date": "2026-11-21",
       "link": "https://www.toodoo.co.za/dance-through-the-decades-elle-dance-academy/",
       "source": "events_sedgefield",
-      "scraped_at": "2026-11-08T13:18:42+00:00"
+      "start_date": "2026-11-21",
+      "end_date": "2026-11-21",
+      "scraped_at": "2026-11-08T14:11:13+00:00"
     },
     {
       "id": "a3da6fde73ca",
@@ -260,7 +337,9 @@
       "date": "2026-11-21",
       "link": "https://www.toodoo.co.za/radiate/",
       "source": "events_knysna",
-      "scraped_at": "2026-11-08T13:18:56+00:00"
+      "start_date": "2026-11-21",
+      "end_date": "2026-11-21",
+      "scraped_at": "2026-11-08T14:11:26+00:00"
     },
     {
       "id": "694f6485cadc",
@@ -269,7 +348,9 @@
       "date": "2026-11-21",
       "link": "https://www.toodoo.co.za/woodstock-beyond-1965-1975-live/",
       "source": "events_knysna",
-      "scraped_at": "2026-11-08T13:18:56+00:00"
+      "start_date": "2026-11-21",
+      "end_date": "2026-11-21",
+      "scraped_at": "2026-11-08T14:11:26+00:00"
     },
     {
       "id": "07869918e8db",
@@ -278,7 +359,9 @@
       "date": "2026-11-22",
       "link": "https://www.toodoo.co.za/mto-trails-tsitsikamma-trail-runs-at-covie-on-22-nov-2026/",
       "source": "events_knysna",
-      "scraped_at": "2026-11-08T13:18:56+00:00"
+      "start_date": "2026-11-22",
+      "end_date": "2026-11-22",
+      "scraped_at": "2026-11-08T14:11:26+00:00"
     },
     {
       "id": "c9deeb97e5c3",
@@ -287,7 +370,9 @@
       "date": "2026-11-28",
       "link": "https://www.toodoo.co.za/vinyl-krispies-sedgefield/",
       "source": "events_sedgefield",
-      "scraped_at": "2026-11-08T13:18:42+00:00"
+      "start_date": "2026-11-28",
+      "end_date": "2026-11-28",
+      "scraped_at": "2026-11-08T14:11:13+00:00"
     },
     {
       "id": "5eedd8e20deb",
@@ -296,7 +381,9 @@
       "date": "2026-11-28",
       "link": "https://www.toodoo.co.za/v-spoke-pop-up-shop-knysna-2026/",
       "source": "events_knysna",
-      "scraped_at": "2026-11-08T13:18:56+00:00"
+      "start_date": "2026-11-28",
+      "end_date": "2026-11-28",
+      "scraped_at": "2026-11-08T14:11:26+00:00"
     },
     {
       "id": "26532fdde903",
@@ -305,7 +392,9 @@
       "date": "2026-11-29",
       "link": "https://georgeherald.com/Entertainment/Article/eyes-on-arts-upcoming-entertainment-highlights-in-george-and-surrounds-202611050156",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "start_date": "2026-11-29",
+      "end_date": "2026-11-29",
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "3df46c630d0f",
@@ -314,7 +403,9 @@
       "date": "2026-11-29",
       "link": "https://georgeherald.com/Entertainment/Article/eyes-on-arts-upcoming-entertainment-highlights-in-george-and-surrounds-202611050156",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "start_date": "2026-11-29",
+      "end_date": "2026-11-29",
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "67a5b98a90fc",
@@ -323,7 +414,9 @@
       "date": "2026-11-29",
       "link": "https://georgeherald.com/Entertainment/Article/eyes-on-arts-upcoming-entertainment-highlights-in-george-and-surrounds-202611050156",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "start_date": "2026-11-29",
+      "end_date": "2026-11-29",
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "10c82d366b96",
@@ -332,7 +425,9 @@
       "date": "2026-12-05",
       "link": "https://www.toodoo.co.za/the-wizard-of-oz-at-the-george-arts-theatre/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "start_date": "2026-12-05",
+      "end_date": "2026-12-05",
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "97ec3ba4adaa",
@@ -341,7 +436,9 @@
       "date": "2026-12-11",
       "link": "https://www.toodoo.co.za/pj-powers-live-at-blend-country-restaurant/",
       "source": "events_knysna",
-      "scraped_at": "2026-11-08T13:18:56+00:00"
+      "start_date": "2026-12-11",
+      "end_date": "2026-12-11",
+      "scraped_at": "2026-11-08T14:11:26+00:00"
     },
     {
       "id": "fd40e4094753",
@@ -350,7 +447,9 @@
       "date": "2026-12-12",
       "link": "https://www.toodoo.co.za/george-picnic-fiesta-summer-edition/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "start_date": "2026-12-12",
+      "end_date": "2026-12-12",
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "856ab5a45517",
@@ -359,7 +458,9 @@
       "date": "2026-12-12",
       "link": "https://www.toodoo.co.za/ginger-biscuit-decorating-george/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "start_date": "2026-12-12",
+      "end_date": "2026-12-12",
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "bb5a5f8c1ba7",
@@ -368,7 +469,9 @@
       "date": "2026-12-12",
       "link": "https://www.toodoo.co.za/sam-charity-shop-festive-decoration-sale/",
       "source": "events_sedgefield",
-      "scraped_at": "2026-11-08T13:18:42+00:00"
+      "start_date": "2026-12-12",
+      "end_date": "2026-12-12",
+      "scraped_at": "2026-11-08T14:11:13+00:00"
     },
     {
       "id": "7d75d483cb84",
@@ -377,7 +480,9 @@
       "date": "2026-12-18",
       "link": "https://www.toodoo.co.za/float-fest-groot-brak-2026/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "start_date": "2026-12-18",
+      "end_date": "2026-12-18",
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "d3107a696542",
@@ -386,7 +491,9 @@
       "date": "2026-12-19",
       "link": "https://www.toodoo.co.za/outeniqua-kersmark-2026-george/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "start_date": "2026-12-19",
+      "end_date": "2026-12-19",
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "1be6757c7dab",
@@ -395,7 +502,9 @@
       "date": "2026-12-20",
       "link": "https://www.toodoo.co.za/uncle-george-party-at-step-aside-farm/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "start_date": "2026-12-20",
+      "end_date": "2026-12-20",
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "bc52ed7b91c6",
@@ -404,43 +513,9 @@
       "date": "2027-02-12",
       "link": "https://www.toodoo.co.za/incognito-anita-overcomer-george-2027/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
-    },
-    {
-      "id": "e913f6c19823",
-      "title": "November | Chicago: The Musical",
-      "town": "George",
-      "date": "2027-10-28",
-      "link": "https://georgeherald.com/Entertainment/Article/eyes-on-arts-upcoming-entertainment-highlights-in-george-and-surrounds-202611050156",
-      "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
-    },
-    {
-      "id": "0e0aa838e685",
-      "title": "November | Chicago: The MusicalThe George Society of Arts presents Chicago: The Musical at",
-      "town": "George",
-      "date": "2027-10-28",
-      "link": "https://georgeherald.com/Entertainment/Article/eyes-on-arts-upcoming-entertainment-highlights-in-george-and-surrounds-202611050156",
-      "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
-    },
-    {
-      "id": "50ff855333e8",
-      "title": "Life Community Services celebrates 25 yearsLife Community Services invites the public to it",
-      "town": "Garden Route",
-      "date": "2027-11-06",
-      "link": "https://georgeherald.com/Entertainment/Article/eyes-on-arts-upcoming-entertainment-highlights-in-george-and-surrounds-202611050156",
-      "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
-    },
-    {
-      "id": "0f5312a2ffbf",
-      "title": "Arrival is",
-      "town": "George",
-      "date": "2027-11-06",
-      "link": "https://georgeherald.com/Entertainment/Article/eyes-on-arts-upcoming-entertainment-highlights-in-george-and-surrounds-202611050156",
-      "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "start_date": "2027-02-12",
+      "end_date": "2027-02-12",
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "6194a47abedc",
@@ -449,7 +524,7 @@
       "date": "See link for date",
       "link": "https://www.gardenroute.com/event/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "ab6d312ca292",
@@ -458,7 +533,7 @@
       "date": "See link for date",
       "link": "https://www.gardenroute.com/event/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "7f3cc674c56a",
@@ -467,7 +542,7 @@
       "date": "See link for date",
       "link": "https://www.gardenroute.com/events/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "c566aa265c43",
@@ -476,7 +551,7 @@
       "date": "See link for date",
       "link": "https://www.toodoo.co.za/sunday-sessions-live-music/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "7878e9fecd1c",
@@ -485,7 +560,7 @@
       "date": "See link for date",
       "link": "https://www.toodoo.co.za/candy-crush/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "5099e71f7a67",
@@ -494,7 +569,7 @@
       "date": "See link for date",
       "link": "https://www.toodoo.co.za/mermaid-ball-2026/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "0c58e53a939d",
@@ -503,7 +578,7 @@
       "date": "See link for date",
       "link": "https://www.toodoo.co.za/knysna-waterfront-half-marathon/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "f1a6a0b0b281",
@@ -512,7 +587,7 @@
       "date": "See link for date",
       "link": "https://www.toodoo.co.za/outeniqua-2026-hartenbos/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "7f28c163dc2c",
@@ -521,7 +596,7 @@
       "date": "See link for date",
       "link": "https://www.toodoo.co.za/demi-lee-moore-die-bush-lapa-george/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "63ca784f68b8",
@@ -530,7 +605,7 @@
       "date": "See link for date",
       "link": "https://www.toodoo.co.za/wild-oats-community-farmers-market/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "d1f514e6bc55",
@@ -539,7 +614,7 @@
       "date": "See link for date",
       "link": "https://www.toodoo.co.za/danre-strydom-catherine-foxcroft-duo-recital-knysna/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "9a4f7a09a188",
@@ -548,7 +623,7 @@
       "date": "See link for date",
       "link": "https://www.toodoo.co.za/ancient-history-of-robberg-coastal-corridor-protected-environment/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "af2d49de9363",
@@ -557,7 +632,7 @@
       "date": "See link for date",
       "link": "https://www.toodoo.co.za/magda-louw-en-die-kar-se-sleutel-mossel-bay/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "29ef7d050ccf",
@@ -566,7 +641,7 @@
       "date": "See link for date",
       "link": "https://www.toodoo.co.za/rocksteadys-ultimate-80s-experience/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "c0e9db5a2d50",
@@ -575,7 +650,7 @@
       "date": "See link for date",
       "link": "https://www.toodoo.co.za/guns-n-roses-jol/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "55a004b86854",
@@ -584,7 +659,7 @@
       "date": "See link for date",
       "link": "https://www.toodoo.co.za/radiate/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "a25c8c68ee70",
@@ -593,7 +668,7 @@
       "date": "See link for date",
       "link": "https://www.toodoo.co.za/woodstock-beyond-1965-1975-live/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "8267b930e6ba",
@@ -602,7 +677,7 @@
       "date": "See link for date",
       "link": "https://www.toodoo.co.za/dance-through-the-decades-elle-dance-academy/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "75d7aefbf9a7",
@@ -611,7 +686,7 @@
       "date": "See link for date",
       "link": "https://www.toodoo.co.za/droomdie-buitelug-konsert-met-frederico-vriende/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "e47d28d543dc",
@@ -620,7 +695,7 @@
       "date": "See link for date",
       "link": "https://www.toodoo.co.za/helen-ogrady-drama-academy-year-end-production-2026/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "04de65a4d029",
@@ -629,7 +704,7 @@
       "date": "See link for date",
       "link": "https://www.toodoo.co.za/one-night-only-jazz-experience-george/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "0bf666c3ec4b",
@@ -638,7 +713,7 @@
       "date": "See link for date",
       "link": "https://www.toodoo.co.za/vinyl-krispies-sedgefield/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "1baf5d0d25a0",
@@ -647,7 +722,7 @@
       "date": "See link for date",
       "link": "https://www.toodoo.co.za/pj-powers-live-at-blend-country-restaurant/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "c9f504de5584",
@@ -656,7 +731,7 @@
       "date": "See link for date",
       "link": "https://www.toodoo.co.za/sam-charity-shop-festive-decoration-sale/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "10f65fed7f71",
@@ -665,7 +740,7 @@
       "date": "See link for date",
       "link": "https://www.toodoo.co.za/incognito-anita-overcomer-george-2027/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "e29dbe1a268b",
@@ -674,7 +749,7 @@
       "date": "See link for date",
       "link": "https://ontheroute.co.za/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "572a08487d32",
@@ -683,7 +758,7 @@
       "date": "See link for date",
       "link": "https://ontheroute.co.za/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "a569393f34ac",
@@ -692,7 +767,7 @@
       "date": "See link for date",
       "link": "https://ontheroute.co.za/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "56e11000a832",
@@ -701,7 +776,7 @@
       "date": "See link for date",
       "link": "https://ontheroute.co.za/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "1ae774ca7f8a",
@@ -710,7 +785,7 @@
       "date": "See link for date",
       "link": "https://ontheroute.co.za/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "f580690d46d6",
@@ -719,7 +794,7 @@
       "date": "See link for date",
       "link": "https://ontheroute.co.za/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "2e42993f3f16",
@@ -728,7 +803,7 @@
       "date": "See link for date",
       "link": "https://ontheroute.co.za/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "6b46d7dd4d8a",
@@ -737,7 +812,7 @@
       "date": "See link for date",
       "link": "https://ontheroute.co.za/",
       "source": "events_george",
-      "scraped_at": "2026-11-08T13:18:28+00:00"
+      "scraped_at": "2026-11-08T14:10:57+00:00"
     },
     {
       "id": "ec726011e690",
@@ -746,7 +821,7 @@
       "date": "See link for date",
       "link": "https://ontheroute.co.za/",
       "source": "events_knysna",
-      "scraped_at": "2026-11-08T13:18:56+00:00"
+      "scraped_at": "2026-11-08T14:11:26+00:00"
     },
     {
       "id": "99d6b5108c25",
@@ -755,7 +830,7 @@
       "date": "See link for date",
       "link": "https://ontheroute.co.za/",
       "source": "events_knysna",
-      "scraped_at": "2026-11-08T13:18:56+00:00"
+      "scraped_at": "2026-11-08T14:11:26+00:00"
     },
     {
       "id": "86d0c81c9d63",
@@ -764,7 +839,7 @@
       "date": "See link for date",
       "link": "https://ontheroute.co.za/",
       "source": "events_knysna",
-      "scraped_at": "2026-11-08T13:18:56+00:00"
+      "scraped_at": "2026-11-08T14:11:26+00:00"
     },
     {
       "id": "0fc0ddd5fc64",
@@ -773,7 +848,7 @@
       "date": "See link for date",
       "link": "https://ontheroute.co.za/",
       "source": "events_knysna",
-      "scraped_at": "2026-11-08T13:18:56+00:00"
+      "scraped_at": "2026-11-08T14:11:26+00:00"
     },
     {
       "id": "a6809eb6f374",
@@ -782,7 +857,7 @@
       "date": "See link for date",
       "link": "https://ontheroute.co.za/",
       "source": "events_plett",
-      "scraped_at": "2026-11-08T13:19:09+00:00"
+      "scraped_at": "2026-11-08T14:11:40+00:00"
     }
   ]
 }
