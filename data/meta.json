@@ -1,24 +1,24 @@
 {
-  "last_updated": "2026-11-15T06:49:43+00:00",
-  "events": 89,
+  "last_updated": "2026-11-16T08:10:10+00:00",
+  "events": 97,
   "restaurants": 4,
   "pruned_expired": 0,
   "sources": {
     "events_george": {
       "status": "ok",
-      "count": 60
+      "count": 66
     },
     "events_sedgefield": {
       "status": "ok",
-      "count": 8
+      "count": 9
     },
     "events_knysna": {
       "status": "ok",
-      "count": 15
+      "count": 17
     },
     "events_plett": {
       "status": "ok",
-      "count": 6
+      "count": 5
     }
   }
 }
