@@ -1,12 +1,12 @@
 {
-  "last_updated": "2026-11-18T06:58:43+00:00",
-  "events": 99,
+  "last_updated": "2026-11-19T06:58:49+00:00",
+  "events": 102,
   "restaurants": 4,
   "pruned_expired": 0,
   "sources": {
     "events_george": {
       "status": "ok",
-      "count": 66
+      "count": 68
     },
     "events_sedgefield": {
       "status": "ok",
@@ -18,7 +18,7 @@
     },
     "events_plett": {
       "status": "ok",
-      "count": 6
+      "count": 7
     }
   }
 }
